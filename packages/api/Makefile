@@ -13,6 +13,7 @@ AWS_REGION ?= $(shell aws configure get region)
 BASE_DOMAIN ?= dagit.club
 BUCKET_EXPIRE ?= 3600
 ASSET_DIR ?= assets
+AUTH_DOMAIN ?= dev.dagit.club
 
 RUST_LOG ?= debug
 
@@ -25,3 +26,6 @@ build:
 	$(BUILD_ENV) cargo build --release -p $(SERVICE) --features lambda
 	mkdir -p $(WORKSPACE_ROOT)/.build/$(SERVICE)
 	cp $(CARGO_TARGET_DIR)/release/$(SERVICE) $(WORKSPACE_ROOT)/.build/$(SERVICE)/bootstrap
+
+test:
+	$(BUILD_ENV) RUSTFLAGS="-A warnings" RUST_TEST_THREADS=1 cargo test --tests $(TESTFLAGS)
