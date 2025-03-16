@@ -219,7 +219,7 @@ pub mod dagit_tests {
         tracing::debug!("id: {id}");
         let user = setup_test_user(&id, &pool).await?;
 
-        let (claims, user_token) = setup_jwt_token(user);
+        let (claims, user_token) = setup_jwt_token(user.clone());
 
         let app = Box::new(app);
         rest_api::set_api_service(app.clone());
