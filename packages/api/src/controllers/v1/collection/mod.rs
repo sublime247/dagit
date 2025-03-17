@@ -1,12 +1,13 @@
-#![allow(unused)]
-
-use by_axum::aide;
-use by_axum::auth::Authorization;
-use by_axum::axum::extract::{Path, Query, State};
-use by_axum::axum::routing::{get, post};
-use by_axum::axum::{Extension, Json};
-use by_types::QueryResponse;
-use models::v1::agits;
+use bdk::prelude::*;
+use by_axum::{
+    aide,
+    auth::Authorization,
+    axum::{
+        Extension, Json,
+        extract::{Path, Query, State},
+        routing::{get, post},
+    },
+};
 use models::v1::prelude::CollectionGetResponse;
 use models::{
     Result,
@@ -54,7 +55,7 @@ impl CollectionControllerV1 {
         &self,
         auth: Option<Authorization>,
         param: CollectionQuery,
-    ) -> Result<QueryResponse<CollectionSummary>> {
+    ) -> Result<by_types::QueryResponse<CollectionSummary>> {
         let user_id = match auth {
             Some(Authorization::Bearer { claims }) => claims
                 .custom
@@ -83,7 +84,7 @@ impl CollectionControllerV1 {
             .fetch_all(&self.pool)
             .await?;
 
-        Ok(QueryResponse { total_count, items })
+        Ok(by_types::QueryResponse { total_count, items })
     }
 
     async fn create(

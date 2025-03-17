@@ -1,3 +1,4 @@
+use bdk::prelude::*;
 use by_axum::{
     aide,
     auth::Authorization,
@@ -7,7 +8,7 @@ use by_axum::{
         routing::{get, post},
     },
 };
-use by_types::QueryResponse;
+
 use models::{
     Result,
     error::ServiceError,
@@ -135,7 +136,7 @@ impl AgitControllerV1 {
         &self,
         auth: Option<Authorization>,
         param: AgitQuery,
-    ) -> Result<QueryResponse<AgitSummary>> {
+    ) -> Result<by_types::QueryResponse<AgitSummary>> {
         tracing::debug!("{param}");
         let user_id = match auth {
             Some(Authorization::Bearer { claims }) => claims
@@ -165,7 +166,7 @@ impl AgitControllerV1 {
             .fetch_all(&self.pool)
             .await?;
 
-        Ok(QueryResponse { total_count, items })
+        Ok(by_types::QueryResponse { total_count, items })
     }
 
     async fn create(

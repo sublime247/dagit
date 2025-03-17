@@ -1,6 +1,8 @@
 pub mod config;
 pub mod controllers;
 
+use bdk::prelude::*;
+
 use by_axum::{
     auth::{authorization_middleware, set_auth_config},
     axum::{Router, middleware},
@@ -147,7 +149,7 @@ pub mod dagit_tests {
             .map(User::from)
             .fetch_optional(&mut *tx)
             .await?
-            .ok_or(ApiError::DuplicateUser)?;
+            .ok_or(ServiceError::DuplicateUser)?;
         tx.commit().await?;
 
         Ok(user)

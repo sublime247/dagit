@@ -1,3 +1,5 @@
+use bdk::prelude::*;
+
 use sqlx::{Pool, Postgres};
 mod agit;
 mod artist;

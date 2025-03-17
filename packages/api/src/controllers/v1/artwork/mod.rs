@@ -1,10 +1,13 @@
-#![allow(unused)]
-
-use by_axum::aide;
-use by_axum::auth::Authorization;
-use by_axum::axum::extract::{Path, Query, State};
-use by_axum::axum::routing::post;
-use by_axum::axum::{Extension, Json};
+use bdk::prelude::*;
+use by_axum::{
+    aide,
+    auth::Authorization,
+    axum::{
+        Extension, Json,
+        extract::{Path, Query, State},
+        routing::{get, post},
+    },
+};
 use models::Result;
 use models::v1::prelude::*;
 

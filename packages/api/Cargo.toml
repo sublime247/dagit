@@ -10,8 +10,6 @@ license.workspace = true
 
 
 [dependencies]
-by-axum.workspace = true
-by-types.workspace = true
 serde = { workspace = true, features = ["derive"] }
 reqwest = { workspace = true, features = ["json"] }
 tokio = { version = "1.43.0", features = ["full"] }
@@ -25,7 +23,8 @@ sqlx = { version = "0.8.3", features = [
 ] }
 
 models = { workspace = true, features = ["server"] }
-schemars = "0.8.22"
+
+bdk = { workspace = true, features = ["be"] }
 
 rest-api.workspace = true
 chrono = "0.4.40"
@@ -34,7 +33,7 @@ chrono = "0.4.40"
 [features]
 default = []
 server = []
-lambda = ["by-axum/lambda"]
+lambda = ["bdk/lambda"]
 
 [dev-dependencies]
 ic-agent = "0.39.3"

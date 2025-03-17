@@ -3,10 +3,15 @@ mod tests;
 
 use std::collections::HashMap;
 
-use by_axum::auth::{Authorization, generate_jwt};
-use by_axum::axum::extract::{Query, State};
-use by_axum::axum::routing::post;
-use by_axum::axum::{Extension, Json};
+use bdk::prelude::{by_axum::auth::generate_jwt, *};
+use by_axum::{
+    auth::Authorization,
+    axum::{
+        Extension, Json,
+        extract::{Query, State},
+        routing::post,
+    },
+};
 use by_types::{Claims, JsonWithHeaders};
 use models::Result;
 use models::error::ServiceError;
@@ -36,7 +41,7 @@ impl UserController {
         State(ctrl): State<UserController>,
         Extension(auth): Extension<Option<Authorization>>,
         Json(body): Json<UserAction>,
-    ) -> Result<JsonWithHeaders<UserResponse>> {
+    ) -> Result<by_types::JsonWithHeaders<UserResponse>> {
         tracing::debug!("act_user: {:?}", auth);
         match body {
             UserAction::SignupOrLogin(req) => ctrl.signup_or_login(auth, req).await,
