@@ -1,13 +1,15 @@
 use crate::v1::{artworks::Artwork, collections::Collection};
-#[cfg(feature = "server")]
-use by_axum::aide;
-use by_macros::api_model;
-use by_types::QueryResponse;
+
+use bdk::prelude::*;
 use validator::Validate;
+
+// #[cfg(feature = "server")]
+// use bdk::prelude::by_types::QueryResponse;
+
 //TODO(api): Implement "/likes", "/followers" and "/member" APIs
 //TODO(api): Implement admin api "m1/agit/:id" for managing admins.
 #[derive(Validate)]
-#[api_model(base = "/v1/agits", table = agits, action_by_id = [delete], iter_type = QueryResponse)]
+#[api_model(base = "/v1/agits", table = agits, action_by_id = [delete], iter_type = by_types::QueryResponse)]
 pub struct Agit {
     #[api_model(summary, primary_key)]
     pub id: i64,

@@ -103,15 +103,13 @@ name = "api"
 version = "0.1.0"
 dependencies = [
  "base64 0.22.1",
- "by-axum",
- "by-types",
+ "bdk",
  "chrono",
  "ic-agent",
  "models",
  "reqwest",
  "rest-api",
  "ring",
- "schemars",
  "serde",
  "sqlx",
  "tokio",
@@ -464,6 +462,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
+name = "bdk"
+version = "0.1.0"
+dependencies = [
+ "aide",
+ "bigdecimal",
+ "btracing",
+ "by-axum",
+ "by-components",
+ "by-macros",
+ "by-types",
+ "dioxus",
+ "dioxus-aws",
+ "dioxus-fullstack",
+ "dioxus-logger 0.5.1",
+ "dioxus-popup",
+ "dioxus-translate",
+ "reqwest",
+ "rest-api",
+ "schemars",
+ "sqlx",
+ "tracing",
+ "validator",
+]
+
+[[package]]
 name = "bigdecimal"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -524,6 +547,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71"
 dependencies = [
  "generic-array",
+]
+
+[[package]]
+name = "btracing"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
+ "gloo-timers",
+ "tracing",
 ]
 
 [[package]]
@@ -1341,6 +1373,18 @@ dependencies = [
 
 [[package]]
 name = "dioxus-logger"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "81fe09dc9773dc1f1bb0d38529203d6555d08f67aadca5cf955ac3d1a9e69880"
+dependencies = [
+ "console_error_panic_hook",
+ "tracing",
+ "tracing-subscriber",
+ "tracing-wasm",
+]
+
+[[package]]
+name = "dioxus-logger"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "545961e752f6c8bf59c274951b3c8b18a106db6ad2f9e2035b29e1f2a3e899b1"
@@ -1963,6 +2007,18 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
+]
+
+[[package]]
+name = "gloo-timers"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbb143cf96099802033e0d4f4963b19fd2e0b728bcf076cd9cf7f6634f092994"
+dependencies = [
+ "futures-channel",
+ "futures-core",
+ "js-sys",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -3014,14 +3070,10 @@ dependencies = [
 name = "models"
 version = "0.1.0"
 dependencies = [
+ "bdk",
  "bigdecimal",
- "by-axum",
- "by-macros",
- "by-types",
- "dioxus-translate",
  "reqwest",
  "rest-api",
- "schemars",
  "serde",
  "serde_json",
  "serde_urlencoded",

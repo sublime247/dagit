@@ -1,11 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[cfg(feature = "server")]
-use by_axum::aide;
-#[cfg(feature = "server")]
-use schemars::JsonSchema;
-
-use dioxus_translate::Translate;
+use bdk::prelude::*;
 
 #[derive(Debug, Serialize, PartialEq, Eq, Deserialize, Translate)]
 #[cfg_attr(feature = "server", derive(JsonSchema, aide::OperationIo))]
@@ -16,7 +11,7 @@ pub enum ServiceError {
     BadRequest(String),
     // Auth Errors
     Unauthorized,
-
+    DuplicateUser,
     #[translate(
         ko = "인증코드가 만료되었습니다.",
         en = "Verification code is expired."

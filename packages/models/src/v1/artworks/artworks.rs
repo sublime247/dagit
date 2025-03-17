@@ -1,14 +1,11 @@
-#[cfg(feature = "server")]
-use by_axum::aide;
-use by_macros::api_model;
-use by_types::QueryResponse;
+use bdk::prelude::*;
 use validator::Validate;
 
 //TODO(api): Implement "/likes" and "/prices" API
 //TODO(api): Implement admin api "m1/agit/:id" for manging admins.
 //TODO(api): Implement Watermarking API
 #[derive(Validate)]
-#[api_model(base = "/v1/artworks", table = artworks, action_by_id = [delete], iter_type = QueryResponse)]
+#[api_model(base = "/v1/artworks", table = artworks, action_by_id = [delete], iter_type = by_types::QueryResponse)]
 pub struct Artwork {
     #[api_model(summary, primary_key)]
     pub id: i64,

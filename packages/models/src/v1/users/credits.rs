@@ -1,7 +1,4 @@
-use by_macros::api_model;
-
-#[cfg(feature = "server")]
-use by_axum::aide;
+use bdk::prelude::*;
 
 #[api_model(base = "/v1/users/:user_id/credits", table = user_credits)]
 pub struct UserCredit {
