@@ -2,7 +2,7 @@
 members = [
     "packages/api",
     "packages/main-ui",
-    "packages/models",
+    "packages/common",
     "packages/build-ui",
 ]
 exclude = ["deps"]
@@ -50,7 +50,7 @@ sqlx = { version = "0.8.3", features = [
     "bigdecimal",
 ] }
 
-models = { path = "packages/models" }
+common = { path = "packages/common" }
 #FIXME: `rest-api` crate has `getrandom` dependency, but it's listed here
 getrandom = { version = "0.2", features = ["js"] }
 

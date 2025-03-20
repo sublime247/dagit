@@ -3,7 +3,7 @@ use crate::{
     controllers::v1::collection,
     dagit_tests::{TestContext, setup},
 };
-use models::v1::collections::CollectionQuery;
+use common::tables::collections::CollectionQuery;
 
 const IMAGE_URL: &str =
     "https://metadata.dev.dagit.club/images/72a11429-20c0-4d62-8cde-ff3d4d5dc0bb";

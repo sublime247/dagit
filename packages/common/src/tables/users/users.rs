@@ -1,6 +1,6 @@
 use bdk::prelude::*;
 
-use crate::v1::agits::Agit;
+use crate::tables::agits::Agit;
 
 #[derive(validator::Validate)]
 #[api_model(base = "/v1/users", table = users, response = [signup_or_login(UserResponse)])]

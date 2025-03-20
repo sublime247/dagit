@@ -1,5 +1,5 @@
 use base64::{Engine, engine::general_purpose};
-use models::v1::users::User;
+use common::tables::users::User;
 use rest_api::{Signature, Signer, signature::SignatureAlgorithm};
 use ring::signature::{Ed25519KeyPair, KeyPair};
 
@@ -57,7 +57,7 @@ async fn test_user_signup_or_login() {
     let id = uuid::Uuid::new_v4().to_string();
     let response = user_client
         .signup_or_login(
-            models::v1::users::AuthProvider::Google,
+            common::tables::users::AuthProvider::Google,
             format!("user-{id}@test.com"),
             format!("test-user-{id}"),
             None,
@@ -68,12 +68,12 @@ async fn test_user_signup_or_login() {
     let signup_response = response.unwrap();
     assert_eq!(
         signup_response.action,
-        models::v1::users::UserResponseType::SignUp
+        common::tables::users::UserResponseType::SignUp
     );
 
     let response = user_client
         .signup_or_login(
-            models::v1::users::AuthProvider::Google,
+            common::tables::users::AuthProvider::Google,
             format!("user-{id}@test.com"),
             format!("test-user-{id}"),
             None,
@@ -81,7 +81,10 @@ async fn test_user_signup_or_login() {
         .await;
     assert!(response.is_ok(), "Failed to login: {:?}", response.err());
     let response = response.unwrap();
-    assert_eq!(response.action, models::v1::users::UserResponseType::Login);
+    assert_eq!(
+        response.action,
+        common::tables::users::UserResponseType::Login
+    );
     assert_eq!(response.user.email, signup_response.user.email);
     rest_api::remove_signer();
 }

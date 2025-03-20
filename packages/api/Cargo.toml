@@ -22,7 +22,7 @@ sqlx = { version = "0.8.3", features = [
     "bigdecimal",
 ] }
 
-models = { workspace = true, features = ["server"] }
+common = { workspace = true, features = ["server"] }
 
 bdk = { workspace = true, features = ["be"] }
 

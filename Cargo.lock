@@ -105,8 +105,8 @@ dependencies = [
  "base64 0.22.1",
  "bdk",
  "chrono",
+ "common",
  "ic-agent",
- "models",
  "reqwest",
  "rest-api",
  "ring",
@@ -780,6 +780,22 @@ checksum = "57663b653d948a338bfb3eeba9bb2fd5fcfaecb9e199e87e1eda4d9e8b240fd9"
 dependencies = [
  "ciborium-io",
  "half 2.4.1",
+]
+
+[[package]]
+name = "common"
+version = "0.1.0"
+dependencies = [
+ "bdk",
+ "bigdecimal",
+ "reqwest",
+ "rest-api",
+ "serde",
+ "serde_json",
+ "serde_urlencoded",
+ "sqlx",
+ "tracing",
+ "validator",
 ]
 
 [[package]]
@@ -3064,22 +3080,6 @@ dependencies = [
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
  "windows-sys 0.52.0",
-]
-
-[[package]]
-name = "models"
-version = "0.1.0"
-dependencies = [
- "bdk",
- "bigdecimal",
- "reqwest",
- "rest-api",
- "serde",
- "serde_json",
- "serde_urlencoded",
- "sqlx",
- "tracing",
- "validator",
 ]
 
 [[package]]

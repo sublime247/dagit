@@ -8,14 +8,13 @@ use by_axum::{
         routing::{get, post},
     },
 };
-use models::v1::prelude::CollectionGetResponse;
-use models::{
+use common::{
     Result,
     error::ServiceError,
-    v1::collections::{
+    tables::collections::{
         Collection, CollectionAction, CollectionByIdAction, CollectionCreateRequest,
-        CollectionParam, CollectionQuery, CollectionRepository, CollectionSummary,
-        CollectionUpdateRequest,
+        CollectionGetResponse, CollectionParam, CollectionQuery, CollectionRepository,
+        CollectionSummary, CollectionUpdateRequest,
     },
 };
 use sqlx::postgres::PgRow;

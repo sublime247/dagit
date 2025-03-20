@@ -1,4 +1,4 @@
-use crate::v1::{artworks::Artwork, collections::Collection};
+use crate::tables::{artworks::Artwork, collections::Collection};
 
 use bdk::prelude::*;
 use validator::Validate;

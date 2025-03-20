@@ -9,10 +9,10 @@ use by_axum::{
     },
 };
 
-use models::{
+use common::{
     Result,
     error::ServiceError,
-    v1::agits::{
+    tables::agits::{
         Agit, AgitAction, AgitByIdAction, AgitCreateRequest, AgitGetResponse, AgitParam, AgitQuery,
         AgitRepository, AgitSummary, AgitUpdateRequest,
     },

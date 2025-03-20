@@ -1,10 +1,10 @@
 use bdk::prelude::*;
 
-use crate::v1::artworks::Artwork;
+use crate::tables::artworks::Artwork;
 
 //TODO(api): Implement "/likes", "/followers" and "/holder" APIs
 //TODO(api): Implement admin api "m1/collections/:id" for managing custodian.
-#[api_model(base = "/v1/collections", table = collections, action_by_id = [delete], iter_type = by_types::QueryResponse)]
+#[api_model(base = "/v1/collections", table = collections, action_by_id = [delete])]
 pub struct Collection {
     #[api_model(summary, primary_key)]
     pub id: i64,

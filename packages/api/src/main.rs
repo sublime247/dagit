@@ -10,7 +10,8 @@ use by_axum::{
 use controllers::v1;
 
 use by_types::DatabaseConfig;
-use models::v1::{
+use common::Result;
+use common::tables::{
     agit_admins::AgitAdmins,
     agits::Agit,
     artists::Artist,
@@ -20,7 +21,6 @@ use models::v1::{
 };
 use sqlx::{migrate, postgres::PgPoolOptions};
 use tokio::net::TcpListener;
-
 mod utils;
 
 macro_rules! migrate {
@@ -39,7 +39,7 @@ macro_rules! migrate {
         }
     };
 }
-async fn migration(pool: &sqlx::Pool<sqlx::Postgres>) -> models::Result<()> {
+async fn migration(pool: &sqlx::Pool<sqlx::Postgres>) -> Result<()> {
     //TODO: Add Model Migration
     tracing::info!("Running migration");
     migrate!(
@@ -49,7 +49,7 @@ async fn migration(pool: &sqlx::Pool<sqlx::Postgres>) -> models::Result<()> {
 
     Ok(())
 }
-async fn make_app() -> models::Result<Router> {
+async fn make_app() -> Result<Router> {
     let app = by_axum::new();
     let conf = config::get();
     set_auth_config(conf.auth.clone());
@@ -73,7 +73,7 @@ async fn make_app() -> models::Result<Router> {
     Ok(app)
 }
 #[tokio::main]
-async fn main() -> models::Result<()> {
+async fn main() -> Result<()> {
     let app = make_app().await?;
     let port = option_env!("PORT").unwrap_or("3000");
     let listener = TcpListener::bind(format!("0.0.0.0:{}", port))
@@ -88,7 +88,8 @@ async fn main() -> models::Result<()> {
 #[cfg(test)]
 pub mod dagit_tests {
     use by_types::Claims;
-    use models::{error::ServiceError, v1::users::User};
+    use common::error::ServiceError;
+    use common::tables::users::User;
     use rest_api::ApiService;
     use std::{collections::HashMap, time::SystemTime};
 
@@ -107,7 +108,7 @@ pub mod dagit_tests {
     const IMAGE_URL: &str =
         "https://metadata.dev.dagit.club/images/72a11429-20c0-4d62-8cde-ff3d4d5dc0bb";
 
-    pub async fn setup_test_user(id: &str, pool: &sqlx::PgPool) -> models::Result<User> {
+    pub async fn setup_test_user(id: &str, pool: &sqlx::PgPool) -> Result<User> {
         let user = User::get_repository(pool.clone());
         let agit = Agit::get_repository(pool.clone());
         let agit_admins = AgitAdmins::get_repository(pool.clone());
@@ -120,7 +121,7 @@ pub mod dagit_tests {
         let mut user = user
             .insert_with_tx(
                 &mut *tx,
-                models::v1::users::AuthProvider::Google,
+                common::tables::users::AuthProvider::Google,
                 address,
                 email,
                 name,
@@ -170,7 +171,7 @@ pub mod dagit_tests {
         (claims, token)
     }
 
-    pub async fn setup() -> models::Result<TestContext> {
+    pub async fn setup() -> Result<TestContext> {
         let conf = config::get();
         let pool = if let DatabaseConfig::Postgres { url, pool_size } = conf.database {
             PgPoolOptions::new()

@@ -8,8 +8,8 @@ use by_axum::{
         routing::{get, post},
     },
 };
-use models::Result;
-use models::v1::prelude::*;
+use common::Result;
+use common::tables::prelude::*;
 
 #[derive(
     Debug, Clone, serde::Deserialize, serde::Serialize, schemars::JsonSchema, aide::OperationIo,
@@ -41,8 +41,8 @@ impl ArtworkControllerV1 {
 
 impl ArtworkControllerV1 {
     pub async fn list(
-        State(ctrl): State<ArtworkControllerV1>,
-        Extension(claim): Extension<Option<Authorization>>,
+        State(_ctrl): State<ArtworkControllerV1>,
+        Extension(_claim): Extension<Option<Authorization>>,
         Query(q): Query<ArtworkParam>,
     ) -> Result<Json<Vec<ArtworkSummary>>> {
         //TODO: Add Listing Artworks
@@ -50,16 +50,16 @@ impl ArtworkControllerV1 {
         Ok(Json(vec![]))
     }
     pub async fn get(
-        State(ctrl): State<ArtworkControllerV1>,
-        Extension(claim): Extension<Option<Authorization>>,
+        State(_ctrl): State<ArtworkControllerV1>,
+        Extension(_claim): Extension<Option<Authorization>>,
         Path(ArtworkPathParam { id }): Path<ArtworkPathParam>,
     ) -> Result<Json<Artwork>> {
         tracing::debug!("get artwork {id}");
         Ok(Json(Artwork::default()))
     }
     pub async fn act(
-        State(ctrl): State<ArtworkControllerV1>,
-        Extension(claim): Extension<Option<Authorization>>,
+        State(_ctrl): State<ArtworkControllerV1>,
+        Extension(_claim): Extension<Option<Authorization>>,
         Json(body): Json<ArtworkAction>,
     ) -> Result<Json<Artwork>> {
         tracing::debug!("artwork act {body:?}");
@@ -72,9 +72,9 @@ impl ArtworkControllerV1 {
     }
 
     pub async fn act_by_id(
-        State(ctrl): State<ArtworkControllerV1>,
+        State(_ctrl): State<ArtworkControllerV1>,
         Path(ArtworkPathParam { id }): Path<ArtworkPathParam>,
-        Extension(claim): Extension<Option<Authorization>>,
+        Extension(_claim): Extension<Option<Authorization>>,
         Json(body): Json<ArtworkByIdAction>,
     ) -> Result<Json<Artwork>> {
         tracing::debug!("artwork act_by_id {id} {body:?}");

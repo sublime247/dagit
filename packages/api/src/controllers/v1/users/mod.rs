@@ -13,9 +13,9 @@ use by_axum::{
     },
 };
 use by_types::{Claims, JsonWithHeaders};
-use models::Result;
-use models::error::ServiceError;
-use models::v1::prelude::*;
+use common::Result;
+use common::error::ServiceError;
+use common::tables::prelude::*;
 use sqlx::postgres::PgRow;
 
 #[derive(Clone, Debug)]
@@ -91,10 +91,10 @@ impl UserController {
             Some(Authorization::UserSig(sig)) => {
                 let principal = sig
                     .principal()
-                    .map_err(|_| models::error::ServiceError::Unauthorized)?;
+                    .map_err(|_| common::error::ServiceError::Unauthorized)?;
                 Ok(principal)
             }
-            _ => Err(models::error::ServiceError::Unauthorized),
+            _ => Err(common::error::ServiceError::Unauthorized),
         }
     }
     async fn get_user_by_address(
@@ -152,7 +152,7 @@ impl UserController {
         let principal = match auth {
             Some(Authorization::Bearer { claims }) => claims.sub,
             _ => {
-                return Err(models::error::ServiceError::Unauthorized);
+                return Err(common::error::ServiceError::Unauthorized);
             }
         };
 

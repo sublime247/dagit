@@ -8,8 +8,8 @@ use by_axum::{
         routing::post,
     },
 };
-use models::Result;
-use models::v1::prelude::*;
+use common::Result;
+use common::tables::prelude::*;
 
 #[derive(
     Debug, Clone, serde::Deserialize, serde::Serialize, schemars::JsonSchema, aide::OperationIo,
