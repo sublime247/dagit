@@ -1,7 +1,4 @@
-#![allow(unused)]
-use dioxus::prelude::*;
-use dioxus_logger::tracing;
-use dioxus_translate::*;
+use bdk::prelude::*;
 
 #[component]
 pub fn HomePage(lang: Language, agit_id: i64) -> Element {

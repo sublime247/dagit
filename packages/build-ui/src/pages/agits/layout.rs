@@ -1,7 +1,6 @@
 #![allow(non_snake_case)]
 use crate::{pages::layout::SuspenseWrapper, routes::Route};
-use dioxus::prelude::*;
-use dioxus_translate::Language;
+use bdk::prelude::*;
 
 use super::Navigation;
 

@@ -1,8 +1,6 @@
 #![allow(non_snake_case)]
+use bdk::prelude::*;
 use by_components::loaders::cube_loader::CubeLoader;
-use dioxus::prelude::*;
-
-use dioxus_translate::Language;
 
 use super::components::{Header, PopupZone};
 use crate::routes::Route;

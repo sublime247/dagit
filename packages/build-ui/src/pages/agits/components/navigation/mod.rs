@@ -1,7 +1,5 @@
 use crate::{components::ServiceLogo, routes::Route};
-use dioxus::prelude::*;
-use dioxus_logger::tracing;
-use dioxus_translate::{Language, translate};
+use bdk::prelude::*;
 
 mod i18n;
 use i18n::NavigationTranslate;

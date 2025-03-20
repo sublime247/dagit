@@ -1,10 +1,7 @@
-use by_components::icons;
-use dioxus::prelude::*;
-use dioxus_logger::tracing;
-use dioxus_translate::Language;
-
 use crate::components::icons::dagit_logo::ServiceLogo;
 use crate::routes::Route;
+use bdk::prelude::*;
+use by_components::icons;
 #[component]
 pub fn Header(lang: Language) -> Element {
     rsx! {
