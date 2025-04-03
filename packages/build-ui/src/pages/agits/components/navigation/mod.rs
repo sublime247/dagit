@@ -9,11 +9,10 @@ enum SelectedSection {
     HomePage,
     Orders,
     Management,
-    Community,
-    Customers,
     Analytics,
     Design,
     ExtensionTool,
+    Hub,
 }
 #[derive(PartialEq, Eq)]
 enum SelectedItem {
@@ -30,7 +29,6 @@ enum SelectedItem {
     Traffic,
     Design,
     ExtensionTool,
-    Customers,
     None,
 }
 fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
@@ -45,13 +43,12 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
         Route::Artworks { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artworks),
         Route::Collections { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collections),
         Route::Artist { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artist),
-        Route::Collectors { lang: _, agit_id: _ } => (SelectedSection::Community, SelectedItem::Collectors),
-        Route::Dao { lang: _, agit_id: _ } => (SelectedSection::Community, SelectedItem::Dao),
-        Route::Oracle { lang: _, agit_id: _ } => (SelectedSection::Community, SelectedItem::Oracle),
-        Route::Faq { lang: _, agit_id: _ } => (SelectedSection::Community, SelectedItem::Faq),
+        Route::Collectors { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collectors),
+        Route::Dao { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Dao),
+        Route::Oracle { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Oracle),
+        Route::Faq { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Faq),
         Route::Report { lang: _, agit_id: _ } => (SelectedSection::Analytics, SelectedItem::Report),
         Route::Traffic { lang: _, agit_id: _ } => (SelectedSection::Analytics, SelectedItem::Traffic),
-        Route::Customers { lang: _, agit_id: _ } => (SelectedSection::Customers, SelectedItem::Customers),
         Route::Design { lang: _, agit_id: _ } => (SelectedSection::Design, SelectedItem::Design),
         Route::ExtensionTool { lang: _, agit_id: _ } => (SelectedSection::ExtensionTool, SelectedItem::ExtensionTool),
         _ => {
@@ -66,19 +63,21 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
     let route = use_route::<Route>();
     let (selected_section, selected_item) = check_route(route);
     rsx! {
-        div { class: "flex flex-col p-10 gap-12.5",
-            ServiceLogo {width: "110", height: "24", class: "fill-white" },
+        div { class: "flex flex-col p-10 gap-10.5",
+            ServiceLogo {width: "110", height: "24", class: "fill-white"},
             div { class: "flex flex-col gap-5 text-white text-base",
+
                 // Standalone sections without children
-                StandaloneSection {
+               Section {
                     label: tr.home,
                     selected: selected_section == SelectedSection::HomePage,
                     to: Route::HomePage { lang, agit_id },
                 }
                 // Sections with children
-                SectionWithChildren {
+                Section {
                     label: tr.orders,
                     selected: selected_section == SelectedSection::Orders,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::SalesRequest,
                         Link { to: Route::SalesRequest{ lang, agit_id }, {tr.sales_request} }
                     }
@@ -86,9 +85,10 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                         Link { to: Route::ShippingLabel { lang, agit_id }, {tr.shipping_label} }
                     }
                 }
-                SectionWithChildren {
+                Section {
                     label: tr.management,
                     selected: selected_section == SelectedSection::Management,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::Artworks,
                         Link { to: Route::Artworks { lang, agit_id }, {tr.artworks} }
                     }
@@ -98,13 +98,14 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     Item { selected: selected_item == SelectedItem::Artist,
                         Link { to: Route::Artist { lang, agit_id }, {tr.artists} }
                     }
-                }
-                SectionWithChildren {
-                    label: tr.community,
-                    selected: selected_section == SelectedSection::Community,
                     Item { selected: selected_item == SelectedItem::Collectors,
                         Link { to: Route::Collectors { lang, agit_id }, {tr.collectors} }
                     }
+                }
+                Section {
+                    label: tr.hub,
+                    selected: selected_section == SelectedSection::Hub,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::Dao,
                         Link { to: Route::Dao { lang, agit_id }, {tr.dao} }
                     }
@@ -115,16 +116,10 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                         Link { to: Route::Faq { lang, agit_id }, {tr.faq} }
                     }
                 }
-                // Standalone section without children
-                StandaloneSection {
-                    label: tr.customers,
-                    selected: selected_section == SelectedSection::Customers,
-                    to: Route::Customers { lang, agit_id },
-                }
-                // Section with children
-                SectionWithChildren {
+                Section {
                     label: tr.analytics,
                     selected: selected_section == SelectedSection::Analytics,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::Report,
                         Link { to: Route::Report { lang, agit_id }, {tr.report} }
                     }
@@ -133,69 +128,44 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     }
                 }
                 // Standalone sections without children
-                StandaloneSection {
+              Section {
                     label: tr.design,
                     selected: selected_section == SelectedSection::Design,
                     to: Route::Design { lang, agit_id },
                 }
-                StandaloneSection {
+                Section {
                     label: tr.extension_tool,
                     selected: selected_section == SelectedSection::ExtensionTool,
                     to: Route::ExtensionTool { lang, agit_id },
                 }
             }
         }
-    }
-}
+
+         }
+           }
 
 
 
 
-// Component for standalone sections without children
+
 #[component]
-fn StandaloneSection(
-    label: String,
-    selected: bool,
-    to: Route,
-) -> Element {
-    rsx! {
-        Link {
-            to: to,
-            div {
-                class: format!(
-                    "hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out",
-                ),
-                div {
-                    class: format!(
-                        "flex items-center py-2.5 gap-2 {}",
-                        if selected { "text-primary" } else { "" },
-                    ),
-                    {label}
-                }
-            }
-        }
-    }
-}
-
-
-
-
-// Component for sections with children
-#[component]
-fn SectionWithChildren(
+fn Section(
     label: String,
     #[props(default = VNode::empty())] children: Element,
     selected: bool,
+    #[props(default = None)] to: Option<Route>,
+    #[props(default = false)] has_children: bool,
 ) -> Element {
-    rsx! {
+    let content = rsx! {
         div {
             class: "relative",
+            // Add a green vertical line for selected sections with children
             {
-                if selected {
+                if selected && has_children {
                     rsx! {
                         div {
-                            class: "absolute left-0 top-0 bg-primary",
-                            style: "width: 1px; height: 38%;",
+                            class: "absolute left-0 top-0 bg-primary ",
+                            style: "width: 1px; height:38%; padding-bottom:5", // Thinner line
                         }
                     }
                 } else {
@@ -203,12 +173,10 @@ fn SectionWithChildren(
                 }
             }
             div {
-                class: format!(
-                    "pl-5 hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out",
-                ),
+                class: "pl-1", 
                 div {
                     class: format!(
-                        "flex items-center py-2.5 gap-2 {}",
+                        "flex items-center py-3 gap-3 hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out {}",
                         if selected { "text-primary" } else { "" },
                     ),
                     {label}
@@ -216,6 +184,16 @@ fn SectionWithChildren(
                 div { class: "ml-5", {children} }
             }
         }
+    };
+
+    match to {
+        Some(route) => rsx! {
+            Link {
+                to: route,
+                {content}
+            }
+        },
+        None => content,
     }
 }
 
@@ -228,7 +206,7 @@ fn Item(selected: bool, children: Element) -> Element {
                 if selected {
                     rsx! {
                         span { 
-                            class: "text-primary absolute -left-10  top-1/2 transform -translate-y-1/2",
+                            class: "text-primary absolute -left-5 top-1/2 transform -translate-y-1/2",
                             "↪" 
                         }
                     }
@@ -237,7 +215,9 @@ fn Item(selected: bool, children: Element) -> Element {
                 }
             }
             div { 
-                class: format!("{}", if selected { "text-primary" } else { "text-inherit" }),
+                class: format!("hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out {}", 
+                    if selected { "text-primary" } else { "text-inherit" }
+                ),
                 {children}
             }
         }

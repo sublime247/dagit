@@ -37,7 +37,10 @@ translate! {
         en: "Collections",
         ko: "Collections",
     },
-
+    hub:{
+        en: "Hub",
+        ko: "Hub",
+    },
     artists: {
         en: "Artists",
         ko: "Artists",
