@@ -9,11 +9,10 @@ enum SelectedSection {
     HomePage,
     Orders,
     Management,
-    Community,
-    Customers,
     Analytics,
     Design,
     ExtensionTool,
+    Hub,
 }
 #[derive(PartialEq, Eq)]
 enum SelectedItem {
@@ -28,6 +27,8 @@ enum SelectedItem {
     Faq,
     Report,
     Traffic,
+    Design,
+    ExtensionTool,
     None,
 }
 fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
@@ -36,6 +37,20 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             lang: _,
             agit_id: _,
         } => (SelectedSection::HomePage, SelectedItem::None),
+
+        Route::SalesRequest { lang: _, agit_id: _ } => (SelectedSection::Orders, SelectedItem::SalesRequest),
+        Route::ShippingLabel { lang: _, agit_id: _ } => (SelectedSection::Orders, SelectedItem::ShippingLabel),
+        Route::Artworks { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artworks),
+        Route::Collections { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collections),
+        Route::Artist { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artist),
+        Route::Collectors { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collectors),
+        Route::Dao { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Dao),
+        Route::Oracle { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Oracle),
+        Route::Faq { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Faq),
+        Route::Report { lang: _, agit_id: _ } => (SelectedSection::Analytics, SelectedItem::Report),
+        Route::Traffic { lang: _, agit_id: _ } => (SelectedSection::Analytics, SelectedItem::Traffic),
+        Route::Design { lang: _, agit_id: _ } => (SelectedSection::Design, SelectedItem::Design),
+        Route::ExtensionTool { lang: _, agit_id: _ } => (SelectedSection::ExtensionTool, SelectedItem::ExtensionTool),
         _ => {
             tracing::error!("Unknown route: {}", route);
             (SelectedSection::HomePage, SelectedItem::None)
@@ -48,109 +63,163 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
     let route = use_route::<Route>();
     let (selected_section, selected_item) = check_route(route);
     rsx! {
-        div { class: "flex flex-col p-10 gap-12.5",
-            ServiceLogo {}
+        div { class: "flex flex-col p-8 gap-10.5 align-start",
+            ServiceLogo {width: "110", height: "24", class: "fill-white"},
             div { class: "flex flex-col gap-5 text-white text-base",
-                Section {
+
+                // Standalone sections without children
+               Section {
                     label: tr.home,
                     selected: selected_section == SelectedSection::HomePage,
+                    to: Route::HomePage { lang, agit_id },
                 }
+                // Sections with children
                 Section {
                     label: tr.orders,
                     selected: selected_section == SelectedSection::Orders,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::SalesRequest,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.sales_request} }
+                        Link { to: Route::SalesRequest{ lang, agit_id }, {tr.sales_request} }
                     }
                     Item { selected: selected_item == SelectedItem::ShippingLabel,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.shipping_label} }
+                        Link { to: Route::ShippingLabel { lang, agit_id }, {tr.shipping_label} }
                     }
-
                 }
                 Section {
                     label: tr.management,
                     selected: selected_section == SelectedSection::Management,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::Artworks,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.artworks} }
+                        Link { to: Route::Artworks { lang, agit_id }, {tr.artworks} }
                     }
                     Item { selected: selected_item == SelectedItem::Collections,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.collections} }
+                        Link { to: Route::Collections { lang, agit_id }, {tr.collections} }
                     }
                     Item { selected: selected_item == SelectedItem::Artist,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.artists} }
+                        Link { to: Route::Artist { lang, agit_id }, {tr.artists} }
+                    }
+                    Item { selected: selected_item == SelectedItem::Collectors,
+                        Link { to: Route::Collectors { lang, agit_id }, {tr.collectors} }
                     }
                 }
                 Section {
-                    label: tr.community,
-                    selected: selected_section == SelectedSection::Community,
-                    Item { selected: selected_item == SelectedItem::Collectors,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.collectors} }
-                    }
+                    label: tr.hub,
+                    selected: selected_section == SelectedSection::Hub,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::Dao,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.dao} }
+                        Link { to: Route::Dao { lang, agit_id }, {tr.dao} }
                     }
                     Item { selected: selected_item == SelectedItem::Oracle,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.oracle} }
+                        Link { to: Route::Oracle { lang, agit_id }, {tr.oracle} }
                     }
                     Item { selected: selected_item == SelectedItem::Faq,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.faq} }
+                        Link { to: Route::Faq { lang, agit_id }, {tr.faq} }
                     }
-                }
-                Section {
-                    label: tr.customers,
-                    selected: selected_section == SelectedSection::Customers,
                 }
                 Section {
                     label: tr.analytics,
                     selected: selected_section == SelectedSection::Analytics,
+                    has_children: true,
                     Item { selected: selected_item == SelectedItem::Report,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.report} }
+                        Link { to: Route::Report { lang, agit_id }, {tr.report} }
                     }
                     Item { selected: selected_item == SelectedItem::Traffic,
-                        Link { to: Route::HomePage { lang, agit_id }, {tr.traffic} }
+                        Link { to: Route::Traffic { lang, agit_id }, {tr.traffic} }
                     }
                 }
-                Section {
+                // Standalone sections without children
+              Section {
                     label: tr.design,
                     selected: selected_section == SelectedSection::Design,
+                    to: Route::Design { lang, agit_id },
                 }
                 Section {
                     label: tr.extension_tool,
                     selected: selected_section == SelectedSection::ExtensionTool,
+                    to: Route::ExtensionTool { lang, agit_id },
                 }
             }
         }
-    }
-}
+
+         }
+           }
+
+
+
+
 
 #[component]
 fn Section(
     label: String,
     #[props(default = VNode::empty())] children: Element,
     selected: bool,
+    #[props(default = None)] to: Option<Route>,
+    #[props(default = false)] has_children: bool,
 ) -> Element {
-    rsx! {
+    let content = rsx! {
         div {
-            class: format!(
-                "hover:border-primary cursor-pointer transition-colors duration-200 ease-in-out {}",
-                if selected { "border-primary" } else { "" },
-            ),
-            div {
-                class: format!(
-                    "flex items-center py-2.5 gap-2 {}",
-                    if selected { "text-primary" } else { "" },
-                ),
-                {label}
+            class: "relative",
+            // Add a green vertical line for selected sections with children
+            {
+                if selected && has_children {
+                    rsx! {
+                        div {
+                            class: "absolute left-0 top-0 bg-primary ",
+                            style: "width: 1px; height:38%; padding-bottom:5", // Thinner line
+                        }
+                    }
+                } else {
+                    rsx! {}
+                }
             }
-            div { class: "ml-5", {children} }
+            div {
+                class: "pl-1", 
+                div {
+                    class: format!(
+                        "flex items-center py-3 gap-3 hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out {}",
+                        if selected { "text-primary" } else { "" },
+                    ),
+                    {label}
+                }
+                div { class: "ml-5", {children} }
+            }
         }
+    };
+
+    match to {
+        Some(route) => rsx! {
+            Link {
+                to: route,
+                {content}
+            }
+        },
+        None => content,
     }
 }
 
 #[component]
 fn Item(selected: bool, children: Element) -> Element {
     rsx! {
-        div { class: format!("{}", if selected { "text-primary" } else { "text-inherit" }),
-            {children}
+        div { 
+            class: "flex items-center relative",
+            {
+                if selected {
+                    rsx! {
+                        span { 
+                            class: "text-primary absolute -left-5 top-1/2 transform -translate-y-1/2",
+                            "↪" 
+                        }
+                    }
+                } else {
+                    rsx! {}
+                }
+            }
+            div { 
+                class: format!("hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out {}", 
+                    if selected { "text-primary" } else { "text-inherit" }
+                ),
+                {children}
+            }
         }
     }
 }
