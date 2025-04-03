@@ -41,7 +41,7 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
         Route::SalesRequest { lang: _, agit_id: _ } => (SelectedSection::Orders, SelectedItem::SalesRequest),
         Route::ShippingLabel { lang: _, agit_id: _ } => (SelectedSection::Orders, SelectedItem::ShippingLabel),
         Route::Artworks { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artworks),
-        Route::Collections { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collections),
+        Route::CollectionsPage { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collections),
         Route::Artist { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artist),
         Route::Collectors { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collectors),
         Route::Dao { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Dao),
@@ -93,7 +93,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                         Link { to: Route::Artworks { lang, agit_id }, {tr.artworks} }
                     }
                     Item { selected: selected_item == SelectedItem::Collections,
-                        Link { to: Route::Collections { lang, agit_id }, {tr.collections} }
+                        Link { to: Route::CollectionsPage { lang, agit_id }, {tr.collections} }
                     }
                     Item { selected: selected_item == SelectedItem::Artist,
                         Link { to: Route::Artist { lang, agit_id }, {tr.artists} }
