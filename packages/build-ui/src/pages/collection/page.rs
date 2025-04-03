@@ -72,11 +72,11 @@ pub fn CollectionsPage(lang: Language, agit_id:i64) -> Element {
     };
 
     rsx! {
-        div { class: "min-h-screen bg-[#171717] h-full flex flex-col text-white w-full",
+        div { class: "w-full min-h-screen bg-[#171717] h-full flex text-white justify-center items-center",
             // Main content
-            div { class: "flex flex-col",
+            div { class: "flex flex-col w-full h-full",
                 // Header
-                div { class: "p-4 sm:p-6",
+                div { class: "",
                     h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard", "Collections {agit_id}" }
                     p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
                 }
@@ -111,12 +111,12 @@ pub fn CollectionsPage(lang: Language, agit_id:i64) -> Element {
                 }
                 
                 // Content area (FilterSidebar and Table)
-                div { class: "flex flex-col md:flex-row flex-1",
+                div { class: "flex flex-col md:flex-row flex-1 w-full",
                     // FilterSidebar (hidden on small screens unless toggled)
                     if *show_filters.read() {
                         div { 
                             class: format!(
-                                "w-full md:w-64 bg-[#171717] border-r border-[#333] fixed inset-y-0 left-0 transform {} md:static md:translate-x-0 transition-transform duration-300",
+                                "w-64 bg-[#171717] border-r border-[#333] fixed inset-y-0 left-0 z-40 transform {} md:relative md:z-auto md:translate-x-0 transition-transform duration-300",
                                 if *show_filters.read() { "translate-x-0" } else { "-translate-x-full" }
                             ),
                             FilterSidebar {}
