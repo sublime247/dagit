@@ -15,7 +15,7 @@ pub enum Route {
             #[layout(NavigationLayout)]
                 #[route("/")]
                     HomePage { lang: Language, agit_id: i64 },
-                #[nest("/oders")]
+                #[nest("/orders")]
                     #[route("/sales-request")]
                         SalesRequest { lang: Language, agit_id: i64 },
                     #[route("/shipping-label")]
