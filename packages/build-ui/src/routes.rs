@@ -34,23 +34,24 @@ pub enum Route {
                 #[end_nest]
 
                 #[nest("/hub")]
-                #[route("/dao")]   
-                    Dao { lang: Language, agit_id: i64 },
-                #[route("/oracle")]   
-                    Oracle { lang: Language, agit_id: i64 },
+                    #[route("/dao")]   
+                        Dao { lang: Language, agit_id: i64 },
+                    #[route("/oracle")]   
+                        Oracle { lang: Language, agit_id: i64 },
                     #[route("/faq")]
                     Faq { lang: Language, agit_id: i64 },
                 #[end_nest]
-                #[route("/customers")]  
-                    Customers { lang: Language, agit_id: i64 },
-                #[route("/traffic")]
-                    Traffic { lang: Language, agit_id: i64 },
-                #[route("/report")]  
-                    Report { lang: Language, agit_id: i64 },
+
+                #[nest("/analytics")]
+                    #[route("/traffic")]
+                        Traffic { lang: Language, agit_id: i64 },
+                    #[route("/report")]  
+                        Report { lang: Language, agit_id: i64 },
+                #[end_nest]
+
                 #[route("/design")]  
                     Design { lang: Language, agit_id: i64 },
                 #[route("/extension-tool")]
-                   
                     ExtensionTool { lang: Language, agit_id: i64 },
               
               

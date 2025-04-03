@@ -63,7 +63,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
     let route = use_route::<Route>();
     let (selected_section, selected_item) = check_route(route);
     rsx! {
-        div { class: "flex flex-col p-10 gap-10.5",
+        div { class: "flex flex-col p-8 gap-10.5 align-start",
             ServiceLogo {width: "110", height: "24", class: "fill-white"},
             div { class: "flex flex-col gap-5 text-white text-base",
 
