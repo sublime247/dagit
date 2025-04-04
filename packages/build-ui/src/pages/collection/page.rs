@@ -1,27 +1,19 @@
 use bdk::prelude::*;
-use dioxus_translate::Language;
 use by_components::icons::{ settings, folder, edit };
+use dioxus_popup::PopupService;
 
-use crate::pages::collection::{Artwork, Collection, CollectionNameModal, FilterSidebar, NewCollectionModal, SuccessModal, TransferConfirmationModal};
+use crate::pages::collection::{ i18n::CollectionTranslate, Artwork, Collection, CollectionNameModal, FilterSidebar, NewCollectionModal, SuccessModal, TransferConfirmationModal};
 
 
-#[derive(Clone, Copy, PartialEq)]
-#[warn(dead_code)]
-enum ModalState {
-    None,
-    NewCollection,
-    Transfer,
-    CollectionName,
-    Success
-}
 
 #[allow(unused_variables)]
 #[component]
-pub fn CollectionsPage(lang: Language, agit_id:i64) -> Element {
+pub fn CollectionsPage(lang: Language, agit_id:ReadOnlySignal<i64>) -> Element {
+    let tr: CollectionTranslate = translate(&lang);
     let mut show_filters = use_signal(|| false);
-    let mut modal_state = use_signal(|| ModalState::None);
     let mut selected_artworks = use_signal(|| Vec::<usize>::new());
     let mut new_collection_name = use_signal(|| String::new());
+    let mut popup: PopupService=use_context();
     
     let collections = use_signal(|| {
         (1..15).map(|id| Collection {
@@ -68,7 +60,13 @@ pub fn CollectionsPage(lang: Language, agit_id:i64) -> Element {
         new_collection_name.set(name);
         
         // Show success modal after "API call"
-        modal_state.set(ModalState::Success);
+        popup.open(rsx!{
+            SuccessModal {
+                show: true,
+                collection_name: new_collection_name.read().clone(),
+                on_confirm: move |_| { popup.close() },
+            }
+        }).with_id("success-modal");
     };
 
     rsx! {
@@ -77,243 +75,220 @@ pub fn CollectionsPage(lang: Language, agit_id:i64) -> Element {
             div { class: "flex flex-col w-full h-full",
                 // Header
                 div { class: "",
-                    h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard", "Collections {agit_id}" }
+                    h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard",
+                        "Collections {agit_id}"
+                    }
                     p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
                 }
-                
                 // Search and filters
                 div { class: "p-4 flex flex-col sm:flex-row sm:items-center gap-4",
-                    button { class: "p-2 border border-[#333] text-white w-full sm:w-auto",
-                    onclick: move |_| show_filters.toggle(),
-                      settings::Sliders{ 
-                      
-                       },
+                    button {
+                        class: "p-2 border border-[#333] text-white w-full sm:w-auto",
+                        onclick: move |_| show_filters.toggle(),
+                        settings::Sliders {}
                     }
-                    
                     div { class: "relative flex-1 mr-4",
                         div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                        edit::Search {    class: "text-white",}
+                            edit::Search { class: "text-white" }
                         }
                         input {
                             class: "bg-[#222] border border-[#333] text-white text-sm rounded-none block w-full pl-10 p-2.5",
-                            placeholder: "Search by title",
-                            r#type: "text"
+                            placeholder: tr.search_by_title,
+                            r#type: "text",
                         }
                     }
-                    
-                    button { class: "bg-[#222] border border-[#333] text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
-                    onclick: move |_| modal_state.set(ModalState::NewCollection),
-                    folder::UploadFolder { 
-                        class:"mr-3"
-                     },
-                        "New Collection"
+                    button {
+                        class: "bg-[#222] border border-[#333] text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
+                        onclick: move |_| {
+                            popup.open(rsx! {
+                                NewCollectionModal {
+                                    show: true,
+                                    on_close: move |_| {
+                                        popup.close();
+                                    },
+                                    artworks: artwork.clone(),
+                                    on_select_artworks: move |selected| {
+                                        selected_artworks.set(selected);
+                                        popup
+                                            .open(rsx! {
+                                                TransferConfirmationModal {
+                                                    show: true,
+                                                    selected_count: selected_artworks.read().len(),
+                                                    on_back: move |_| popup.close(),
+                                                    on_continue: move |_| {
+                                                        popup.open(rsx! {
+                                                            CollectionNameModal {
+                                                                show: true,
+                                                                on_back: move |_| popup.close(),
+                                                                on_add: move |name| {
+                                                                    create_collection(name);
+                                                                },
+                                                            }
+                                                        }).with_id("collection-name-modal");
+                                                    },
+                                                }
+                                            })
+                                            .with_id("transfer-confirmation-modal");
+                                    },
+                                }
+                            }).with_id("new-collection-modal");
+                        },
+                        folder::UploadFolder { class: "mr-3" }
+                        {tr.new_collection}
                     }
                 }
-                
                 // Content area (FilterSidebar and Table)
                 div { class: "flex flex-col md:flex-row flex-1 w-full",
                     // FilterSidebar (hidden on small screens unless toggled)
                     if *show_filters.read() {
-                        div { 
+                        div {
                             class: format!(
                                 "w-64 bg-[#171717] border-r border-[#333] fixed inset-y-0 left-0 z-40 transform {} md:relative md:z-auto md:translate-x-0 transition-transform duration-300",
-                                if *show_filters.read() { "translate-x-0" } else { "-translate-x-full" }
+                                if *show_filters.read() { "translate-x-0" } else { "-translate-x-full" },
                             ),
                             FilterSidebar {}
                         }
                     }
-                    
                     // Table body
                     div { class: "flex-1 overflow-auto",
                         table { class: "w-full text-sm text-left border-collapse min-w-[800px]",
-                            // Table header and body content...
-                            // (Keeping the existing table code)
-                            
                             // Table header
                             thead { class: "text-xs uppercase bg-[#1a1a1a] border-b border-[#333]",
                                 tr {
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrapp", 
-                                        div { class: "flex items-center", 
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrapp",
+                                        div { class: "flex items-center",
                                             span { "#" }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Collection" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.collection} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Floor Price" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.floor_price} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Floor Change" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.floor_change} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Volume Change" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.volume_change} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Volume" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.volume} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Owners" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.owners} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Stock" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.stock} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", 
-                                        div { class: "flex items-center", 
-                                            span { "Status" }
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        div { class: "flex items-center",
+                                            span { {tr.status} }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "" } // For the actions column
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                        ""
+                                    } // For the actions column
                                 }
                             }
-                            
                             // Table body
                             tbody {
-                                {collections_data.iter().enumerate().map(|(index, collection)| {
-                                    rsx! {
-                                        tr { key: "{index}", class: "border-b border-[#333]",
-                                            // Table row content...
-                                            // (Keeping the existing table row code)
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.id}" }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                div { class: "flex items-center", 
-                                                    div { class: "w-6 h-6 sm:w-8 sm:h-8 bg-[#333] mr-2" }
-                                                    span { "{collection.name}" }
-                                                    // Verified icon
-                                                    svg {
-                                                        view_box: "0 0 24 24",
-                                                        width: "16",
-                                                        height: "16",
-                                                        fill: "#10b981",
-                                                        class: "ml-1",
-                                                        path {
-                                                            d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                {
+                                    collections_data
+                                        .iter()
+                                        .enumerate()
+                                        .map(|(index, collection)| {
+                                            rsx! {
+                                                tr { key: "{index}", class: "border-b border-[#333]",
+                                                    // Table row content...
+                                                    // (Keeping the existing table row code)
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.id}" }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                        div { class: "flex items-center",
+                                                            div { class: "w-6 h-6 sm:w-8 sm:h-8 bg-[#333] mr-2" }
+                                                            span { "{collection.name}" }
+                                                            // Verified icon
+                                                            svg {
+                                                                view_box: "0 0 24 24",
+                                                                width: "16",
+                                                                height: "16",
+                                                                fill: "#10b981",
+                                                                class: "ml-1",
+                                                                path { d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }
+                                                            }
+                                                        }
+                                                    }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                        div { "{collection.floor_price_eth} ETH" }
+                                                        div { class: "text-xs text-gray-400", "$ {collection.floor_price_usd}" }
+                                                    }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                        div { "{collection.floor_change_eth} ETH" }
+                                                        div { class: "text-xs text-gray-400", "$ {collection.floor_change_usd}" }
+                                                    }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                        div { class: "flex items-center space-x-4 p-l-4",
+                                                            div { class: "flex flex-col",
+                                                                div { class: "text-green-500", "+ {collection.volume_change_24h}%" }
+                                                                div { class: "text-xs text-gray-400", "24h" }
+                                                            }
+                                                            div { class: "flex flex-col",
+                                                                div { class: "text-red-500", "{collection.volume_change_7d}%" }
+                                                                div { class: "text-xs text-gray-400", "7d" }
+                                                            }
+                                                        }
+                                                    }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                        div { "{collection.volume_eth} ETH" }
+                                                        div { class: "text-xs text-gray-400", "$ {collection.volume_usd}" }
+                                                    }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.owners}" }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.stock}" }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.status}" }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                        button { class: "text-gray-400 hover:text-white",
+                                                            svg {
+                                                                view_box: "0 0 24 24",
+                                                                width: "18",
+                                                                height: "18",
+                                                                stroke: "currentColor",
+                                                                stroke_width: "2",
+                                                                fill: "none",
+                                                                path { d: "M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" }
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                div { "{collection.floor_price_eth} ETH" }
-                                                div { class: "text-xs text-gray-400", "$ {collection.floor_price_usd}" }
-                                            }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                div { "{collection.floor_change_eth} ETH" }
-                                                div { class: "text-xs text-gray-400", "$ {collection.floor_change_usd}" }
-                                            }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                div { class: "flex items-center space-x-4 p-l-4",
-                                                    div { class: "flex flex-col",
-                                                        div { class: "text-green-500", "+ {collection.volume_change_24h}%" }
-                                                        div { class: "text-xs text-gray-400", "24h" }
-                                                    }
-                                                    div { class: "flex flex-col",
-                                                        div { class: "text-red-500", "{collection.volume_change_7d}%" }
-                                                        div { class: "text-xs text-gray-400", "7d" }
-                                                    }
-                                                }
-                                            }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                div { "{collection.volume_eth} ETH" }
-                                                div { class: "text-xs text-gray-400", "$ {collection.volume_usd}" }
-                                            }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.owners}" }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.stock}" }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.status}" }
-                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                button { class: "text-gray-400 hover:text-white",
-                                                    svg {
-                                                        view_box: "0 0 24 24",
-                                                        width: "18",
-                                                        height: "18",
-                                                        stroke: "currentColor",
-                                                        stroke_width: "2",
-                                                        fill: "none",
-                                                        path {
-                                                            d: "M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })}
+                                        })
+                                }
                             }
                         }
                     }
                 }
-            }
-            
-            // Modals - All controlled at the page level
-            match *modal_state.read() {
-                ModalState::NewCollection => rsx! {
-                    NewCollectionModal {
-                        show: true,
-                        on_close: move |_| modal_state.set(ModalState::None),
-                        artworks: artwork.clone(),
-                        on_select_artworks: move |selected| {
-                            selected_artworks.set(selected);
-                            modal_state.set(ModalState::Transfer);
-                        }
-                    }
-                },
-                ModalState::Transfer => rsx! {
-                    TransferConfirmationModal {
-                        show: true,
-                        selected_count: selected_artworks.read().len(),
-                        on_back: move |_| modal_state.set(ModalState::NewCollection),
-                        on_continue: move |_| {
-                            modal_state.set(ModalState::CollectionName);
-                        }
-                    }
-                },
-                ModalState::CollectionName => rsx! {
-                    CollectionNameModal {
-                        show: true,
-                        on_back: move |_| modal_state.set(ModalState::Transfer),
-                        on_add: move |name| {
-                            // This simulates the API call
-                            create_collection(name);
-                            // The success modal will be shown by the create_collection function
-                        }
-                    }
-                },
-                ModalState::Success => rsx! {
-                    SuccessModal {
-                        show: true,
-                        collection_name: new_collection_name.read().clone(),
-                        on_confirm: move |_| {
-                            // Close all modals and reset state
-                            modal_state.set(ModalState::None);
-                            
-                            // Additional logic after successful creation
-                            // e.g., refresh collections list, navigate to new collection, etc.
-                        }
-                    }
-                },
-                _ => rsx! {}
             }
         }
     }

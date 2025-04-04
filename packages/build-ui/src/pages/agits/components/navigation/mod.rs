@@ -38,19 +38,19 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             agit_id: _,
         } => (SelectedSection::HomePage, SelectedItem::None),
 
-        Route::SalesRequest { lang: _, agit_id: _ } => (SelectedSection::Orders, SelectedItem::SalesRequest),
-        Route::ShippingLabel { lang: _, agit_id: _ } => (SelectedSection::Orders, SelectedItem::ShippingLabel),
-        Route::Artworks { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artworks),
-        Route::CollectionsPage { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collections),
-        Route::Artist { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Artist),
-        Route::Collectors { lang: _, agit_id: _ } => (SelectedSection::Management, SelectedItem::Collectors),
-        Route::Dao { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Dao),
-        Route::Oracle { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Oracle),
-        Route::Faq { lang: _, agit_id: _ } => (SelectedSection::Hub, SelectedItem::Faq),
-        Route::Report { lang: _, agit_id: _ } => (SelectedSection::Analytics, SelectedItem::Report),
-        Route::Traffic { lang: _, agit_id: _ } => (SelectedSection::Analytics, SelectedItem::Traffic),
-        Route::Design { lang: _, agit_id: _ } => (SelectedSection::Design, SelectedItem::Design),
-        Route::ExtensionTool { lang: _, agit_id: _ } => (SelectedSection::ExtensionTool, SelectedItem::ExtensionTool),
+        Route::SalesRequest { .. } => (SelectedSection::Orders, SelectedItem::SalesRequest),
+        Route::ShippingLabel { .. } => (SelectedSection::Orders, SelectedItem::ShippingLabel),
+        Route::Artworks { .. } => (SelectedSection::Management, SelectedItem::Artworks),
+        Route::CollectionsPage { .. } => (SelectedSection::Management, SelectedItem::Collections),
+        Route::Artist { .. } => (SelectedSection::Management, SelectedItem::Artist),
+        Route::Collectors { .. } => (SelectedSection::Management, SelectedItem::Collectors),
+        Route::Dao { .. } => (SelectedSection::Hub, SelectedItem::Dao),
+        Route::Oracle { .. } => (SelectedSection::Hub, SelectedItem::Oracle),
+        Route::Faq { .. } => (SelectedSection::Hub, SelectedItem::Faq),
+        Route::Report { .. } => (SelectedSection::Analytics, SelectedItem::Report),
+        Route::Traffic { .. } => (SelectedSection::Analytics, SelectedItem::Traffic),
+        Route::Design { .. } => (SelectedSection::Design, SelectedItem::Design),
+        Route::ExtensionTool { .. } => (SelectedSection::ExtensionTool, SelectedItem::ExtensionTool),
         _ => {
             tracing::error!("Unknown route: {}", route);
             (SelectedSection::HomePage, SelectedItem::None)
@@ -64,11 +64,11 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
     let (selected_section, selected_item) = check_route(route);
     rsx! {
         div { class: "flex flex-col p-10 gap-10.5",
-            ServiceLogo {width: "110", height: "24", class: "fill-white"},
+            ServiceLogo { width: "110", height: "24", class: "fill-white" }
             div { class: "flex flex-col gap-5 text-white text-base",
 
                 // Standalone sections without children
-               Section {
+                Section {
                     label: tr.home,
                     selected: selected_section == SelectedSection::HomePage,
                     to: Route::HomePage { lang, agit_id },
@@ -79,10 +79,22 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     selected: selected_section == SelectedSection::Orders,
                     has_children: true,
                     Item { selected: selected_item == SelectedItem::SalesRequest,
-                        Link { to: Route::SalesRequest{ lang, agit_id }, {tr.sales_request} }
+                        Link {
+                            to: Route::SalesRequest {
+                                lang,
+                                agit_id,
+                            },
+                            {tr.sales_request}
+                        }
                     }
                     Item { selected: selected_item == SelectedItem::ShippingLabel,
-                        Link { to: Route::ShippingLabel { lang, agit_id }, {tr.shipping_label} }
+                        Link {
+                            to: Route::ShippingLabel {
+                                lang,
+                                agit_id,
+                            },
+                            {tr.shipping_label}
+                        }
                     }
                 }
                 Section {
@@ -93,7 +105,13 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                         Link { to: Route::Artworks { lang, agit_id }, {tr.artworks} }
                     }
                     Item { selected: selected_item == SelectedItem::Collections,
-                        Link { to: Route::CollectionsPage { lang, agit_id }, {tr.collections} }
+                        Link {
+                            to: Route::CollectionsPage {
+                                lang,
+                                agit_id,
+                            },
+                            {tr.collections}
+                        }
                     }
                     Item { selected: selected_item == SelectedItem::Artist,
                         Link { to: Route::Artist { lang, agit_id }, {tr.artists} }
@@ -128,7 +146,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     }
                 }
                 // Standalone sections without children
-              Section {
+                Section {
                     label: tr.design,
                     selected: selected_section == SelectedSection::Design,
                     to: Route::Design { lang, agit_id },
@@ -136,12 +154,14 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                 Section {
                     label: tr.extension_tool,
                     selected: selected_section == SelectedSection::ExtensionTool,
-                    to: Route::ExtensionTool { lang, agit_id },
+                    to: Route::ExtensionTool {
+                        lang,
+                        agit_id,
+                    },
                 }
             }
         }
-
-         }
+    }
            }
 
 
@@ -157,8 +177,7 @@ fn Section(
     #[props(default = false)] has_children: bool,
 ) -> Element {
     let content = rsx! {
-        div {
-            class: "relative",
+        div { class: "relative",
             // Add a green vertical line for selected sections with children
             {
                 if selected && has_children {
@@ -172,8 +191,7 @@ fn Section(
                     rsx! {}
                 }
             }
-            div {
-                class: "pl-1", 
+            div { class: "pl-1",
                 div {
                     class: format!(
                         "flex items-center py-3 gap-3 hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out {}",
@@ -188,10 +206,7 @@ fn Section(
 
     match to {
         Some(route) => rsx! {
-            Link {
-                to: route,
-                {content}
-            }
+            Link { to: route, {content} }
         },
         None => content,
     }
@@ -200,23 +215,20 @@ fn Section(
 #[component]
 fn Item(selected: bool, children: Element) -> Element {
     rsx! {
-        div { 
-            class: "flex items-center relative",
+        div { class: "flex items-center relative",
             {
                 if selected {
                     rsx! {
-                        span { 
-                            class: "text-primary absolute -left-5 top-1/2 transform -translate-y-1/2",
-                            "↪" 
-                        }
+                        span { class: "text-primary absolute -left-5 top-1/2 transform -translate-y-1/2", "↪" }
                     }
                 } else {
                     rsx! {}
                 }
             }
-            div { 
-                class: format!("hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out {}", 
-                    if selected { "text-primary" } else { "text-inherit" }
+            div {
+                class: format!(
+                    "hover:text-primary cursor-pointer transition-colors duration-200 ease-in-out {}",
+                    if selected { "text-primary" } else { "text-inherit" },
                 ),
                 {children}
             }

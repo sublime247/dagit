@@ -1,5 +1,6 @@
 use bdk::prelude::*;
 use crate::pages::collection::Artwork;
+// use dioxus_popup::PopupService;
 
 #[component]
 #[allow(unused_variables)]
@@ -11,9 +12,11 @@ pub fn NewCollectionModal(
 ) -> Element {
     // Use `use_signal` for a Vec<usize> to store selected artwork IDs
     let mut selected_artworks = use_signal(|| Vec::<usize>::new());
-    
+    // let mut popup: PopupService =  use_context();
     if !show {
-        return rsx!(div {});
+        return rsx!(
+            div {}
+        );
     }
     
     rsx! {
@@ -28,8 +31,7 @@ pub fn NewCollectionModal(
                 class: "fixed inset-0  flex items-center justify-center p-4 shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
                 onclick: move |e| e.stop_propagation(),
 
-                div {
-                    class: "bg-[#000000] border border-[#333] rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col",
+                div { class: "bg-[#000000] border border-[#333] rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col",
 
                     // Modal header
                     div { class: "flex items-center justify-between p-6 border-b border-[#333]",
@@ -75,7 +77,7 @@ pub fn NewCollectionModal(
                             input {
                                 class: "w-full bg-[#222] border border-[#333] text-white text-sm rounded-none p-2 pl-10",
                                 placeholder: "Search by title",
-                                r#type: "text"
+                                r#type: "text",
                             }
                             div { class: "absolute inset-y-0 left-3 flex items-center text-[#ffffff]",
                                 svg {
@@ -99,12 +101,12 @@ pub fn NewCollectionModal(
                                     th { class: "px-4 py-3 w-8",
                                         input {
                                             r#type: "checkbox",
-                                            class: "form-checkbox bg-transparent border-[#333] text-primary rounded-none accent-[#333]"
+                                            class: "form-checkbox bg-transparent border-[#333] text-primary rounded-none accent-[#333]",
                                         }
                                     }
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center ",
-                                            span {class:"text-white" , "Title", }
+                                            span { class: "text-white", "Title" }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
@@ -112,19 +114,19 @@ pub fn NewCollectionModal(
                                     th { class: "px-4 py-3 text-white", "Attributes" }
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center",
-                                            span { class:"text-white","Ways to Sell",  }
+                                            span { class: "text-white", "Ways to Sell" }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center",
-                                            span {  class:"text-white","Volume" }
+                                            span { class: "text-white", "Volume" }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center",
-                                            span { class:"text-white", "Status", }
+                                            span { class: "text-white", "Status" }
                                             span { class: "ml-1 text-gray-500", "%" }
                                         }
                                     }
@@ -133,87 +135,91 @@ pub fn NewCollectionModal(
                             }
                             tbody {
                                 // Iterate over artworks using .read()
-                                {artworks.read().clone().into_iter().enumerate().map(move |(index, artwork)|{
-                                    rsx! {
-                                        tr { class: "border-b border-[#333]", key:"{index}",
-                                            td { class: "px-4 py-3",
-                                                input {
-                                                    r#type: "checkbox",
-                                                    class: "form-checkbox bg-transparent border-[#333] text-primary rounded-none accent-[#333]",
-
-                                                    checked: selected_artworks.read().contains(&artwork.id),
-                                                    onclick: move |_| {
-                                                        // Use .with_mut to modify the signal's Vec
-                                                        selected_artworks.with_mut(|vec| {
-                                                            if vec.contains(&artwork.id) {
-                                                                vec.retain(|&x| x != artwork.id);
-                                                            } else {
-                                                                vec.push(artwork.id);
-                                                            }
-                                                        });
+                                {
+                                    artworks
+                                        .read()
+                                        .clone()
+                                        .into_iter()
+                                        .enumerate()
+                                        .map(move |(index, artwork)| {
+                                            rsx! {
+                                                tr { class: "border-b border-[#333]", key: "{index}",
+                                                    td { class: "px-4 py-3",
+                                                        input {
+                                                            r#type: "checkbox",
+                                                            class: "form-checkbox bg-transparent border-[#333] text-primary rounded-none accent-[#333]",
+                                                            checked: selected_artworks.read().contains(&artwork.id),
+                                                            onclick: move |_| {
+                                                                selected_artworks
+                                                                    .with_mut(|vec| {
+                                                                        if vec.contains(&artwork.id) {
+                                                                            vec.retain(|&x| x != artwork.id);
+                                                                        } else {
+                                                                            vec.push(artwork.id);
+                                                                        }
+                                                                    });
+                                                            },
+                                                        }
                                                     }
-                                                }
-                                            }
-                                            td { class: "px-4 py-3",
-                                                div { class: "flex items-center",
-                                                    div { class: "w-8 h-8 bg-[#333] mr-2" }
-                                                    div { class: "flex flex-col",
-                                                        div { class: "flex items-center text-[#ffffff]",
-                                                            span { "{artwork.title}" }
+                                                    td { class: "px-4 py-3",
+                                                        div { class: "flex items-center",
+                                                            div { class: "w-8 h-8 bg-[#333] mr-2" }
+                                                            div { class: "flex flex-col",
+                                                                div { class: "flex items-center text-[#ffffff]",
+                                                                    span { "{artwork.title}" }
+                                                                    svg {
+                                                                        view_box: "0 0 24 24",
+                                                                        width: "16",
+                                                                        height: "16",
+                                                                        fill: "#10b981",
+                                                                        class: "ml-1",
+                                                                        path { d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }
+                                                                    }
+                                                                }
+                                                                div { class: "text-sm text-gray-400", "{artwork.artist_name}" }
+                                                            }
+                                                        }
+                                                    }
+                                                    td { class: "px-4 py-3 text-[#ffffff]", "{artwork.collection.as_ref().unwrap_or(&String::new())}" }
+                                                    td { class: "px-4 py-3",
+                                                        div { class: "flex gap-2",
+                                                            {
+                                                                artwork
+                                                                    .attributes
+                                                                    .iter()
+                                                                    .map(|attr| {
+                                                                        rsx! {
+                                                                            span { class: "px-2 py-1 bg-transparent border border-[#333] text-xs rounded text-[#ffffff]",
+                                                                                "{attr}"
+                                                                            }
+                                                                        }
+                                                                    })
+                                                            }
+                                                        }
+                                                    }
+                                                    td { class: "px-4 py-3 text-[#ffffff]", "{artwork.ways_to_sell}" }
+                                                    td { class: "px-4 py-3",
+                                                        div { class: "text-[#ffffff]", "{artwork.volume_eth} ETH" }
+                                                        div { class: "text-xs text-gray-400", "$ {artwork.volume_usd}" }
+                                                    }
+                                                    td { class: "px-4 py-3 text-[#ffffff] ", "{artwork.status}" }
+                                                    td { class: "px-4 py-3",
+                                                        button { class: "text-gray-400 hover:text-white",
                                                             svg {
                                                                 view_box: "0 0 24 24",
-                                                                width: "16",
-                                                                height: "16",
-                                                                fill: "#10b981",
-                                                                class: "ml-1",
-                                                                path {
-                                                                    d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                                }
+                                                                width: "18",
+                                                                height: "18",
+                                                                stroke: "currentColor",
+                                                                stroke_width: "2",
+                                                                fill: "none",
+                                                                path { d: "M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" }
                                                             }
-                                                        }
-                                                        div { class: "text-sm text-gray-400",
-                                                            "{artwork.artist_name}"
                                                         }
                                                     }
                                                 }
                                             }
-                                            td { class: "px-4 py-3 text-[#ffffff]", "{artwork.collection.as_ref().unwrap_or(&String::new())}" }
-                                            td { class: "px-4 py-3",
-                                                div { class: "flex gap-2",
-                                                    { artwork.attributes.iter().map(|attr| {
-                                                        rsx! {
-                                                            span {
-                                                                class: "px-2 py-1 bg-transparent border border-[#333] text-xs rounded text-[#ffffff]",
-                                                                "{attr}"
-                                                            }
-                                                        }
-                                                    })}
-                                                }
-                                            }
-                                            td { class: "px-4 py-3 text-[#ffffff]", "{artwork.ways_to_sell}" }
-                                            td { class: "px-4 py-3",
-                                                div { class: "text-[#ffffff]","{artwork.volume_eth} ETH" }
-                                                div { class: "text-xs text-gray-400", "$ {artwork.volume_usd}" }
-                                            }
-                                            td { class: "px-4 py-3 text-[#ffffff] ", "{artwork.status}" }
-                                            td { class: "px-4 py-3",
-                                                button { class: "text-gray-400 hover:text-white",
-                                                    svg {
-                                                        view_box: "0 0 24 24",
-                                                        width: "18",
-                                                        height: "18",
-                                                        stroke: "currentColor",
-                                                        stroke_width: "2",
-                                                        fill: "none",
-                                                        path {
-                                                            d: "M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                })}
+                                        })
+                                }
                             }
                         }
                     }
@@ -233,7 +239,6 @@ pub fn NewCollectionModal(
                                 class: "px-4 py-2 text-sm bg-white text-black hover:bg-gray-200",
                                 onclick: move |_| {
                                     if !selected_artworks.read().is_empty() {
-                                        // Pass selected artworks to parent component
                                         on_select_artworks.call(selected_artworks.read().clone());
                                     }
                                 },
