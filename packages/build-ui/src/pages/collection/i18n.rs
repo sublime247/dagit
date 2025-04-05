@@ -34,7 +34,7 @@ translate! {
 
     owners: {
         en: "Owners",
-        ko: "거래량",
+        ko: "소유자",
     },
 
     stock: {

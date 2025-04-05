@@ -17,42 +17,42 @@ pub enum Route {
                     HomePage { lang: Language, agit_id: i64 },
                 #[nest("/orders")]
                     #[route("/sales-request")]
-                        SalesRequest { lang: Language, agit_id: i64 },
+                        SalesRequestPage { lang: Language, agit_id: i64 },
                     #[route("/shipping-label")]
-                        ShippingLabel { lang: Language, agit_id: i64 },
+                        ShippingLabelPage { lang: Language, agit_id: i64 },
                 #[end_nest]
 
                 #[nest("/management")]
                     #[route("/artworks")]
-                        Artworks { lang: Language, agit_id: i64 },
+                        ArtworksPage { lang: Language, agit_id: i64 },
                     #[route("/collections")]
                         CollectionsPage { lang: Language, agit_id: i64 },
                     #[route("/artist")]
-                        Artist { lang: Language, agit_id: i64 },
+                        ArtistPage { lang: Language, agit_id: i64 },
                     #[route("/collectors")]   
-                        Collectors { lang: Language, agit_id: i64 },
+                        CollectorsPage { lang: Language, agit_id: i64 },
                 #[end_nest]
 
                 #[nest("/hub")]
                     #[route("/dao")]   
-                        Dao { lang: Language, agit_id: i64 },
+                        DaoPage { lang: Language, agit_id: i64 },
                     #[route("/oracle")]   
-                        Oracle { lang: Language, agit_id: i64 },
+                        OraclePage { lang: Language, agit_id: i64 },
                     #[route("/faq")]
-                    Faq { lang: Language, agit_id: i64 },
+                    FaqPage { lang: Language, agit_id: i64 },
                 #[end_nest]
 
                 #[nest("/analytics")]
                     #[route("/traffic")]
-                        Traffic { lang: Language, agit_id: i64 },
+                        TrafficPage { lang: Language, agit_id: i64 },
                     #[route("/report")]  
-                        Report { lang: Language, agit_id: i64 },
+                        ReportPage { lang: Language, agit_id: i64 },
                 #[end_nest]
 
                 #[route("/design")]  
-                    Design { lang: Language, agit_id: i64 },
+                    DesignPage { lang: Language, agit_id: i64 },
                 #[route("/extension-tool")]
-                    ExtensionTool { lang: Language, agit_id: i64 },
+                    ExtensionToolPage { lang: Language, agit_id: i64 },
               
               
             #[end_layout]

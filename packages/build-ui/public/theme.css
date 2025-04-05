@@ -1,0 +1,25 @@
+@theme {
+    --color-primary: #30D4A0;
+    --color-background: #171717;
+
+      /* Border colors */
+     --color-border-primary: #333;
+     --color-border-bg: #222;
+
+     /* Table color */
+      --color-table-bg: #1a1a1a;
+      
+      /* Popup background */
+      --color-popup-bg: #000000;
+
+      /* popup text style */
+      --color-popup-text: #ffffff;
+      --color-popup-label: #AEAAAB;
+      --color-popup-border: #6B6B6B;
+      --color-popup-placeholder: #ffffff;
+
+      /* filter sidebar */
+
+      --color-filter-bg: #000000;
+
+}

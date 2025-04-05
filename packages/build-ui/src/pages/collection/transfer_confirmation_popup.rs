@@ -22,9 +22,9 @@ pub fn TransferConfirmationModal(
             div {
                 class: "fixed inset-0 flex items-center justify-center p-4",
                 onclick: move |e| e.stop_propagation(),
-                div { class: "bg-black border border-[#333] rounded-lg shadow-2xl w-full max-w-md",
+                div { class: "bg-black border border-border-primary rounded-lg shadow-2xl w-full max-w-md",
                     // Modal header
-                    div { class: "flex items-center justify-between px-6 pt-6  pb-2 border-[#333]",
+                    div { class: "flex items-center justify-between px-6 pt-6  pb-2 border-border-primary",
                         h2 { class: "text-xl font-semibold text-white", "Transfer Artwork" }
                         button {
                             class: "text-gray-400 hover:text-white",
@@ -45,9 +45,9 @@ pub fn TransferConfirmationModal(
                         }
                     }
                     // Modal footer
-                    div { class: "flex items-center justify-between gap-4 p-6 border-[#333]",
+                    div { class: "flex items-center justify-between gap-4 p-6 border-border-primary",
                         button {
-                            class: "px-4 py-2 text-l text-[#ffffff] hover:text-white",
+                            class: "px-4 py-2 text-l text-popup-text hover:text-white",
                             onclick: move |_| on_back.call(()),
                             "Back"
                         }

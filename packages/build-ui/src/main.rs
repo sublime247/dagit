@@ -21,6 +21,8 @@ fn main() {
 #[component]
 fn App() -> Element {
     PopupService::init();
+
+let css = include_str!("../public/theme.css");
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
@@ -29,9 +31,11 @@ fn App() -> Element {
             rel: "stylesheet",
             href: "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css",
         }
+        document::Style { r#type: "text/tailwindcss", {css} }
         load_tailwindcss {}
         Router::<Route> {}
     }
+
 }
 
 #[cfg(not(feature = "lambda"))]

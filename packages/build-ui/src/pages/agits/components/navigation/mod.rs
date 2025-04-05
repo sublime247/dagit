@@ -38,19 +38,19 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             agit_id: _,
         } => (SelectedSection::HomePage, SelectedItem::None),
 
-        Route::SalesRequest { .. } => (SelectedSection::Orders, SelectedItem::SalesRequest),
-        Route::ShippingLabel { .. } => (SelectedSection::Orders, SelectedItem::ShippingLabel),
-        Route::Artworks { .. } => (SelectedSection::Management, SelectedItem::Artworks),
+        Route::SalesRequestPage { .. } => (SelectedSection::Orders, SelectedItem::SalesRequest),
+        Route::ShippingLabelPage { .. } => (SelectedSection::Orders, SelectedItem::ShippingLabel),
+        Route::ArtworksPage { .. } => (SelectedSection::Management, SelectedItem::Artworks),
         Route::CollectionsPage { .. } => (SelectedSection::Management, SelectedItem::Collections),
-        Route::Artist { .. } => (SelectedSection::Management, SelectedItem::Artist),
-        Route::Collectors { .. } => (SelectedSection::Management, SelectedItem::Collectors),
-        Route::Dao { .. } => (SelectedSection::Hub, SelectedItem::Dao),
-        Route::Oracle { .. } => (SelectedSection::Hub, SelectedItem::Oracle),
-        Route::Faq { .. } => (SelectedSection::Hub, SelectedItem::Faq),
-        Route::Report { .. } => (SelectedSection::Analytics, SelectedItem::Report),
-        Route::Traffic { .. } => (SelectedSection::Analytics, SelectedItem::Traffic),
-        Route::Design { .. } => (SelectedSection::Design, SelectedItem::Design),
-        Route::ExtensionTool { .. } => (SelectedSection::ExtensionTool, SelectedItem::ExtensionTool),
+        Route::ArtistPage { .. } => (SelectedSection::Management, SelectedItem::Artist),
+        Route::CollectorsPage { .. } => (SelectedSection::Management, SelectedItem::Collectors),
+        Route::DaoPage { .. } => (SelectedSection::Hub, SelectedItem::Dao),
+        Route::OraclePage { .. } => (SelectedSection::Hub, SelectedItem::Oracle),
+        Route::FaqPage { .. } => (SelectedSection::Hub, SelectedItem::Faq),
+        Route::ReportPage { .. } => (SelectedSection::Analytics, SelectedItem::Report),
+        Route::TrafficPage { .. } => (SelectedSection::Analytics, SelectedItem::Traffic),
+        Route::DesignPage { .. } => (SelectedSection::Design, SelectedItem::Design),
+        Route::ExtensionToolPage { .. } => (SelectedSection::ExtensionTool, SelectedItem::ExtensionTool),
         _ => {
             tracing::error!("Unknown route: {}", route);
             (SelectedSection::HomePage, SelectedItem::None)
@@ -80,7 +80,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     has_children: true,
                     Item { selected: selected_item == SelectedItem::SalesRequest,
                         Link {
-                            to: Route::SalesRequest {
+                            to: Route::SalesRequestPage {
                                 lang,
                                 agit_id,
                             },
@@ -89,7 +89,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     }
                     Item { selected: selected_item == SelectedItem::ShippingLabel,
                         Link {
-                            to: Route::ShippingLabel {
+                            to: Route::ShippingLabelPage {
                                 lang,
                                 agit_id,
                             },
@@ -102,7 +102,13 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     selected: selected_section == SelectedSection::Management,
                     has_children: true,
                     Item { selected: selected_item == SelectedItem::Artworks,
-                        Link { to: Route::Artworks { lang, agit_id }, {tr.artworks} }
+                        Link {
+                            to: Route::ArtworksPage {
+                                lang,
+                                agit_id,
+                            },
+                            {tr.artworks}
+                        }
                     }
                     Item { selected: selected_item == SelectedItem::Collections,
                         Link {
@@ -114,10 +120,16 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                         }
                     }
                     Item { selected: selected_item == SelectedItem::Artist,
-                        Link { to: Route::Artist { lang, agit_id }, {tr.artists} }
+                        Link { to: Route::ArtistPage { lang, agit_id }, {tr.artists} }
                     }
                     Item { selected: selected_item == SelectedItem::Collectors,
-                        Link { to: Route::Collectors { lang, agit_id }, {tr.collectors} }
+                        Link {
+                            to: Route::CollectorsPage {
+                                lang,
+                                agit_id,
+                            },
+                            {tr.collectors}
+                        }
                     }
                 }
                 Section {
@@ -125,13 +137,13 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     selected: selected_section == SelectedSection::Hub,
                     has_children: true,
                     Item { selected: selected_item == SelectedItem::Dao,
-                        Link { to: Route::Dao { lang, agit_id }, {tr.dao} }
+                        Link { to: Route::DaoPage { lang, agit_id }, {tr.dao} }
                     }
                     Item { selected: selected_item == SelectedItem::Oracle,
-                        Link { to: Route::Oracle { lang, agit_id }, {tr.oracle} }
+                        Link { to: Route::OraclePage { lang, agit_id }, {tr.oracle} }
                     }
                     Item { selected: selected_item == SelectedItem::Faq,
-                        Link { to: Route::Faq { lang, agit_id }, {tr.faq} }
+                        Link { to: Route::FaqPage { lang, agit_id }, {tr.faq} }
                     }
                 }
                 Section {
@@ -139,22 +151,28 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     selected: selected_section == SelectedSection::Analytics,
                     has_children: true,
                     Item { selected: selected_item == SelectedItem::Report,
-                        Link { to: Route::Report { lang, agit_id }, {tr.report} }
+                        Link { to: Route::ReportPage { lang, agit_id }, {tr.report} }
                     }
                     Item { selected: selected_item == SelectedItem::Traffic,
-                        Link { to: Route::Traffic { lang, agit_id }, {tr.traffic} }
+                        Link {
+                            to: Route::TrafficPage {
+                                lang,
+                                agit_id,
+                            },
+                            {tr.traffic}
+                        }
                     }
                 }
                 // Standalone sections without children
                 Section {
                     label: tr.design,
                     selected: selected_section == SelectedSection::Design,
-                    to: Route::Design { lang, agit_id },
+                    to: Route::DesignPage { lang, agit_id },
                 }
                 Section {
                     label: tr.extension_tool,
                     selected: selected_section == SelectedSection::ExtensionTool,
-                    to: Route::ExtensionTool {
+                    to: Route::ExtensionToolPage {
                         lang,
                         agit_id,
                     },

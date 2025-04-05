@@ -31,10 +31,10 @@ pub fn NewCollectionModal(
                 class: "fixed inset-0  flex items-center justify-center p-4 shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
                 onclick: move |e| e.stop_propagation(),
 
-                div { class: "bg-[#000000] border border-[#333] rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col",
+                div { class: "bg-popup-bg border border-border-primary rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col",
 
                     // Modal header
-                    div { class: "flex items-center justify-between p-6 border-b border-[#333]",
+                    div { class: "flex items-center justify-between p-6 border-b border-border-primary",
                         div { class: "flex flex-col",
                             h2 { class: "text-xl font-semibold text-white",
                                 "Please select the artwork to include in the collection"
@@ -58,8 +58,8 @@ pub fn NewCollectionModal(
                     }
 
                     // Search and filters
-                    div { class: "p-4 flex items-center gap-4 border-b border-[#333]",
-                        button { class: "p-2 border border-[#333] bg-[#222]",
+                    div { class: "p-4 flex items-center gap-4 border-b border-border-primary",
+                        button { class: "p-2 border border-border-primary bg-border-bg",
                             svg {
                                 view_box: "0 0 24 24",
                                 width: "24",
@@ -70,16 +70,16 @@ pub fn NewCollectionModal(
                                 path { d: "M4 6h16M4 12h16M4 18h16" }
                             }
                         }
-                        select { class: "bg-[#222] border border-[#333] text-white text-sm p-2 w-40",
+                        select { class: "bg-border-bg border border-border-primary text-white text-sm p-2 w-40",
                             option { "All" }
                         }
                         div { class: "flex-1 relative",
                             input {
-                                class: "w-full bg-[#222] border border-[#333] text-white text-sm rounded-none p-2 pl-10",
+                                class: "w-full bg-border-bg border border-border-primary text-white text-sm rounded-none p-2 pl-10",
                                 placeholder: "Search by title",
                                 r#type: "text",
                             }
-                            div { class: "absolute inset-y-0 left-3 flex items-center text-[#ffffff]",
+                            div { class: "absolute inset-y-0 left-3 flex items-center text-popup-text",
                                 svg {
                                     view_box: "0 0 24 24",
                                     width: "16",
@@ -96,12 +96,12 @@ pub fn NewCollectionModal(
                     // Table
                     div { class: "flex-1 overflow-auto",
                         table { class: "w-full text-sm text-left",
-                            thead { class: "text-xs uppercase border-b border-[#333]",
+                            thead { class: "text-xs uppercase border-b border-border-primary",
                                 tr {
                                     th { class: "px-4 py-3 w-8",
                                         input {
                                             r#type: "checkbox",
-                                            class: "form-checkbox bg-transparent border-[#333] text-primary rounded-none accent-[#333]",
+                                            class: "form-checkbox bg-transparent border-border-primary text-primary rounded-none accent-border-primary",
                                         }
                                     }
                                     th { class: "px-4 py-3",
@@ -143,11 +143,11 @@ pub fn NewCollectionModal(
                                         .enumerate()
                                         .map(move |(index, artwork)| {
                                             rsx! {
-                                                tr { class: "border-b border-[#333]", key: "{index}",
+                                                tr { class: "border-b border-border-primary", key: "{index}",
                                                     td { class: "px-4 py-3",
                                                         input {
                                                             r#type: "checkbox",
-                                                            class: "form-checkbox bg-transparent border-[#333] text-primary rounded-none accent-[#333]",
+                                                            class: "form-checkbox bg-transparent border-border-primary text-primary rounded-none accent-border-primary",
                                                             checked: selected_artworks.read().contains(&artwork.id),
                                                             onclick: move |_| {
                                                                 selected_artworks
@@ -163,9 +163,9 @@ pub fn NewCollectionModal(
                                                     }
                                                     td { class: "px-4 py-3",
                                                         div { class: "flex items-center",
-                                                            div { class: "w-8 h-8 bg-[#333] mr-2" }
+                                                            div { class: "w-8 h-8 bg-border-primary mr-2" }
                                                             div { class: "flex flex-col",
-                                                                div { class: "flex items-center text-[#ffffff]",
+                                                                div { class: "flex items-center text-popup-text",
                                                                     span { "{artwork.title}" }
                                                                     svg {
                                                                         view_box: "0 0 24 24",
@@ -180,7 +180,7 @@ pub fn NewCollectionModal(
                                                             }
                                                         }
                                                     }
-                                                    td { class: "px-4 py-3 text-[#ffffff]", "{artwork.collection.as_ref().unwrap_or(&String::new())}" }
+                                                    td { class: "px-4 py-3 text-popup-text", "{artwork.collection.as_ref().unwrap_or(&String::new())}" }
                                                     td { class: "px-4 py-3",
                                                         div { class: "flex gap-2",
                                                             {
@@ -189,7 +189,7 @@ pub fn NewCollectionModal(
                                                                     .iter()
                                                                     .map(|attr| {
                                                                         rsx! {
-                                                                            span { class: "px-2 py-1 bg-transparent border border-[#333] text-xs rounded text-[#ffffff]",
+                                                                            span { class: "px-2 py-1 bg-transparent border border-border-primary text-xs rounded text-popup-text",
                                                                                 "{attr}"
                                                                             }
                                                                         }
@@ -197,12 +197,12 @@ pub fn NewCollectionModal(
                                                             }
                                                         }
                                                     }
-                                                    td { class: "px-4 py-3 text-[#ffffff]", "{artwork.ways_to_sell}" }
+                                                    td { class: "px-4 py-3 text-popup-text", "{artwork.ways_to_sell}" }
                                                     td { class: "px-4 py-3",
-                                                        div { class: "text-[#ffffff]", "{artwork.volume_eth} ETH" }
+                                                        div { class: "text-popup-text", "{artwork.volume_eth} ETH" }
                                                         div { class: "text-xs text-gray-400", "$ {artwork.volume_usd}" }
                                                     }
-                                                    td { class: "px-4 py-3 text-[#ffffff] ", "{artwork.status}" }
+                                                    td { class: "px-4 py-3 text-popup-text ", "{artwork.status}" }
                                                     td { class: "px-4 py-3",
                                                         button { class: "text-gray-400 hover:text-white",
                                                             svg {
@@ -225,7 +225,7 @@ pub fn NewCollectionModal(
                     }
 
                     // Footer
-                    div { class: "p-4 border-t border-[#333] flex flex-col justify-end self-end",
+                    div { class: "p-4 border-t border-border-primary flex flex-col justify-end self-end",
                         div { class: "text-sm text-gray-400 mb-5",
                             "{selected_artworks.read().len()} artworks have been selected."
                         }

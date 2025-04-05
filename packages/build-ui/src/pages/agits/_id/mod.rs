@@ -1,19 +1,18 @@
 mod page;
 pub use page::HomePage;
-pub use page::SalesRequest;
-pub use page::ShippingLabel;
-pub use page::Artworks;
-pub use page::Collections;
-pub use page::Dao;
-pub use page::Oracle;
-pub use page::Faq;
-pub use page::Report;
-pub use page::Design;
-pub use page::ExtensionTool;
-pub use page::Traffic;
-pub use page::Customers;
-pub use page::Collectors;
-pub use page::Artist;
+pub use page::SalesRequestPage;
+pub use page::ShippingLabelPage;
+pub use page::ArtworksPage;
+pub use page::DaoPage;
+pub use page::OraclePage;
+pub use page::FaqPage;
+pub use page::ReportPage;
+pub use page::DesignPage;
+pub use page::ExtensionToolPage;
+pub use page::TrafficPage;
+pub use page::CustomersPage;
+pub use page::CollectorsPage;
+pub use page::ArtistPage;
 
 
 

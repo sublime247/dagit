@@ -53,7 +53,7 @@ pub fn CollectionsPage(lang: Language, agit_id:ReadOnlySignal<i64>) -> Element {
 
     // Function to simulate API call for creating a collection
     let mut create_collection = move |name: String| {
-        // In a real app, this would be an API call
+        // This would be an API call
         // log::info!("Creating collection: {}", name);
         
         // Store the collection name for the success modal
@@ -70,7 +70,7 @@ pub fn CollectionsPage(lang: Language, agit_id:ReadOnlySignal<i64>) -> Element {
     };
 
     rsx! {
-        div { class: "w-full min-h-screen bg-[#171717] h-full flex text-white justify-center items-center",
+        div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
             // Main content
             div { class: "flex flex-col w-full h-full",
                 // Header
@@ -83,22 +83,22 @@ pub fn CollectionsPage(lang: Language, agit_id:ReadOnlySignal<i64>) -> Element {
                 // Search and filters
                 div { class: "p-4 flex flex-col sm:flex-row sm:items-center gap-4",
                     button {
-                        class: "p-2 border border-[#333] text-white w-full sm:w-auto",
+                        class: "p-2 border border-border-primary text-white w-full sm:w-auto",
                         onclick: move |_| show_filters.toggle(),
                         settings::Sliders {}
                     }
                     div { class: "relative flex-1 mr-4",
                         div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                            edit::Search { class: "text-white" }
+                            edit::Search {}
                         }
                         input {
-                            class: "bg-[#222] border border-[#333] text-white text-sm rounded-none block w-full pl-10 p-2.5",
+                            class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
                             placeholder: tr.search_by_title,
                             r#type: "text",
                         }
                     }
                     button {
-                        class: "bg-[#222] border border-[#333] text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
+                        class: "bg-border-background border border-border-primary text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
                         onclick: move |_| {
                             popup.open(rsx! {
                                 NewCollectionModal {
@@ -143,7 +143,7 @@ pub fn CollectionsPage(lang: Language, agit_id:ReadOnlySignal<i64>) -> Element {
                     if *show_filters.read() {
                         div {
                             class: format!(
-                                "w-64 bg-[#171717] border-r border-[#333] fixed inset-y-0 left-0 z-40 transform {} md:relative md:z-auto md:translate-x-0 transition-transform duration-300",
+                                "w-64 bg-background border-r border-border-primary fixed inset-y-0 left-0 z-40 transform {} md:relative md:z-auto md:translate-x-0 transition-transform duration-300",
                                 if *show_filters.read() { "translate-x-0" } else { "-translate-x-full" },
                             ),
                             FilterSidebar {}
@@ -153,9 +153,9 @@ pub fn CollectionsPage(lang: Language, agit_id:ReadOnlySignal<i64>) -> Element {
                     div { class: "flex-1 overflow-auto",
                         table { class: "w-full text-sm text-left border-collapse min-w-[800px]",
                             // Table header
-                            thead { class: "text-xs uppercase bg-[#1a1a1a] border-b border-[#333]",
+                            thead { class: "text-xs uppercase bg-table-background border-b border-border-primary",
                                 tr {
-                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrapp",
+                                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { "#" }
                                             span { class: "ml-1 text-gray-500", "%" }
@@ -222,7 +222,7 @@ pub fn CollectionsPage(lang: Language, agit_id:ReadOnlySignal<i64>) -> Element {
                                         .enumerate()
                                         .map(|(index, collection)| {
                                             rsx! {
-                                                tr { key: "{index}", class: "border-b border-[#333]",
+                                                tr { key: "{index}", class: "border-b border-border-primary",
                                                     // Table row content...
                                                     // (Keeping the existing table row code)
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.id}" }
