@@ -1,21 +1,17 @@
 mod page;
+
+mod analytics;
+mod design;
+mod extension_tool;
+mod hub;
+mod management;
+mod orders;
+
+pub use analytics::{ReportPage, TrafficPage};
 pub use page::HomePage;
-pub use page::SalesRequest;
-pub use page::ShippingLabel;
-pub use page::Artworks;
-pub use page::Collections;
-pub use page::Dao;
-pub use page::Oracle;
-pub use page::Faq;
-pub use page::Report;
-pub use page::Design;
-pub use page::ExtensionTool;
-pub use page::Traffic;
-pub use page::Customers;
-pub use page::Collectors;
-pub use page::Artist;
 
-
-
-
-
+pub use design::DesignPage;
+pub use extension_tool::ExtensionToolPage;
+pub use hub::{DaoPage, FaqPage, OraclePage};
+pub use management::{ArtistPage, ArtworkPage, CollectionPage, CollectorPage};
+pub use orders::{SalesRequestPage, ShippingLabelPage};

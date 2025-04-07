@@ -35,34 +35,3 @@ fn App() -> Element {
         Router::<Route> {}
     }
 }
-
-#[cfg(not(feature = "lambda"))]
-#[allow(dead_code)]
-#[component]
-fn load_tailwindcss() -> Element {
-    use dioxus::document::{StyleProps, document};
-
-    let theme = include_str!("../tailwind-theme.css");
-    let v = StyleProps::builder()
-        .children(rsx! {
-            {theme}
-        })
-        .r#type("text/tailwindcss")
-        .build();
-    let doc = document();
-    doc.create_style(v);
-    // Note:
-    // `style { r#type: "text/tailwindcss", {theme}}` is not working.
-    // The reason is that Dioxus creates `<!-- -->` comment nodes,
-    // which are not allowed inside the `<style>` tag.
-    rsx! {
-        script { src: "https://unpkg.com/@tailwindcss/browser@4" }
-    }
-}
-
-#[cfg(feature = "lambda")]
-#[allow(dead_code)]
-#[component]
-fn load_tailwindcss() -> Element {
-    VNode::empty()
-}
