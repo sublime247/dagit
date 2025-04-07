@@ -1,6 +1,7 @@
 use bdk::prelude::*;
 
 use super::FilterDropdown;
+use by_components::icons::edit;
 
 #[component]
 pub fn FilterSidebar() -> Element {
@@ -16,15 +17,7 @@ pub fn FilterSidebar() -> Element {
                         r#type: "text",
                     }
                     div { class: "absolute inset-y-0 right-2 flex items-center pointer-events-none",
-                        svg {
-                            view_box: "0 0 24 24",
-                            width: "16",
-                            height: "16",
-                            stroke: "currentColor",
-                            stroke_width: "2",
-                            fill: "none",
-                            path { d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }
-                        }
+                        edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                     }
                 }
             }
@@ -56,15 +49,8 @@ pub fn FilterSidebar() -> Element {
                         r#type: "text",
                     }
                     div { class: "absolute inset-y-0 right-2 flex items-center pointer-events-none",
-                        svg {
-                            view_box: "0 0 24 24",
-                            width: "16",
-                            height: "16",
-                            stroke: "currentColor",
-                            stroke_width: "2",
-                            fill: "none",
-                            path { d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }
-                        }
+                        edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
+                    
                     }
                 }
 

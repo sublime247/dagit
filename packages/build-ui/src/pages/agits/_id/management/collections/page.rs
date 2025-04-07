@@ -3,7 +3,7 @@ use super::i18n::CollectionTranslate;
 //FIXME: Use Collection in "packages/models/table/collection.rs"
 use super::controllers::Controller;
 use bdk::prelude::*;
-use by_components::icons::{edit, folder, settings};
+use by_components::icons::{edit, folder, settings, validations, arrows};
 #[allow(unused_variables)]
 #[component]
 pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
@@ -33,11 +33,11 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     button {
                         class: "p-2 border border-border-primary text-white w-full sm:w-auto",
                         onclick: move |_| show_filters.toggle(),
-                        settings::Sliders {}
+                        settings::Sliders { class: "[&>path]:stroke-white" }
                     }
                     div { class: "relative flex-1 mr-4",
                         div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                            edit::Search {}
+                            edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                         }
                         input {
                             class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
@@ -50,7 +50,7 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         onclick: move |_| {
                             ctrl.open_new_collection_popup();
                         },
-                        folder::UploadFolder { class: "mr-3" }
+                        folder::UploadFolder { class: "mr-3 [&>path]:stroke-white [&>circle]:stroke-white" }
                         {tr.new_collection}
                     }
                 }
@@ -75,59 +75,62 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { "#" }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.collection} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.floor_price} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.floor_change} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.volume_change} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.volume} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.owners} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.stock} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             span { {tr.status} }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                        ""
+                                        div { class: "flex items-center",
+                                            span { "" }
+                                            validations::Extra { class: "[&>circle]:stroke-white" }
+                                        }
                                     } // For the actions column
                                 }
                             }
@@ -145,7 +148,7 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.id}" }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { class: "flex items-center",
-                                                            div { class: "w-6 h-6 sm:w-8 sm:h-8 bg-[#333] mr-2" }
+                                                            div { class: "w-6 h-6 sm:w-8 sm:h-8 bg-border-primary mr-2" }
                                                             span { "{collection.name}" }
                                                             // Verified icon
                                                             svg {
@@ -187,15 +190,7 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.status}" }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         button { class: "text-gray-400 hover:text-white",
-                                                            svg {
-                                                                view_box: "0 0 24 24",
-                                                                width: "18",
-                                                                height: "18",
-                                                                stroke: "currentColor",
-                                                                stroke_width: "2",
-                                                                fill: "none",
-                                                                path { d: "M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" }
-                                                            }
+                                                            validations::Extra { class: "[&>circle]:stroke-white" }
                                                         }
                                                     }
                                                 }

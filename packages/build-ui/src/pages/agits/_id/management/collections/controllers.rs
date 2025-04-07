@@ -89,7 +89,8 @@ impl Controller {
 
     pub fn open_new_collection_popup(&mut self) {
         let mut popup = self.popup.clone();
-        let selected_artworks = self.selected_artworks.clone();
+        let mut selected_artworks = self.selected_artworks.clone();
+        let artworks_data = self.artworks.read().clone();
         popup
             .open(rsx! {
                 NewCollectionModal {
@@ -97,8 +98,16 @@ impl Controller {
                     on_close: move |_| {
                         popup.close();
                     },
-                    artworks: self.artworks.clone(),
-                    on_select_artworks: move |selected| {},
+                    artworks: artworks_data,
+                    on_select_artworks: move |selected:Vec<usize>| {
+                        let selected_count = selected.len();
+                        selected_artworks.set(selected.clone());
+                        let mut inner_popup = popup.clone();
+
+
+
+
+                    },
                 }
             })
             .with_id("new-collection-modal");
