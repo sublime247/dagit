@@ -10,7 +10,7 @@ pub fn NavigationLayout(lang: Language, agit_id: i64) -> Element {
         SuspenseWrapper {
             div { class: "flex flex-row bg-background min-h-svh",
                 Navigation { lang, agit_id }
-                div { class: "py-10", Outlet::<Route> {} }
+                div { class: "py-10 px-20 w-full", Outlet::<Route> {} }
             }
         }
     }

@@ -53,8 +53,6 @@ pub enum Route {
                     DesignPage { lang: Language, agit_id: i64 },
                 #[route("/extension-tool")]
                     ExtensionToolPage { lang: Language, agit_id: i64 },
-              
-              
             #[end_layout]
         #[end_nest]
     #[end_nest]
