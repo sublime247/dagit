@@ -20,6 +20,8 @@ fn main() {
 #[component]
 fn App() -> Element {
     PopupService::init();
+
+    let css = include_str!("../public/theme.css");
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
@@ -28,38 +30,8 @@ fn App() -> Element {
             rel: "stylesheet",
             href: "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css",
         }
-        load_tailwindcss {}
+        document::Style { r#type: "text/tailwindcss", {css} }
+        document::Script { src: "https://unpkg.com/@tailwindcss/browser@4.0.12/dist/index.global.js" }
         Router::<Route> {}
     }
-}
-
-#[cfg(not(feature = "lambda"))]
-#[allow(dead_code)]
-#[component]
-fn load_tailwindcss() -> Element {
-    use dioxus::document::{StyleProps, document};
-
-    let theme = include_str!("../tailwind-theme.css");
-    let v = StyleProps::builder()
-        .children(rsx! {
-            {theme}
-        })
-        .r#type("text/tailwindcss")
-        .build();
-    let doc = document();
-    doc.create_style(v);
-    // Note:
-    // `style { r#type: "text/tailwindcss", {theme}}` is not working.
-    // The reason is that Dioxus creates `<!-- -->` comment nodes,
-    // which are not allowed inside the `<style>` tag.
-    rsx! {
-        script { src: "https://unpkg.com/@tailwindcss/browser@4" }
-    }
-}
-
-#[cfg(feature = "lambda")]
-#[allow(dead_code)]
-#[component]
-fn load_tailwindcss() -> Element {
-    VNode::empty()
 }

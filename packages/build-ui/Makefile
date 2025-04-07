@@ -36,7 +36,7 @@ node_modules:
 	npm i
 
 public/tailwind.css: node_modules
-	npx @tailwindcss/cli -i $(PWD)/input.css -o $(PWD)/public/tailwind.css
+	npx @tailwindcss/cli -i $(PWD)/public/input.css -o $(PWD)/public/tailwind.css
 
 build: clean public/tailwind.css
 	$(BUILD_ENV) dx build --release --fullstack --server-features lambda
