@@ -1,8 +1,6 @@
 use bdk::prelude::*;
 
-use crate::pages::collection::FilterDropdown;
-
-
+use super::FilterDropdown;
 
 #[component]
 pub fn FilterSidebar() -> Element {

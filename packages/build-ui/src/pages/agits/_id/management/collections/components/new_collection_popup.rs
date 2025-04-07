@@ -1,28 +1,26 @@
 use bdk::prelude::*;
-use crate::pages::collection::Artwork;
-// use dioxus_popup::PopupService;
+
+use super::super::models::Artwork;
 
 #[component]
 #[allow(unused_variables)]
 pub fn NewCollectionModal(
-    show: bool, 
-    on_close: EventHandler<()>, 
+    show: bool,
+    on_close: EventHandler<()>,
     artworks: Signal<Vec<Artwork>>,
-    on_select_artworks: EventHandler<Vec<usize>>
+    on_select_artworks: EventHandler<Vec<usize>>,
 ) -> Element {
     // Use `use_signal` for a Vec<usize> to store selected artwork IDs
     let mut selected_artworks = use_signal(|| Vec::<usize>::new());
     // let mut popup: PopupService =  use_context();
     if !show {
-        return rsx!(
-            div {}
-        );
+        return rsx!(div {});
     }
-    
+
     rsx! {
         // Modal backdrop with purple glow effect
         div {
-            class: "fixed inset-0  bg-opacity-0 backdrop-blur-sm z-50 
+            class: "fixed inset-0  bg-opacity-0 backdrop-blur-sm z-50
             bg-[radial-gradient(circle,rgba(255,41,144,0.5)_20%,rgba(0,0,0,0)_70%)]",
             onclick: move |_| on_close.call(()),
 
