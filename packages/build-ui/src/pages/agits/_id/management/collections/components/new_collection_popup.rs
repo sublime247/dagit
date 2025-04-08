@@ -21,15 +21,14 @@ pub fn NewCollectionModal(
     rsx! {
         // Modal backdrop with purple glow effect
         div {
-            class: "fixed inset-0  bg-opacity-0 backdrop-blur-sm z-50
-            bg-[radial-gradient(circle,rgba(255,41,144,0.5)_20%,rgba(0,0,0,0)_70%)]",
+            class: "fixed inset-0 bg-opacity-0 backdrop-blur-sm z-50",
             onclick: move |_| on_close.call(()),
             // Modal content
             div {
-                class: "fixed inset-0  flex items-center justify-center p-4 shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
+                class: "fixed inset-0 flex items-center justify-center p-4",
                 onclick: move |e| e.stop_propagation(),
 
-                div { class: "bg-popup-bg border border-border-primary rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col",
+                div { class: "bg-popup-bg border border-border-primary rounded-lg w-full max-w-6xl max-h-[90vh] flex flex-col shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
 
                     // Modal header
                     div { class: "flex items-center justify-between p-6 border-b border-border-primary",

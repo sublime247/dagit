@@ -15,14 +15,14 @@ pub fn TransferConfirmationModal(
     rsx! {
         // Modal backdrop with purple glow effect
         div {
-            class: "fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50",
-            style: "background: radial-gradient(circle at center, rgba(76, 29, 149, 0.15) 0%, rgba(0, 0, 0, 0.5) 100%)",
+            class: "fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50",
+           
             onclick: move |_| on_back.call(()),
             // Modal content
             div {
                 class: "fixed inset-0 flex items-center justify-center p-4",
                 onclick: move |e| e.stop_propagation(),
-                div { class: "bg-black border border-border-primary rounded-lg shadow-2xl w-full max-w-md",
+                div { class: "bg-black border border-border-primary rounded-lg  w-full max-w-md shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
                     // Modal header
                     div { class: "flex items-center justify-between px-6 pt-6  pb-2 border-border-primary",
                         h2 { class: "text-xl font-semibold text-white", "Transfer Artwork" }
