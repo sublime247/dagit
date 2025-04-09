@@ -15,11 +15,10 @@ pub fn SuccessModal(
     rsx! {
         // Modal backdrop
         div {
-            class: "fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50",
-            style: "background: radial-gradient(circle at center, rgba(76, 29, 149, 0.15) 0%, rgba(0, 0, 0, 0.5) 100%)",
+            class: "fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50",
             // Modal content
             div { class: "fixed inset-0 flex items-center justify-center p-4",
-                div { class: "bg-filter-bg border border-border-primary rounded-lg shadow-2xl w-full max-w-md text-center p-6",
+                div { class: "bg-filter-bg border border-border-primary rounded-lg  w-full max-w-md text-center p-6 shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
                     // Modal body
                     div { class: "px-6 py-2",
                         p { class: "text-white",

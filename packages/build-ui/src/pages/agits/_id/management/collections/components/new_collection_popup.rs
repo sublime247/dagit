@@ -1,13 +1,14 @@
 use bdk::prelude::*;
 
 use super::super::models::Artwork;
+use by_components::icons::{arrows, edit, settings};
 
 #[component]
 #[allow(unused_variables)]
 pub fn NewCollectionModal(
     show: bool,
     on_close: EventHandler<()>,
-    artworks: Signal<Vec<Artwork>>,
+    artworks: Vec<Artwork>,
     on_select_artworks: EventHandler<Vec<usize>>,
 ) -> Element {
     // Use `use_signal` for a Vec<usize> to store selected artwork IDs
@@ -20,16 +21,14 @@ pub fn NewCollectionModal(
     rsx! {
         // Modal backdrop with purple glow effect
         div {
-            class: "fixed inset-0  bg-opacity-0 backdrop-blur-sm z-50
-            bg-[radial-gradient(circle,rgba(255,41,144,0.5)_20%,rgba(0,0,0,0)_70%)]",
+            class: "fixed inset-0 bg-opacity-0 backdrop-blur-sm z-50",
             onclick: move |_| on_close.call(()),
-
             // Modal content
             div {
-                class: "fixed inset-0  flex items-center justify-center p-4 shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
+                class: "fixed inset-0 flex items-center justify-center p-4",
                 onclick: move |e| e.stop_propagation(),
 
-                div { class: "bg-popup-bg border border-border-primary rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col",
+                div { class: "bg-popup-bg border border-border-primary rounded-lg w-full max-w-6xl max-h-[90vh] flex flex-col shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
 
                     // Modal header
                     div { class: "flex items-center justify-between p-6 border-b border-border-primary",
@@ -58,15 +57,7 @@ pub fn NewCollectionModal(
                     // Search and filters
                     div { class: "p-4 flex items-center gap-4 border-b border-border-primary",
                         button { class: "p-2 border border-border-primary bg-border-bg",
-                            svg {
-                                view_box: "0 0 24 24",
-                                width: "24",
-                                height: "24",
-                                stroke: "currentColor",
-                                stroke_width: "2",
-                                fill: "none",
-                                path { d: "M4 6h16M4 12h16M4 18h16" }
-                            }
+                            settings::Sliders { class: "[&>path]:stroke-white" }
                         }
                         select { class: "bg-border-bg border border-border-primary text-white text-sm p-2 w-40",
                             option { "All" }
@@ -78,15 +69,7 @@ pub fn NewCollectionModal(
                                 r#type: "text",
                             }
                             div { class: "absolute inset-y-0 left-3 flex items-center text-popup-text",
-                                svg {
-                                    view_box: "0 0 24 24",
-                                    width: "16",
-                                    height: "16",
-                                    stroke: "currentColor",
-                                    stroke_width: "2",
-                                    fill: "none",
-                                    path { d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }
-                                }
+                                edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                             }
                         }
                     }
@@ -105,7 +88,7 @@ pub fn NewCollectionModal(
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center ",
                                             span { class: "text-white", "Title" }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-4 py-3 text-white", "Collection" }
@@ -113,19 +96,19 @@ pub fn NewCollectionModal(
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center",
                                             span { class: "text-white", "Ways to Sell" }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center",
                                             span { class: "text-white", "Volume" }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-4 py-3",
                                         div { class: "flex items-center",
                                             span { class: "text-white", "Status" }
-                                            span { class: "ml-1 text-gray-500", "%" }
+                                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                                         }
                                     }
                                     th { class: "px-4 py-3", "" }
@@ -135,8 +118,6 @@ pub fn NewCollectionModal(
                                 // Iterate over artworks using .read()
                                 {
                                     artworks
-                                        .read()
-                                        .clone()
                                         .into_iter()
                                         .enumerate()
                                         .map(move |(index, artwork)| {

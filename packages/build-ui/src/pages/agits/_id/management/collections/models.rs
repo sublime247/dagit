@@ -31,6 +31,7 @@ pub struct FilterState {
 #[derive(Clone, Debug)]
 #[allow(dead_code)]
 #[allow(private_interfaces)]
+#[derive(PartialEq)]
 pub struct Artwork {
     pub id: usize,
     pub title: String,

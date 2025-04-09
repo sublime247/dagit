@@ -1,9 +1,9 @@
 mod artists;
 mod artworks;
-mod collecotrs;
+mod collectors;
 mod collections;
 
 pub use artists::ArtistPage;
 pub use artworks::ArtworkPage;
-pub use collecotrs::CollectorPage;
+pub use collectors::CollectorPage;
 pub use collections::CollectionPage;
