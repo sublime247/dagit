@@ -5,7 +5,6 @@ use crate::pages::agits::_id::management::collections::components::{
 
 use super::models::*;
 use bdk::prelude::{dioxus_popup::PopupService, *};
-use web_sys::console::log;
 
 // Define modal states to track which modal is currently shown
 #[derive(Debug, Clone, PartialEq)]
@@ -145,7 +144,7 @@ impl Controller {
                         on_back: move |_| this.update_modal_state(ModalState::TransferConfirmation),
                         on_add: move |name: String| {
                             collection_name.set(name.clone());
-                            tracing::info!("Collection Name: {}", name);
+                            tracing::debug!("Collection Name: {}", name);
                         //    todo:: function to simulate the api to addcollection will be called here before the success modal
                             this.update_modal_state(ModalState::Success);
                         },
