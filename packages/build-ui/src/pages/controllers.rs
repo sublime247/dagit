@@ -162,7 +162,7 @@ impl Controller{
 
 
 
-        
+
     }
     pub fn open_build_your_agit_modal(&mut self, selected_blockchain: String, selected_wallet: String) {
         let mut popup_clone = self.popup.clone();
@@ -192,7 +192,7 @@ impl Controller{
                     lang: self.lang.clone(),
                 }
             }
-        ).with_id("user_info_modal");
+        ).with_id("build_agit_modal");
     }
 
 
