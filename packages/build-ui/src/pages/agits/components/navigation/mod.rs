@@ -58,7 +58,7 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             lang: _,
             agit_id: _,
         } => (SelectedSection::Management, SelectedItem::Artist),
-        Route::CollectorPage {
+        Route::CollectorsPage {
             lang: _,
             agit_id: _,
         } => (SelectedSection::Management, SelectedItem::Collectors),
@@ -163,7 +163,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                     }
                     Item { selected: selected_item == SelectedItem::Collectors,
                         Link {
-                            to: Route::CollectorPage {
+                            to: Route::CollectorsPage {
                                 lang,
                                 agit_id,
                             },

@@ -13,5 +13,5 @@ pub use page::HomePage;
 pub use design::DesignPage;
 pub use extension_tool::ExtensionToolPage;
 pub use hub::{DaoPage, FaqPage, OraclePage};
-pub use management::{ArtistPage, ArtworkPage, CollectionPage, CollectorPage};
+pub use management::{ArtistPage, ArtworkPage, CollectionPage, CollectorsPage};
 pub use orders::{SalesRequestPage, ShippingLabelPage};
