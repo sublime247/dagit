@@ -22,6 +22,7 @@ enum SelectedItem {
     Collections,
     Artist,
     Collectors,
+    CollectorDetail,
     Dao,
     Oracle,
     Faq,
@@ -62,6 +63,11 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             lang: _,
             agit_id: _,
         } => (SelectedSection::Management, SelectedItem::Collectors),
+        Route::CollectorDetailPage {
+            lang: _,
+            agit_id: _,
+            collector_id: _,
+        } => (SelectedSection::Management, SelectedItem::CollectorDetail),
         Route::DaoPage {
             lang: _,
             agit_id: _,
@@ -170,6 +176,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                             {tr.collectors}
                         }
                     }
+                  
                 }
                 Section {
                     label: tr.hub,

@@ -31,8 +31,8 @@ pub enum Route {
                         ArtistPage { lang: Language, agit_id: i64 },
                     #[route("/collectors")]  
                         CollectorsPage { lang: Language, agit_id: i64 },
-                  
-                        // CollectorDetailPage {lang:Language, agit_id:i64},
+                    #[route("/collectors/:collector_id")]
+                        CollectorDetailPage { lang: Language, agit_id: i64, collector_id: i64 },
                 #[end_nest]
 
                 #[nest("/hub")]

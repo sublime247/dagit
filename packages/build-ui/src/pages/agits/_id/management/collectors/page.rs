@@ -98,16 +98,20 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         }
                     }
                     tbody { 
-                     {   collectors.iter().enumerate().map(|(_index, collector)| {
+                     {   collectors.into_iter().enumerate().map(|(_index, collector)| {
                             rsx! {
-                                tr { key: "{collector.id}",
+                              
+                              
+                                tr { 
+                                    key: "{collector.id}",
                                     class: "hover:bg-gray-900 cursor-pointer",
-                                    onclick: move |_| {
-                                        // let navigator = use_navigator();
-                                        // navigator.push(Route::CollectorDetailPage { lang, agit_id: agit_id()});
-
-
-                                    },
+                                onclick: move |_| {
+                                    use_navigator().push(Route::CollectorDetailPage { 
+                                        lang: lang, 
+                                        agit_id: agit_id(), 
+                                        collector_id: collector.id.parse::<i64>().unwrap()
+                                    });
+                                },
                                    
                                     td { 
                                         class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
@@ -117,20 +121,19 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                             div { 
                                                 class: "flex items-center",
                                                 span { {collector.collector_id.clone()} }
-                                                if collector.verified {
-                                                    span { 
-                                                        class: "ml-1 text-green-500",
-                                                      // Verified icon
-                                                      svg {
-                                                        view_box: "0 0 24 24",
-                                                        width: "16",
-                                                        height: "16",
-                                                        fill: "#10b981",
-                                                        class: "ml-1",
-                                                        path { d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }
-                                                    }
+                                                span { 
+                                                    class: "ml-1 text-green-500 hidden aria-verified:block", 
+                                                    "aria-verified": collector.verified,
+                                                  // Verified icon
+                                                  svg {
+                                                    view_box: "0 0 24 24",
+                                                    width: "16",
+                                                    height: "16",
+                                                    fill: "#10b981",
+                                                    class: "ml-1",
+                                                    path { d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }
                                                 }
-                                                }
+                                            }
                                             }
                                         }
                                     }
@@ -177,7 +180,7 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
-                            }
+                                 }
                        })
                     }
                 }
