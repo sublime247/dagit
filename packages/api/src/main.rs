@@ -118,7 +118,7 @@ pub mod dagit_tests {
         let profile_url = None::<String>;
         let mut tx = pool.begin().await?;
 
-        let mut user = user
+        let user = user
             .insert_with_tx(
                 &mut *tx,
                 common::tables::users::AuthProvider::Google,

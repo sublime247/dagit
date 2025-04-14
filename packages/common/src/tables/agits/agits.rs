@@ -1,3 +1,4 @@
+#![allow(unused)]
 use crate::tables::{artworks::Artwork, collections::Collection};
 
 use bdk::prelude::*;
