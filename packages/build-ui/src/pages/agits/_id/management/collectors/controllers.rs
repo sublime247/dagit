@@ -3,8 +3,7 @@ use std::io::Read;
 
 use bdk::prelude::{dioxus_popup::PopupService, *};
 
-use super::models::{Collector, Asset};
-// use super::models::*;
+use super::models::{Activity, Asset, Collector};
 
 
 #[derive(Debug, Clone, Copy, DioxusController)]
@@ -12,7 +11,8 @@ pub struct Controller{
     lang: Language,
     collector: Signal<Vec<Collector>>,
     asset: Signal<Vec<Asset>>,
-    popup: PopupService,
+    activity: Signal<Vec<Activity>>,
+    popup: PopupService
 
  
 }
@@ -59,11 +59,22 @@ impl Controller{
     }).collect::<Vec<_>>()
  });
 
+ let activity = use_signal(||{
+    (0..6).map(|id|Activity{
+        id: id.to_string(),
+        from: "20114FWO".to_string(),
+        to: "20114FWO".to_string(),
+        time: "30 mins ago".to_string(),
+        title: "Art Title".to_string()
+    }).collect::<Vec<_>>()
+ });
+
     let ctrl = Self{
         lang,
         collector,
         popup,
         asset,
+        activity
     };
     use_context_provider(||ctrl);
     Ok(ctrl)

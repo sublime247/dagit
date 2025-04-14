@@ -33,6 +33,15 @@ pub struct Asset {
     pub verified: bool,
 }
 
+#[derive(Clone, Debug, PartialEq)]
+pub struct Activity{
+    pub id: String,
+    pub from: String,
+    pub to: String,
+    pub title: String,
+    pub time: String,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)] // Replace Params with a valid derive macro
 pub struct CollectorDetailParams {
     id: String,
