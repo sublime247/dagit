@@ -4,18 +4,16 @@ use bdk::prelude::*;
 pub fn CollectionNameModal(
     show: bool,
     on_back: EventHandler<()>,
-    on_add: EventHandler<String> // Changed to pass the collection name
+    on_add: EventHandler<String>, // Changed to pass the collection name
 ) -> Element {
     let mut collection_name = use_signal(|| String::new());
-    
+
     if !show {
-        return rsx!(
-            div {}
-        );
+        return rsx!(div {});
     }
 
     rsx! {
-    
+
         div {
             class: "fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50",
 
