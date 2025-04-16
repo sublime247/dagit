@@ -2,8 +2,7 @@ use bdk::prelude::*;
 
 use crate::tables::artworks::Artwork;
 
-//TODO(api): Implement "/likes", "/followers" and "/holder" APIs
-//TODO(api): Implement admin api "m1/collectors/:id" for managing custodian.
+
 #[api_model(base = "/v1/collectors", table = collectors, action_by_id = [delete])]
 pub struct Collector {
     #[api_model(summary, primary_key)]
@@ -37,3 +36,4 @@ pub struct Collector {
     pub holder: bool,
 
 }
+
