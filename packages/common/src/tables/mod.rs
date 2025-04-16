@@ -4,6 +4,7 @@ pub mod artists;
 pub mod artworks;
 pub mod collections;
 pub mod users;
+pub mod collectors;
 
 pub mod prelude {
     pub use super::agit_admins::*;
@@ -12,4 +13,5 @@ pub mod prelude {
     pub use super::artworks::*;
     pub use super::collections::*;
     pub use super::users::*;
+    pub use super::collectors::*;
 }

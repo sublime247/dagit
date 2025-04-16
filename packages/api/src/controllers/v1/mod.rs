@@ -6,6 +6,7 @@ mod artist;
 mod artwork;
 mod collection;
 mod users;
+mod collector;
 
 use agit::AgitControllerV1;
 use artist::ArtistControllerV1;
