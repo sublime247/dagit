@@ -42,7 +42,7 @@ impl Controller{
         artist_name: "Artist Name".to_string(),
         attributes: vec!["Pixel".to_string(), "Animation".to_string()],
         way_to_sell: "Offer".to_string(),
-        owner: "Num".to_string(),
+        owner: "247".to_string(),
         current_price: 2.370,
         current_price_usd: 8147.63,
         average_price: 2.370,
@@ -55,6 +55,7 @@ impl Controller{
         royalty_usd: 8147.63,
         status: "Active".to_string(),
         verified: true,
+        art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
 
     }).collect::<Vec<_>>()
  });

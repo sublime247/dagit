@@ -31,6 +31,7 @@ pub struct Asset {
     pub royalty_usd: f64,
     pub status: String,
     pub verified: bool,
+    pub art_image: String,
 }
 
 #[derive(Clone, Debug, PartialEq)]

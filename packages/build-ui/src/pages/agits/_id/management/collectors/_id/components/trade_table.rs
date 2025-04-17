@@ -1,86 +1,86 @@
-use crate::pages::agits::_id::management::collectors::models::Asset;
+use crate::pages::agits::_id::management::collectors::{i18n::CollectorsTranslate, models::Asset};
 use bdk::prelude::{
     by_components::icons::{arrows, validations},
     *,
 };
 
 #[component]
-pub fn render_trade_table(assets: Vec<Asset>) -> Element {
+pub fn render_trade_table(assets: Vec<Asset>, lang:Language) -> Element {
+    let tr: CollectorsTranslate = translate(&lang);
     rsx! {
             table {
                 class: "w-full text-sm text-left border-collapse min-w-[800px]",
                 thead {
                     tr {
-
                         th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Title"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Attributes"}
-                            //   arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Ways to Sell"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Owner"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Current Price"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Average Price"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Price Change"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Volume"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Royalty"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {"Status"}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                       th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                         div { class: "flex items-center",
-                            span { "" }
-                            validations::Extra { class: "[&>circle]:stroke-white", height:18 }
-                        }
-                    }
+                           span {{tr.title}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.attributes}}
+                          //   arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.ways_to_sell}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.owner}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.current_price}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.average_price}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.price_change}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.volume}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.royalty}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                      th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                        div { class: "flex items-center",
+                           span {{tr.status}}
+                            arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
+                         }
+                      }
+                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                      div { class: "flex items-center",
+                          span { "" }
+                          validations::Extra { class: "[&>circle]:stroke-white", height:18 }
+                      }
+                  }
 
-                    }
-                }
+                  }
+              }
             tbody {
                 { assets.iter().enumerate().map(|(index, asset)| {
                      rsx! {
