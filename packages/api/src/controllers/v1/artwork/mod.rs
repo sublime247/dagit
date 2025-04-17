@@ -20,12 +20,12 @@ pub struct ArtworkPathParam {
 }
 
 #[derive(Clone, Debug)]
-pub struct ArtworkControllerV1 {
+pub struct ArtworkController {
     pool: sqlx::PgPool,
     repo: ArtworkRepository,
 }
 
-impl ArtworkControllerV1 {
+impl ArtworkController {
     pub fn new(pool: sqlx::PgPool) -> Self {
         let repo = Artwork::get_repository(pool.clone());
         Self { repo, pool }
@@ -40,9 +40,9 @@ impl ArtworkControllerV1 {
     }
 }
 
-impl ArtworkControllerV1 {
+impl ArtworkController {
     pub async fn list(
-        State(_ctrl): State<ArtworkControllerV1>,
+        State(_ctrl): State<ArtworkController>,
         Extension(_claim): Extension<Option<Authorization>>,
         Query(q): Query<ArtworkParam>,
     ) -> Result<Json<Vec<ArtworkSummary>>> {
@@ -51,7 +51,7 @@ impl ArtworkControllerV1 {
         Ok(Json(vec![]))
     }
     pub async fn get(
-        State(_ctrl): State<ArtworkControllerV1>,
+        State(_ctrl): State<ArtworkController>,
         Extension(_claim): Extension<Option<Authorization>>,
         Path(ArtworkPathParam { id }): Path<ArtworkPathParam>,
     ) -> Result<Json<Artwork>> {
@@ -59,7 +59,7 @@ impl ArtworkControllerV1 {
         Ok(Json(Artwork::default()))
     }
     pub async fn act(
-        State(_ctrl): State<ArtworkControllerV1>,
+        State(_ctrl): State<ArtworkController>,
         Extension(_claim): Extension<Option<Authorization>>,
         Json(body): Json<ArtworkAction>,
     ) -> Result<Json<Artwork>> {
@@ -73,7 +73,7 @@ impl ArtworkControllerV1 {
     }
 
     pub async fn act_by_id(
-        State(_ctrl): State<ArtworkControllerV1>,
+        State(_ctrl): State<ArtworkController>,
         Path(ArtworkPathParam { id }): Path<ArtworkPathParam>,
         Extension(_claim): Extension<Option<Authorization>>,
         Json(body): Json<ArtworkByIdAction>,
