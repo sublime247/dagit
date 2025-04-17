@@ -30,12 +30,12 @@ pub struct AgitPath {
 }
 
 #[derive(Clone, Debug)]
-pub struct AgitControllerV1 {
+pub struct AgitController {
     repo: AgitRepository,
     pool: sqlx::Pool<sqlx::Postgres>,
 }
 
-impl AgitControllerV1 {
+impl AgitController {
     pub fn new(pool: sqlx::Pool<sqlx::Postgres>) -> Self {
         let repo = Agit::get_repository(pool.clone());
         Self { repo, pool }
@@ -50,7 +50,7 @@ impl AgitControllerV1 {
     }
 
     pub async fn act_agit(
-        State(ctrl): State<AgitControllerV1>,
+        State(ctrl): State<AgitController>,
         Extension(auth): Extension<Option<Authorization>>,
         Json(body): Json<AgitAction>,
     ) -> Result<Json<Agit>> {
@@ -65,7 +65,7 @@ impl AgitControllerV1 {
     }
 
     pub async fn act_agit_by_id(
-        State(ctrl): State<AgitControllerV1>,
+        State(ctrl): State<AgitController>,
         Extension(auth): Extension<Option<Authorization>>,
         Path(AgitPath { id }): Path<AgitPath>,
         Json(body): Json<AgitByIdAction>,
@@ -85,7 +85,7 @@ impl AgitControllerV1 {
     }
 
     pub async fn get_agit_by_id(
-        State(ctrl): State<AgitControllerV1>,
+        State(ctrl): State<AgitController>,
         Extension(auth): Extension<Option<Authorization>>,
         Path(AgitPath { id }): Path<AgitPath>,
     ) -> Result<Json<Agit>> {
@@ -117,7 +117,7 @@ impl AgitControllerV1 {
     }
 
     pub async fn get_agit(
-        State(ctrl): State<AgitControllerV1>,
+        State(ctrl): State<AgitController>,
         Extension(auth): Extension<Option<Authorization>>,
         Query(q): Query<AgitParam>,
     ) -> Result<Json<AgitGetResponse>> {
@@ -131,7 +131,7 @@ impl AgitControllerV1 {
     }
 }
 
-impl AgitControllerV1 {
+impl AgitController {
     async fn query(
         &self,
         auth: Option<Authorization>,

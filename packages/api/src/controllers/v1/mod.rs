@@ -8,15 +8,19 @@ mod collection;
 mod users;
 mod collector;
 
-use agit::AgitControllerV1;
-use artist::ArtistControllerV1;
-use artwork::ArtworkControllerV1;
+use agit::AgitController;
+use artist::ArtistController;
+use artwork::ArtworkController;
 use users::UserController;
+use collector::CollectorController;
+use collection::CollectionController;
 
 pub fn routes(pool: Pool<Postgres>) -> common::Result<by_axum::router::BiyardRouter> {
     Ok((by_axum::router::BiyardRouter::new())
-        .nest("/agits", AgitControllerV1::route(pool.clone())?)
-        .nest("/artworks", ArtworkControllerV1::route(pool.clone())?)
-        .nest("/artists", ArtistControllerV1::route(pool.clone())?)
-        .nest("/users", UserController::new(pool.clone()).route()?))
+        .nest("/agits", AgitController::route(pool.clone())?)
+        .nest("/artworks", ArtworkController::route(pool.clone())?)
+        .nest("/artists", ArtistController::route(pool.clone())?)
+        .nest("/users", UserController::new(pool.clone()).route()?)
+        .nest("/collectors", CollectorController::route(pool.clone())?)
+        .nest("/collections", CollectionController::route(pool.clone())?))
 }

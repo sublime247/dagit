@@ -45,12 +45,12 @@ pub struct CollectionByIdPathParam {
 }
 
 #[derive(Clone, Debug)]
-pub struct CollectionControllerV1 {
+pub struct CollectionController {
     pool: sqlx::PgPool,
     repo: CollectionRepository,
 }
 
-impl CollectionControllerV1 {
+impl CollectionController {
     async fn query(
         &self,
         auth: Option<Authorization>,
@@ -144,7 +144,7 @@ impl CollectionControllerV1 {
     }
 }
 
-impl CollectionControllerV1 {
+impl CollectionController {
     pub fn new(pool: sqlx::Pool<sqlx::Postgres>) -> Self {
         let repo = Collection::get_repository(pool.clone());
         Self { repo, pool }

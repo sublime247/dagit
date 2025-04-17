@@ -20,12 +20,12 @@ pub struct ArtistPathParam {
 }
 
 #[derive(Clone, Debug)]
-pub struct ArtistControllerV1 {
+pub struct ArtistController {
     pool: sqlx::PgPool,
     repo: ArtistRepository,
 }
 
-impl ArtistControllerV1 {
+impl ArtistController {
     pub fn new(pool: sqlx::PgPool) -> Self {
         let repo = Artist::get_repository(pool.clone());
         Self { repo, pool }
@@ -40,9 +40,9 @@ impl ArtistControllerV1 {
     }
 }
 
-impl ArtistControllerV1 {
+impl ArtistController {
     pub async fn list(
-        State(ctrl): State<ArtistControllerV1>,
+        State(ctrl): State<ArtistController>,
         Extension(claim): Extension<Option<Authorization>>,
         Query(q): Query<ArtistParam>,
     ) -> Result<Json<Vec<ArtistSummary>>> {
@@ -51,7 +51,7 @@ impl ArtistControllerV1 {
         Ok(Json(vec![]))
     }
     pub async fn get(
-        State(ctrl): State<ArtistControllerV1>,
+        State(ctrl): State<ArtistController>,
         Extension(claim): Extension<Option<Authorization>>,
         Path(ArtistPathParam { id }): Path<ArtistPathParam>,
     ) -> Result<Json<Artist>> {
@@ -59,7 +59,7 @@ impl ArtistControllerV1 {
         Ok(Json(Artist::default()))
     }
     pub async fn act(
-        State(ctrl): State<ArtistControllerV1>,
+        State(ctrl): State<ArtistController>,
         Extension(claim): Extension<Option<Authorization>>,
         Json(body): Json<ArtistAction>,
     ) -> Result<Json<Artist>> {
@@ -73,7 +73,7 @@ impl ArtistControllerV1 {
     }
 
     pub async fn act_by_id(
-        State(ctrl): State<ArtistControllerV1>,
+        State(ctrl): State<ArtistController>,
         Path(ArtistPathParam { id }): Path<ArtistPathParam>,
         Extension(claim): Extension<Option<Authorization>>,
         Json(body): Json<ArtistByIdAction>,

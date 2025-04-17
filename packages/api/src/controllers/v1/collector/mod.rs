@@ -48,12 +48,12 @@ pub struct CollectorByIdPathParam{
 }
 
 #[derive(Clone, Debug)]
-pub struct CollectorControllerV1 {
+pub struct CollectorController {
     pool: sqlx::PgPool,
     repo: CollectorRepository,
 }
 
-impl CollectorControllerV1{
+impl CollectorController{
 
     async fn query(&self, auth:Option<Authorization>, param: CollectorQuery) -> Result<by_types::QueryResponse<CollectorSummary>>{
         let user_id= match auth{
@@ -153,7 +153,7 @@ impl CollectorControllerV1{
     
 }
 
-impl CollectorControllerV1{
+impl CollectorController{
     pub fn new(pool: sqlx::Pool<sqlx::Postgres>) -> Self {
         let repo = Collector::get_repository(pool.clone());
         Self { repo, pool }
