@@ -3,7 +3,7 @@ use bdk::prelude::*;
 
 #[component]
 #[allow(unused_variables)]
-pub fn render_activity_table(activity: Vec<Activity>, lang: Language) -> Element {
+pub fn ActivityTable(activity: Vec<Activity>, lang: Language) -> Element {
     let tr: CollectorsTranslate = translate(&lang);
     rsx! {
                 { activity.iter().enumerate().map(|(index, activity)| {

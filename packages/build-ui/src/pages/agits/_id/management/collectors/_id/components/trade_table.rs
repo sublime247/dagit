@@ -5,7 +5,7 @@ use bdk::prelude::{
 };
 
 #[component]
-pub fn render_trade_table(assets: Vec<Asset>, lang:Language) -> Element {
+pub fn TradeTable(assets: Vec<Asset>, lang:Language) -> Element {
     let tr: CollectorsTranslate = translate(&lang);
     rsx! {
             table {

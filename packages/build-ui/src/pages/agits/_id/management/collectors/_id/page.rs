@@ -1,7 +1,7 @@
 use crate::{
     pages::agits::_id::management::collectors::{
         _id::components::{
-            render_activity_table, render_created_table, render_nft_images, render_owned_table, render_trade_table
+            ActivityTable, CreatedTable, NftTable, OwnedTable, TradeTable
         },
         controllers::Controller, i18n::CollectorsTranslate,
     },
@@ -324,29 +324,29 @@ pub fn CollectorDetailPage(
                                 AssetTab::Owned=> {
                                     if *view_mode.read()=="nftImages" {
                                         rsx!{
-                                            render_nft_images {assets: assets.clone(), lang}
+                                            NftTable {assets: assets.clone(), lang}
                                         }
                                     }else {
-                                    rsx!{ render_owned_table {assets: assets.clone(), lang}} 
+                                    rsx!{ OwnedTable {assets: assets.clone(), lang}} 
                                } 
                             }
                             AssetTab::Created => {
                                 if *view_mode.read() == "nftImages" {
-                                    rsx!{ render_nft_images { assets: assets.clone(), lang} }
+                                    rsx!{ NftTable { assets: assets.clone(), lang} }
                                 } else {
-                                    rsx!{ render_created_table { assets: assets.clone(), lang } }
+                                    rsx!{ CreatedTable { assets: assets.clone(), lang } }
                                 }
                             },
                             AssetTab::Trade => {
                                 if *view_mode.read() == "nftImages" {
-                                    rsx!{ render_nft_images { assets: assets.clone(), lang } }
+                                    rsx!{ NftTable { assets: assets.clone(), lang } }
                                 } else {
-                                    rsx!{ render_trade_table { assets: assets.clone(), lang } }
+                                    rsx!{ TradeTable { assets: assets.clone(), lang } }
                                 }
                             },
                             AssetTab::Activity => {
                                 // Activity is always shown as a table
-                                rsx!{ render_activity_table { activity: activities.clone(), lang  } }
+                                rsx!{ ActivityTable { activity: activities.clone(), lang  } }
                             },
                             }}
 

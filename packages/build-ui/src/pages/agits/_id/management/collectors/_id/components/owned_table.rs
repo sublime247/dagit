@@ -5,7 +5,7 @@ use bdk::prelude::{
 };
 
 #[component]
-pub fn render_owned_table(assets: Vec<Asset>, lang:Language) -> Element {
+pub fn OwnedTable(assets: Vec<Asset>, lang:Language) -> Element {
     let tr: CollectorsTranslate = translate(&lang);
     rsx! {
             table {

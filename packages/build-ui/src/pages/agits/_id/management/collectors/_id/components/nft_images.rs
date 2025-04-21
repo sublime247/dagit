@@ -2,7 +2,7 @@
 use bdk::prelude::{by_components::icons::validations, *};
 use crate::pages::agits::_id::management::collectors::{i18n::CollectorsTranslate, models::Asset};
 #[component]
-pub fn render_nft_images(assets: Vec<Asset>, lang:Language) -> Element {
+pub fn NftTable(assets: Vec<Asset>, lang:Language) -> Element {
     let tr: CollectorsTranslate = translate(&lang);
     rsx! {
         div {
