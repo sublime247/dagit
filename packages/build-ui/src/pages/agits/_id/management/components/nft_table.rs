@@ -1,13 +1,15 @@
+use crate::pages::agits::_id::management::{
+    collections::CollectionTranslate, collectors::models::Asset,
+};
 #[allow(unused_imports)]
 use bdk::prelude::{by_components::icons::validations, *};
-use crate::pages::agits::_id::management::collectors::{i18n::CollectorsTranslate, models::Asset};
 #[component]
-pub fn NftTable(assets: Vec<Asset>, lang:Language) -> Element {
-    let tr: CollectorsTranslate = translate(&lang);
+pub fn NftTable(assets: Vec<Asset>, lang: Language) -> Element {
+    let tr: CollectionTranslate = translate(&lang);
     rsx! {
         div {
             class: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 align-items-start",
-            
+
             {assets.iter().enumerate().map(|(index, asset)| {
                 let dimensions = if index % 2 == 0 {
                     "width: 342px; height: 500px;"
@@ -22,14 +24,14 @@ pub fn NftTable(assets: Vec<Asset>, lang:Language) -> Element {
                         div {
                             class: "relative bg-gray-800",
                             style: "{dimensions}",
-                           
+
                                 div {
                                     class: "text-4xl text-gray-600 absolute inset-0 flex items-center justify-center",
                                     img {
                                         class: "w-full h-full object-cover",
                                         src: asset.art_image.clone()
                                     }
-                                
+
                             }
                         }
                         // NFT metadata section
@@ -61,7 +63,7 @@ pub fn NftTable(assets: Vec<Asset>, lang:Language) -> Element {
                                     }
                                     span {class: "font-bold text-white", "${asset.current_price}" }
                                 }
-                                div{ 
+                                div{
                                     class: "flex flex-col",
 
                                     div {

@@ -1,3 +1,5 @@
+use crate::routes::Route;
+
 use super::components::FilterSidebar;
 use super::i18n::CollectionTranslate;
 //FIXME: Use Collection in "packages/models/table/collection.rs"
@@ -138,11 +140,19 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                             tbody {
                                 {
                                     collections
-                                        .iter()
+                                        .into_iter()
                                         .enumerate()
                                         .map(|(index, collection)| {
                                             rsx! {
-                                                tr { key: "{index}", class: "border-b border-border-primary",
+                                                tr { key: "{index}",
+                                                 class: "border-b border-border-primary",
+                                                    onclick: move |_| {
+                                                        use_navigator().push(Route::CollectionDetailPage {
+                                                            lang: lang,
+                                                            agit_id: *agit_id.read(),
+                                                            collection_id: collection.id as i64,
+                                                        });
+                                                    },
                                                     // Table row content...
                                                     // (Keeping the existing table row code)
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.id}" }

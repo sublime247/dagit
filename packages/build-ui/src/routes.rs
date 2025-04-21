@@ -27,6 +27,8 @@ pub enum Route {
                         ArtworkPage { lang: Language, agit_id: i64 },
                     #[route("/collections")]
                         CollectionPage { lang: Language, agit_id: i64 },
+                    #[route("/collections/:collection_id")]
+                        CollectionDetailPage { lang: Language, agit_id: i64, collection_id:i64 },
                     #[route("/artists")]
                         ArtistPage { lang: Language, agit_id: i64 },
                     #[route("/collectors")]  

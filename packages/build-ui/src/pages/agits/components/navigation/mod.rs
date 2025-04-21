@@ -20,6 +20,7 @@ enum SelectedItem {
     ShippingLabel,
     Artworks,
     Collections,
+    CollectionDetail,
     Artist,
     Collectors,
     CollectorDetail,
@@ -55,6 +56,11 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             lang: _,
             agit_id: _,
         } => (SelectedSection::Management, SelectedItem::Collections),
+        Route::CollectionDetailPage {
+            lang: _,
+            agit_id: _,
+            collection_id: _,
+        } => (SelectedSection::Management, SelectedItem::CollectionDetail),
         Route::ArtistPage {
             lang: _,
             agit_id: _,

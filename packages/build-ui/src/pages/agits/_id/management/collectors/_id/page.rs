@@ -1,9 +1,11 @@
 use crate::{
-    pages::agits::_id::management::collectors::{
-        _id::components::{
-            ActivityTable, CreatedTable, NftTable, OwnedTable, TradeTable
+    pages::agits::_id::management::{
+        collectors::{
+            _id::components::{CreatedTable, TradeTable},
+            controllers::Controller,
+            i18n::CollectorsTranslate,
         },
-        controllers::Controller, i18n::CollectorsTranslate,
+        components::{ActivityTable, NftTable, OwnedTable},
     },
     routes::Route,
 };
@@ -26,7 +28,7 @@ pub fn CollectorDetailPage(
     collector_id: i64,
 ) -> Element {
     let search_query = use_signal(String::new);
-    let mut view_mode = use_signal(|| "table"); 
+    let mut view_mode = use_signal(|| "table");
     let filter = use_signal(|| "All");
     let tr: CollectorsTranslate = translate(&lang);
     let ctrl = Controller::new(lang, agit_id)?;
@@ -66,18 +68,7 @@ pub fn CollectorDetailPage(
 
                         div{
                             class: "flex items-center",
-                            span {
-                                class: "text-green-500 mr-2",
-                                   // Verified icon
-                                svg {
-                                    view_box: "0 0 24 24",
-                                    width: "20",
-                                    height: "20",
-                                    fill: "#10b981",
-                                    class: "ml-1",
-                                    path { d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }
-                                }
-                            }
+
 
                              h1 {
                             class: "text-xl font-bold",
@@ -271,7 +262,7 @@ pub fn CollectorDetailPage(
                                 }
 
                                 button {
-                                    class: format!("p-2 border {} text-white w-full sm:w-auto", 
+                                    class: format!("p-2 border {} text-white w-full sm:w-auto",
                                         if *view_mode.read() == "nftImages" { "border-white" } else { "border-border-primary" }
                                     ),
                                     onclick: move |_| {
@@ -285,7 +276,7 @@ pub fn CollectorDetailPage(
                                 }
 
 
-                       
+
 
                             // All dropdown
                             div { class: "relative",
@@ -327,8 +318,8 @@ pub fn CollectorDetailPage(
                                             NftTable {assets: assets.clone(), lang}
                                         }
                                     }else {
-                                    rsx!{ OwnedTable {assets: assets.clone(), lang}} 
-                               } 
+                                    rsx!{ OwnedTable {assets: assets.clone(), lang}}
+                               }
                             }
                             AssetTab::Created => {
                                 if *view_mode.read() == "nftImages" {
