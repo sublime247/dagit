@@ -1,8 +1,8 @@
-mod components;
-pub mod controllers;
+mod components; 
+mod controllers;
 mod i18n;
 mod page;
-pub mod models;
+ mod models;
 mod _id;
 
 

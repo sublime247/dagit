@@ -1,11 +1,10 @@
 use crate::pages::agits::_id::management::{
-    TableHeader,
-    collectors::{i18n::CollectorsTranslate, models::Asset},
+    collectors::i18n::CollectorsTranslate, Assets, TableHeader
 };
 use bdk::prelude::{by_components::icons::validations, *};
 
 #[component]
-pub fn TradeTable(assets: Vec<Asset>, lang: Language) -> Element {
+pub fn TradeTable(assets: Vec<Assets>, lang: Language) -> Element {
     let _tr: CollectorsTranslate = translate(&lang);
     rsx! {
             table {

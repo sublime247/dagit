@@ -1,10 +1,9 @@
-use crate::pages::agits::_id::management::{
-    collections::CollectionTranslate, collectors::models::Asset,
-};
-#[allow(unused_imports)]
-use bdk::prelude::{by_components::icons::validations, *};
+use crate::pages::agits::_id::management::{ collections::CollectionTranslate, Assets};
+
+
+use bdk::prelude::*;
 #[component]
-pub fn NftTable(assets: Vec<Asset>, lang: Language) -> Element {
+pub fn NftTable(assets: Vec<Assets>, lang: Language) -> Element {
     let tr: CollectionTranslate = translate(&lang);
     rsx! {
         div {

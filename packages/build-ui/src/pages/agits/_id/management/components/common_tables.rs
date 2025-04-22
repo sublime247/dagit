@@ -1,9 +1,8 @@
-use crate::pages::agits::_id::management::collectors::models::Activity;
-use crate::pages::agits::_id::management::collectors::models::Asset;
+use crate::pages::agits::_id::management::model::{Assets, Activity};
 use crate::pages::agits::_id::management::{TableHeader, collections::CollectionTranslate};
 use bdk::prelude::{by_components::icons::validations, *};
 #[component]
-pub fn OwnedTable(assets: Vec<Asset>, lang: Language) -> Element {
+pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
 
     rsx! {
@@ -15,7 +14,7 @@ pub fn OwnedTable(assets: Vec<Asset>, lang: Language) -> Element {
                     let is_dropdown_open = active_dropdown.with(|active| active == &Some(index));
                     rsx! {
                         tr {
-                            key: "{index}",
+                            key: "owned-tr-{index}",
                             class: "border-b border-gray-800 hover:bg-gray-900",
                             td {
                                 class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
@@ -140,15 +139,16 @@ pub fn OwnedTable(assets: Vec<Asset>, lang: Language) -> Element {
                                         validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                                     }
                                     // Render dropdown if this row's dropdown is active
-                                    if is_dropdown_open {
+                                  
                                         div {
-                                            class: "absolute right-0 mt-2 w-48 bg-black border border-green-500 rounded shadow-lg z-10",
+                                            class: "absolute right-0 mt-2 w-48 bg-black border border-green-500 rounded shadow-lg z-10 hidden aria-dropdown-open:block",
+                                            "aria-dropdown-open": is_dropdown_open,
                                             div {
                                                 class: "py-1",
                                                 button {
                                                     class: "block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800",
                                                     onclick: move |_| {
-                                                        println!("Edit the artwork clicked");
+                                                        tracing::debug!("Edit the artwork clicked");
                                                         active_dropdown.set(None); // Close dropdown after action
                                                     },
                                                     "Edit the artwork"
@@ -156,7 +156,7 @@ pub fn OwnedTable(assets: Vec<Asset>, lang: Language) -> Element {
                                                 button {
                                                     class: "block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800",
                                                     onclick: move |_| {
-                                                        println!("Remove from the list clicked");
+                                                        tracing::debug!("Remove from the list clicked");
                                                         active_dropdown.set(None); // Close dropdown after action
                                                     },
                                                     "Remove from the list"
@@ -164,14 +164,14 @@ pub fn OwnedTable(assets: Vec<Asset>, lang: Language) -> Element {
                                                 button {
                                                     class: "block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800",
                                                     onclick: move |_| {
-                                                        println!("Option clicked");
+                                                        tracing::debug!("Option clicked");
                                                         active_dropdown.set(None); // Close dropdown after action
                                                     },
                                                     "Option"
                                                 }
                                             }
                                         }
-                                    }
+                                    
                                 }
                             }
                         }
@@ -191,7 +191,7 @@ pub fn ActivityTable(activity: Vec<Activity>, lang: Language) -> Element {
 
                     rsx!{
                         div {
-                            class: "flex items-center p-4 mb-2.5 rounded bg-[#1a1a1a] hover:bg-[#0a3b2c] transition-colors duration-200 group",
+                            class: "flex items-center p-4 mb-2.5 rounded bg-table-bg hover:bg-hover-activity transition-colors duration-200 group",
 
                             // Art thumbnail
                             div {

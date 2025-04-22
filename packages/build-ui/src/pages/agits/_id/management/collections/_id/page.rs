@@ -1,8 +1,9 @@
 use bdk::prelude::by_components::icons::{arrows, edit, layouts, settings, validations};
 use bdk::prelude::*;
 
+use crate::pages::agits::_id::management::collections::controllers::Controller;
 use crate::pages::agits::_id::management::collections::i18n::CollectionTranslate;
-use crate::pages::agits::_id::management::collectors::controllers::Controller;
+
 use crate::pages::agits::_id::management::components::{ActivityTable, NftTable, OwnedTable};
 use crate::routes::Route;
 #[derive(Clone, Debug, PartialEq)]
