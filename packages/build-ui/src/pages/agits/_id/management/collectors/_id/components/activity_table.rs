@@ -1,9 +1,10 @@
-use crate::pages::agits::_id::management::collectors::models::Activity;
+use crate::pages::agits::_id::management::collectors::{i18n::CollectorsTranslate, models::Activity};
 use bdk::prelude::*;
 
 #[component]
 #[allow(unused_variables)]
-pub fn render_activity_table(activity: Vec<Activity>) -> Element {
+pub fn ActivityTable(activity: Vec<Activity>, lang: Language) -> Element {
+    let tr: CollectorsTranslate = translate(&lang);
     rsx! {
                 { activity.iter().enumerate().map(|(index, activity)| {
 

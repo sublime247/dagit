@@ -1,9 +1,9 @@
 use crate::{
     pages::agits::_id::management::collectors::{
         _id::components::{
-            render_activity_table, render_created_table, render_owned_table, render_trade_table,
+            ActivityTable, CreatedTable, NftTable, OwnedTable, TradeTable
         },
-        controllers::Controller,
+        controllers::Controller, i18n::CollectorsTranslate,
     },
     routes::Route,
 };
@@ -26,12 +26,14 @@ pub fn CollectorDetailPage(
     collector_id: i64,
 ) -> Element {
     let search_query = use_signal(String::new);
-    let view_mode = use_signal(|| "grid");
+    let mut view_mode = use_signal(|| "table"); 
     let filter = use_signal(|| "All");
+    let tr: CollectorsTranslate = translate(&lang);
     let ctrl = Controller::new(lang, agit_id)?;
     let assets = ctrl.asset();
     let activities = ctrl.activity();
     let mut active_tab = use_signal(|| AssetTab::Owned);
+
     rsx! {
              div{
                 class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
@@ -114,7 +116,7 @@ pub fn CollectorDetailPage(
                 div {
                     // Stat
                     div { class: "border-b-2 border-border-primary flex justify-between items-center pb-2  mb-4",
-                        p { class: "text-sm text-white", "Total Volume" }
+                        p { class: "text-sm text-white", {tr.total_volume} }
                         p { class: "text-sm font-bold", "2,370 ETH" }
                     }
                     // Wallet
@@ -127,12 +129,12 @@ pub fn CollectorDetailPage(
                 div {
                     // Stat
                     div { class: "border-b-2 border-border-primary flex justify-between items-center pb-2 mb-4",
-                        p { class: "text-sm text-white", "Owned" }
+                        p { class: "text-sm text-white", {tr.owned} }
                         p { class: "text-sm font-bold", "2,370 ETH" }
                     }
                     // Wallet
                     div { class: "pt-2 border-b-2 border-border-primary flex justify-between items-center pb-2 mt-4",
-                        p { class: "text-sm text-white", "Wallet Address" }
+                        p { class: "text-sm text-white", {tr.wallet_address} }
                         div { class: "flex items-center",
                             p { class: "font-mono text-sm", "0x1234...abcd" }
                             button { class: "ml-2 text-white",
@@ -157,12 +159,12 @@ pub fn CollectorDetailPage(
                 div {
                     // Stat
                     div { class: "border-b-2 border-border-primary flex justify-between items-center pb-2 mb-4",
-                        p { class: "text-sm text-white", "Owned" }
+                        p { class: "text-sm text-white", {tr.owned} }
                         p { class: "text-sm font-bold", "2,370 ETH" }
                     }
                     // Wallet
                     div { class: "pt-2 border-b-2 border-border-primary flex justify-between items-center pb-2 mt-4",
-                        p { class: "text-sm text-white", "Wallet Address" }
+                        p { class: "text-sm text-white", {tr.wallet_address} }
                         div { class: "flex items-center",
                             p { class: "font-mono text-sm", "0x1234...abcd" }
                             button { class: "ml-2 text-white",
@@ -258,19 +260,32 @@ pub fn CollectorDetailPage(
                         // View mode buttons
                         div {
                             class: "flex space-x-2",
-                            button {
-                                class: "p-2 border border-border-primary text-white w-full sm:w-auto",
-                                // onclick: move |_| show_filters.toggle(),
-                                layouts::Window{ class: "[&>path]:stroke-white" }
-                            }
 
 
-                            // Filter dropdown
-                            button {
-                                class: "p-2 border border-border-primary text-white w-full sm:w-auto",
-                                // onclick: move |_| show_filters.toggle(),
-                                settings::Sliders { class: "[&>path]:stroke-white" }
-                            }
+
+                                 // Filter dropdown
+                                 button {
+                                    class: "p-2 border border-border-primary text-white w-full sm:w-auto",
+                                    // onclick: move |_| show_filters.toggle(),
+                                    settings::Sliders { class: "[&>path]:stroke-white" }
+                                }
+
+                                button {
+                                    class: format!("p-2 border {} text-white w-full sm:w-auto", 
+                                        if *view_mode.read() == "nftImages" { "border-white" } else { "border-border-primary" }
+                                    ),
+                                    onclick: move |_| {
+                                        if *view_mode.read() == "table" {
+                                            view_mode.set("nftImages");
+                                        } else {
+                                            view_mode.set("table");
+                                        }
+                                    },
+                                    layouts::Window{ class: "[&>path]:stroke-white" }
+                                }
+
+
+                       
 
                             // All dropdown
                             div { class: "relative",
@@ -306,18 +321,33 @@ pub fn CollectorDetailPage(
 
 
                             {match active_tab.with(|tab| tab.clone()) {
-                                AssetTab::Owned=> rsx!{
-                                    render_owned_table {assets: assets.clone()}
-                                },
-                                AssetTab::Created=> rsx!{
-                                    render_created_table {assets: assets.clone()}
-                                },
-                                AssetTab::Trade=> rsx!{
-                                    render_trade_table {assets: assets.clone()}
-                                },
-                                AssetTab::Activity=> rsx!{
-                                    render_activity_table {activity: activities.clone()}
-                                },
+                                AssetTab::Owned=> {
+                                    if *view_mode.read()=="nftImages" {
+                                        rsx!{
+                                            NftTable {assets: assets.clone(), lang}
+                                        }
+                                    }else {
+                                    rsx!{ OwnedTable {assets: assets.clone(), lang}} 
+                               } 
+                            }
+                            AssetTab::Created => {
+                                if *view_mode.read() == "nftImages" {
+                                    rsx!{ NftTable { assets: assets.clone(), lang} }
+                                } else {
+                                    rsx!{ CreatedTable { assets: assets.clone(), lang } }
+                                }
+                            },
+                            AssetTab::Trade => {
+                                if *view_mode.read() == "nftImages" {
+                                    rsx!{ NftTable { assets: assets.clone(), lang } }
+                                } else {
+                                    rsx!{ TradeTable { assets: assets.clone(), lang } }
+                                }
+                            },
+                            AssetTab::Activity => {
+                                // Activity is always shown as a table
+                                rsx!{ ActivityTable { activity: activities.clone(), lang  } }
+                            },
                             }}
 
 

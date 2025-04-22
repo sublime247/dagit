@@ -20,7 +20,10 @@ translate! {
         en: "Total Volume",
         ko: "총 거래량",
     },
-
+    title:{
+        en: "Title",
+        ko: "제목",
+    }
     owned: {
         en: "Owned",
         ko: "소유한",
@@ -69,6 +72,10 @@ translate! {
         en: "Volume",
         ko: "거래량",
     }
+    sales_volume:{
+        en: "Sales Volume",
+        ko: "판매량",
+    }
     royalty:{
         en: "Royalty",
         ko: "로열티",
@@ -89,4 +96,5 @@ translate! {
         en: "Search by title",
         ko: "제목으로 검색",
     }
+    
 }
