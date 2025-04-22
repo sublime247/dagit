@@ -3,14 +3,17 @@ use std::io::Read;
 
 use bdk::prelude::{dioxus_popup::PopupService, *};
 
-use super::models::{Activity, Asset, Collector};
+use crate::pages::agits::_id::management::{Activity, Assets};
+
+use super::models::{Collector};
+use super::models::*;
 
 
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller{
     lang: Language,
     collector: Signal<Vec<Collector>>,
-    asset: Signal<Vec<Asset>>,
+    asset: Signal<Vec<Assets>>,
     activity: Signal<Vec<Activity>>,
     popup: PopupService
 
@@ -36,7 +39,7 @@ impl Controller{
     });
    
  let asset = use_signal(||{
-    (0..8).map(|id| Asset{
+    (0..8).map(|id| Assets{
         id : id.to_string(),
         title: "Asset Title".to_string(),
         artist_name: "Artist Name".to_string(),

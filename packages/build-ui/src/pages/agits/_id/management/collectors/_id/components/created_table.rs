@@ -1,87 +1,16 @@
-use crate::pages::agits::_id::management::collectors::{i18n::CollectorsTranslate, models::Asset};
-use bdk::prelude::{
-    by_components::icons::{arrows, validations},
-    *,
+use crate::pages::agits::_id::management::{
+    collectors::i18n::CollectorsTranslate, Assets, TableHeader
 };
 
+use bdk::prelude::{by_components::icons::validations, *};
+
 #[component]
-pub fn CreatedTable(assets: Vec<Asset>, lang:Language) -> Element {
-    let tr: CollectorsTranslate = translate(&lang);
+pub fn CreatedTable(assets: Vec<Assets>, lang: Language) -> Element {
+    let _tr: CollectorsTranslate = translate(&lang);
     rsx! {
             table {
                 class: "w-full text-sm text-left border-collapse min-w-[800px]",
-                thead {
-                    tr {
-
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.title}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.attributes}}
-                            //   arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.ways_to_sell}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.owner}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.current_price}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.average_price}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.price_change}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.volume}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.royalty}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                        th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                          div { class: "flex items-center",
-                             span {{tr.status}}
-                              arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
-                           }
-                        }
-                       th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                        div { class: "flex items-center",
-                            span { "" }
-                            validations::Extra { class: "[&>circle]:stroke-white", height:18 }
-                        }
-                    }
-
-                    }
-                }
+             TableHeader { lang:lang }
             tbody {
                 { assets.iter().enumerate().map(|(index, asset)| {
                      rsx! {
