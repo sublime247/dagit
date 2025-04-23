@@ -2,7 +2,7 @@
 use super::models::*;
 use bdk::prelude::*;
 
-use crate::pages::agits::_id::management::Assets;
+use crate::{pages::agits::_id::management::Assets, routes::Route};
 
 
 #[derive(Debug, Clone, Copy, DioxusController)]
@@ -58,10 +58,20 @@ impl Controller{
       let ctrl = Self{
         lang,
         agit_id,
-        artist
-        ,artist_asset
+        artist,
+        artist_asset
       };
       use_context_provider(||ctrl);
         Ok(ctrl)
+    }
+
+
+    
+    pub fn open_new_artist_form(&self){
+        let navigate = use_navigator();
+        navigate.push(Route::NewArtistPage{
+            lang: self.lang,
+            agit_id: self.agit_id.with(|id| *id),
+        });
     }
 }

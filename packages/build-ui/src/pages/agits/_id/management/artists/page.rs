@@ -73,7 +73,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
         button {
           class: "bg-border-background border border-border-primary text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
           onclick: move |_| {
-              // ctrl.open_new_collection_popup();
+              ctrl.open_new_artist_form();
           },
           validations::Add { class: "mr-3 [&>path]:stroke-white [&>circle]:stroke-white" }
           {tr.new_artist}

@@ -5,4 +5,4 @@ mod _id;
 mod models;
 
 pub use page::ArtistPage;
-pub use _id::ArtistDetailPage;
+pub use _id::{ArtistDetailPage, NewArtistPage};
