@@ -22,6 +22,7 @@ enum SelectedItem {
     Collections,
     CollectionDetail,
     Artist,
+    ArtistDetail,
     Collectors,
     CollectorDetail,
     Dao,
@@ -65,6 +66,11 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             lang: _,
             agit_id: _,
         } => (SelectedSection::Management, SelectedItem::Artist),
+        Route::ArtistDetailPage {
+            lang: _,
+            agit_id: _,
+            artist_id: _,
+        } => (SelectedSection::Management, SelectedItem::ArtistDetail),
         Route::CollectorsPage {
             lang: _,
             agit_id: _,

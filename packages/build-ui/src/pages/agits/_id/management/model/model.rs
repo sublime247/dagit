@@ -19,6 +19,8 @@ pub struct Assets {
     pub status: String,
     pub verified: bool,
     pub art_image: String,
+    pub medium: String,
+    pub rarity: String,
 }
 
 #[derive(Clone, Debug, PartialEq)]

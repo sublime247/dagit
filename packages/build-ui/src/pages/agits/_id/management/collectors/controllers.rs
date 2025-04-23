@@ -59,6 +59,8 @@ impl Controller{
         status: "Active".to_string(),
         verified: true,
         art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
+        medium: "Digital".to_string(),
+        rarity: "Rare".to_string(),
 
     }).collect::<Vec<_>>()
  });
