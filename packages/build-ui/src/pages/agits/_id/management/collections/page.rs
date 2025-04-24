@@ -26,7 +26,7 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                 // Header
                 div { class: "",
                     h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard",
-                        "Collections {agit_id}"
+                        "{tr.collections} {agit_id}"
                     }
                     p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
                 }
