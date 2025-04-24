@@ -154,10 +154,11 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                               key: "owned-{artist.id}",
                               class: "hover:bg-gray-900 cursor-pointer",
                           onclick: move |_| {
+                            let artist_id = artist.id.clone();
                               use_navigator().push(Route::ArtistDetailPage { 
                                   lang: lang, 
                                   agit_id: agit_id(), 
-                                  artist_id: artist.id.parse::<i64>().unwrap()
+                                  artist_id: artist_id.parse::<i64>().unwrap()
                               });
                           },
                              
