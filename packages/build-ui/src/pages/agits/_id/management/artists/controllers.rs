@@ -18,8 +18,8 @@ impl Controller{
         let artist = use_signal(||{
            (1..10).map(|id|Artist {
             id: id.to_string(),
-            artist_name: "Artist Name".to_string(),
-            artist_mail: "email@email.com".to_string(),
+            name: "Artist Name".to_string(),
+            mail: "email@email.com".to_string(),
             revenue: 2.370,
             revenue_usd: 8147.63,
             attributes: vec!["Pixel".to_string(), "Animation".to_string(), "Sci-fi".to_string(), "3D".to_string(), "Digital".to_string()],

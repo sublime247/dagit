@@ -169,8 +169,8 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                       div { 
                                           class: "flex items-center",
                                           div {  class:"flex flex-col",
-                                          span { {artist.artist_name.clone()} }
-                                          span { {artist.artist_mail.clone()} }
+                                          span { {artist.name.clone()} }
+                                          span { {artist.mail.clone()} }
 
                                           }
                                       }

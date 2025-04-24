@@ -2,8 +2,8 @@
 
 pub struct Artist {
     pub id: String,
-    pub artist_name: String,
-    pub artist_mail: String,
+    pub name: String,
+    pub mail: String,
     pub revenue: f64,
     pub revenue_usd: f64,
     pub attributes: Vec<String>,
