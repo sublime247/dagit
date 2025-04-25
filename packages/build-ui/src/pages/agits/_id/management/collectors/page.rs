@@ -106,10 +106,11 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                     key: "{collector.id}",
                                     class: "hover:bg-gray-900 cursor-pointer",
                                 onclick: move |_| {
+                                    let collector_id = collector.id.clone();
                                     use_navigator().push(Route::CollectorDetailPage { 
                                         lang: lang, 
                                         agit_id: agit_id(), 
-                                        collector_id: collector.id.parse::<i64>().unwrap()
+                                        collector_id: collector_id.parse::<i64>().unwrap()
                                     });
                                 },
                                    
