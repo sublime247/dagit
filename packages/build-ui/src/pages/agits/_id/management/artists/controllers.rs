@@ -1,8 +1,11 @@
 #![allow(unused)]
 use super::models::*;
+
+use common::tables::{artists::Artist as ArtistModel, prelude::{ArtistCreateRequest, ArtistQuery}};
+
 use bdk::prelude::*;
 
-use crate::{pages::agits::_id::management::Assets, routes::Route};
+use crate::{config::Config, pages::agits::_id::management::Assets, routes::Route};
 
 
 #[derive(Debug, Clone, Copy, DioxusController)]
@@ -15,6 +18,13 @@ pub struct Controller{
 }
 impl Controller{
     pub fn new(lang:Language, agit_id:ReadOnlySignal<i64>)->Result<Self, RenderError>{
+        let res = use_server_future(move || {
+            async move {
+                let endpoint = crate::config::get().api_url;
+                let client = ArtistModel::get_client(endpoint);
+                client.query(ArtistQuery::new(100).with_page(0)).await.unwrap_or_default()
+            }
+        })?;
         let artist = use_signal(||{
            (1..10).map(|id|Artist {
             id: id.to_string(),
@@ -65,8 +75,25 @@ impl Controller{
         Ok(ctrl)
     }
 
-
-    
+    pub async fn create_artist(&self){
+        let endpoint = crate::config::get().api_url;
+        let client = ArtistModel::get_client(endpoint);
+        // act is without id. Create
+        // act_by_id is with id, update or delete.
+        let res = client.act(common::tables::prelude::ArtistAction::Create(ArtistCreateRequest {
+            title: "New Artist".to_string(),
+        })).await;
+        match res {
+            Ok(_) => {
+                // Handle success
+                btracing::info!("Artist created successfully");
+                
+            }
+            Err(e) => {
+                btracing::error!("Error creating artist: {:?}", e);
+            }
+        };
+    }
     pub fn open_new_artist_form(&self){
         let navigate = use_navigator();
         navigate.push(Route::NewArtistPage{

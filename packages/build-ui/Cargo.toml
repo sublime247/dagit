@@ -17,6 +17,7 @@ serde = { workspace = true, features = ["derive"] }
 #FIXME: `rest-api` crate has `getrandom` dependency, but it's listed here
 getrandom = { version = "0.2", features = ["js"] }
 
+common = { workspace = true, features = ["web"] }
 
 [features]
 default = []

@@ -6,6 +6,7 @@ pub struct Config {
     pub env: &'static str,
     pub database: DatabaseConfig,
     pub auth: AuthConfig,
+    pub endpoint: &'static str,
 }
 
 impl Default for Config {
@@ -14,6 +15,7 @@ impl Default for Config {
             env: option_env!("ENV").expect("You must set ENV"),
             database: DatabaseConfig::default(),
             auth: AuthConfig::default(),
+            endpoint: option_env!("API_URL").unwrap_or("http://localhost:3000"),
         }
     }
 }

@@ -563,6 +563,7 @@ name = "build-ui"
 version = "0.2.0"
 dependencies = [
  "bdk",
+ "common",
  "getrandom 0.2.15",
  "serde",
  "wasm-bindgen",

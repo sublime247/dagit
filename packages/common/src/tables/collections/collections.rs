@@ -4,6 +4,7 @@ use crate::tables::artworks::Artwork;
 
 //TODO(api): Implement "/likes", "/followers" and "/holder" APIs
 //TODO(api): Implement admin api "m1/collections/:id" for managing custodian.
+#[derive(validator::Validate)]
 #[api_model(base = "/v1/collections", table = collections, action_by_id = [delete])]
 pub struct Collection {
     #[api_model(summary, primary_key)]
