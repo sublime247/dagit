@@ -2,7 +2,7 @@ use bdk::prelude::*;
 
 use crate::tables::artworks::Artwork;
 
-
+#[derive(validator::Validate)]
 #[api_model(base = "/v1/collectors", table = collectors, action_by_id = [delete])]
 pub struct Collector {
     #[api_model(summary, primary_key)]

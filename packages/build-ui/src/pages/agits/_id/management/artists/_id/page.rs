@@ -152,7 +152,7 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
 #[component]
 pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let _tr: ArtistTranslate = translate(&lang);
-    let _ctrl = Controller::new(lang, agit_id)?;
+    let ctrl = Controller::new(lang, agit_id)?;
 
     // Form state signals
     let mut display_name = use_signal(String::new);
@@ -346,7 +346,22 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
 
                     button {
                         class: "border border-white text-white px-6 py-2 flex items-center justify-center",
-                        // This would navigate to add artwork page
+                        onclick: move |_| {
+                            tracing::debug!(
+                                "Display name: {:?}, social media: {:?}, introduction: {:?}, biography: {:?}",
+                                display_name.read().clone(),
+                                social_media.read().clone(),
+                                introduction.read().clone(),
+                                biography.read().clone(),
+                            );
+                                ctrl.create_artist(
+                                 display_name.read().clone(),
+                                 display_name.read().clone(),
+                                 social_media.read().clone(),
+                                 introduction.read().clone(),
+                                 biography.read().clone(),
+                                );
+                        },
                         validations::Add { class: "mr-2 [&>path]:stroke-white [&>circle]:stroke-white" }
                         "Add Artwork"
                     }
