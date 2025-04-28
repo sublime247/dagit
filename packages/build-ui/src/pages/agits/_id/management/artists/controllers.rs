@@ -15,6 +15,7 @@ pub struct Controller {
     lang: Language,
     agit_id: ReadOnlySignal<i64>,
     artist: Signal<Vec<Artist>>,
+    artist_input_field: Signal<ArtistInputField>,
     artist_asset: Signal<Vec<Assets>>,
 }
 impl Controller {
@@ -28,6 +29,15 @@ impl Controller {
                 .unwrap_or_default()
         })?;
         tracing::debug!("res: {:?}", res);
+        let artist_input_field = use_signal(|| ArtistInputField {
+            display_name: String::new(),
+            social_media: String::new(),
+            medium: String::new(),
+            theme: String::new(),
+            art_style: String::new(),
+            introduction: String::new(),
+            biography: String::new(),
+        });
         let artist = use_signal(|| {
             (1..10)
                 .map(|id| Artist {
@@ -80,25 +90,15 @@ impl Controller {
             lang,
             agit_id,
             artist,
+            artist_input_field,
             artist_asset,
         };
         use_context_provider(|| ctrl);
         Ok(ctrl)
     }
 
-    pub fn create_artist(
-        &self,
-        _title: String,
-        _mail: String,
-        _social_media: String,
-        _intro: String,
-        _biography: String,
-    ) {
-        let title = _title.clone();
-        let mail = _mail.clone();
-        let social_media = _social_media.clone();
-        let intro = _intro.clone();
-        let biography = _biography.clone();
+    pub fn create_artist(&self) {
+        let artist_inputs = self.artist_input_field.with(|field| field.clone());
         // act_by_id is with id, update or delete.
         // act is without id. Create
         spawn_local(async move {
@@ -107,14 +107,16 @@ impl Controller {
             let res = client
                 .act(common::tables::prelude::ArtistAction::Create(
                     ArtistCreateRequest {
-                        title,
-                        mail,
-                        social_media,
-                        intro,
-                        biography,
+                        title: artist_inputs.display_name,
+                        mail: artist_inputs.social_media.clone(),
+                        social_media: artist_inputs.medium.clone(),
+                        intro: artist_inputs.theme,
+                        biography: artist_inputs.art_style,
                     },
                 ))
                 .await;
+            tracing::debug!("mail: {:?}", artist_inputs.social_media);
+            tracing::debug!("social_media: {:?}", artist_inputs.medium);    
             match res {
                 Ok(_) => {
                     btracing::info!("Artist created successfully");
@@ -146,11 +148,48 @@ impl Controller {
         });
     }
 
+
+
+pub fn update_artist_field(&mut self, field: String, value: String) {
+    match field.as_str(){
+        "display_name" => self.artist_input_field.set(ArtistInputField{
+            display_name: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "social_media" => self.artist_input_field.set(ArtistInputField{
+            social_media: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "medium" => self.artist_input_field.set(ArtistInputField{
+            medium: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "theme" => self.artist_input_field.set(ArtistInputField{
+           theme: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "introduction" => self.artist_input_field.set(ArtistInputField{
+           introduction: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+  
+        "biography" => self.artist_input_field.set(ArtistInputField{
+           biography: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "art_style" => self.artist_input_field.set(ArtistInputField{
+           art_style: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }), 
+        _ => {}
+    }
+}
+
     pub fn open_new_artist_form(&self) {
         let navigate = use_navigator();
         navigate.push(Route::NewArtistPage {
             lang: self.lang,
-            agit_id: self.agit_id.with(|id| *id),
+            agit_id: self.agit_id.with(|id  | *id),
         });
     }
 }

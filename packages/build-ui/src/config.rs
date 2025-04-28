@@ -21,7 +21,7 @@ impl Default for Config {
                 Some("error") => Level::ERROR,
                 _ => Level::INFO,
             },
-            api_url: option_env!("API_URL").unwrap_or("http://localhost:3000"),
+            api_url: option_env!("API_URL").unwrap_or("https://dagit-api.dev.biyard.co"),
         }
     }
 }

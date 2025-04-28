@@ -1,4 +1,4 @@
 mod page;
 mod components;
 
-pub use page::{ArtistDetailPage, NewArtistPage};
+pub use page::ArtistDetailPage;
