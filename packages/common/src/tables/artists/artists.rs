@@ -9,6 +9,14 @@ pub struct Artist {
     #[api_model(summary, auto = [insert, update])]
     pub updated_at: i64,
 
-    #[api_model(summary, action = create, action_by_id = update)]
+    #[api_model(summary, action = create, action_by_id = [update])]
     pub title: String,
+    #[api_model(summary, action = create, action_by_id = [update])]
+    pub mail: String,
+    #[api_model(summary, action = create, action_by_id = [update])]
+    pub social_media: String,
+    #[api_model(summary, action = create, action_by_id = [update])]
+    pub intro: String,
+    #[api_model(summary, action = create, action_by_id = [update])]
+    pub biography: String,
 }

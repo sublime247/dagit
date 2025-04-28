@@ -1,47 +1,68 @@
 #![allow(unused)]
 use super::models::*;
-
-use common::tables::{artists::Artist as ArtistModel, prelude::{ArtistCreateRequest, ArtistQuery}};
+use common::tables::{
+    artists::Artist as ArtistModel,
+    prelude::{ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery},
+};
+use wasm_bindgen_futures::spawn_local;
 
 use bdk::prelude::*;
 
 use crate::{config::Config, pages::agits::_id::management::Assets, routes::Route};
 
-
 #[derive(Debug, Clone, Copy, DioxusController)]
-pub struct Controller{
-    lang:Language,
-    agit_id:ReadOnlySignal<i64>,
+pub struct Controller {
+    lang: Language,
+    agit_id: ReadOnlySignal<i64>,
     artist: Signal<Vec<Artist>>,
+    artist_input_field: Signal<ArtistInputField>,
     artist_asset: Signal<Vec<Assets>>,
-
 }
-impl Controller{
-    pub fn new(lang:Language, agit_id:ReadOnlySignal<i64>)->Result<Self, RenderError>{
-        let res = use_server_future(move || {
-            async move {
-                let endpoint = crate::config::get().api_url;
-                let client = ArtistModel::get_client(endpoint);
-                client.query(ArtistQuery::new(100).with_page(0)).await.unwrap_or_default()
-            }
+impl Controller {
+    pub fn new(lang: Language, agit_id: ReadOnlySignal<i64>) -> Result<Self, RenderError> {
+        let res = use_server_future(move || async move {
+            let endpoint = crate::config::get().api_url;
+            let client = ArtistModel::get_client(endpoint);
+            client
+                .query(ArtistQuery::new(100).with_page(0))
+                .await
+                .unwrap_or_default()
         })?;
-        let artist = use_signal(||{
-           (1..10).map(|id|Artist {
-            id: id.to_string(),
-            name: "Artist Name".to_string(),
-            mail: "email@email.com".to_string(),
-            revenue: 2.370,
-            revenue_usd: 8147.63,
-            attributes: vec!["Pixel".to_string(), "Animation".to_string(), "Sci-fi".to_string(), "3D".to_string(), "Digital".to_string()],
-            status: "true".to_string(),
-            social_media: "@social_media".to_string(),
-            featured_work: "Artwork_title".to_string(),
-            artwork: "Num".to_string(),
-        }).collect::<Vec<_>>()
+        tracing::debug!("res: {:?}", res);
+        let artist_input_field = use_signal(|| ArtistInputField {
+            display_name: String::new(),
+            social_media: String::new(),
+            medium: String::new(),
+            theme: String::new(),
+            art_style: String::new(),
+            introduction: String::new(),
+            biography: String::new(),
+        });
+        let artist = use_signal(|| {
+            (1..10)
+                .map(|id| Artist {
+                    id: id.to_string(),
+                    name: "Artist Name".to_string(),
+                    mail: "email@email.com".to_string(),
+                    revenue: 2.370,
+                    revenue_usd: 8147.63,
+                    attributes: vec![
+                        "Pixel".to_string(),
+                        "Animation".to_string(),
+                        "Sci-fi".to_string(),
+                        "3D".to_string(),
+                        "Digital".to_string(),
+                    ],
+                    status: "true".to_string(),
+                    social_media: "@social_media".to_string(),
+                    featured_work: "Artwork_title".to_string(),
+                    artwork: "Num".to_string(),
+                })
+                .collect::<Vec<_>>()
         });
 
-        let artist_asset = use_signal(||{
-          (0..8).map(|id| Assets{
+        let artist_asset = use_signal(|| {
+            (0..8).map(|id| Assets{
               id : id.to_string(),
               title: "Asset Title".to_string(),
               artist_name: "Artist Name".to_string(),
@@ -64,41 +85,111 @@ impl Controller{
               medium: "Digital".to_string(),
               rarity: "Rare".to_string(),
           }).collect::<Vec<_>>()
-       });
-      let ctrl = Self{
-        lang,
-        agit_id,
-        artist,
-        artist_asset
-      };
-      use_context_provider(||ctrl);
+        });
+        let ctrl = Self {
+            lang,
+            agit_id,
+            artist,
+            artist_input_field,
+            artist_asset,
+        };
+        use_context_provider(|| ctrl);
         Ok(ctrl)
     }
 
-    pub async fn create_artist(&self){
-        let endpoint = crate::config::get().api_url;
-        let client = ArtistModel::get_client(endpoint);
-        // act is without id. Create
+    pub fn create_artist(&self) {
+        let artist_inputs = self.artist_input_field.with(|field| field.clone());
         // act_by_id is with id, update or delete.
-        let res = client.act(common::tables::prelude::ArtistAction::Create(ArtistCreateRequest {
-            title: "New Artist".to_string(),
-        })).await;
-        match res {
-            Ok(_) => {
-                // Handle success
-                btracing::info!("Artist created successfully");
-                
-            }
-            Err(e) => {
-                btracing::error!("Error creating artist: {:?}", e);
-            }
-        };
+        // act is without id. Create
+        spawn_local(async move {
+            let endpoint = crate::config::get().api_url;
+            let client = ArtistModel::get_client(endpoint);
+            let res = client
+                .act(common::tables::prelude::ArtistAction::Create(
+                    ArtistCreateRequest {
+                        title: artist_inputs.display_name,
+                        mail: artist_inputs.social_media.clone(),
+                        social_media: artist_inputs.medium.clone(),
+                        intro: artist_inputs.theme,
+                        biography: artist_inputs.art_style,
+                    },
+                ))
+                .await;
+            tracing::debug!("mail: {:?}", artist_inputs.social_media);
+            tracing::debug!("social_media: {:?}", artist_inputs.medium);    
+            match res {
+                Ok(_) => {
+                    btracing::info!("Artist created successfully");
+                }
+                Err(e) => {
+                    btracing::error!("Error creating artist: {:?}", e);
+                }
+            };
+        });
     }
-    pub fn open_new_artist_form(&self){
+    pub fn remove_artist(&self, artist_id: i64) {
+        spawn_local(async move {
+            let endpoint = crate::config::get().api_url;
+            let client = ArtistModel::get_client(endpoint);
+            let res = client
+                .act_by_id(
+                    artist_id,
+                    common::tables::prelude::ArtistByIdAction::Delete(ArtistDeleteRequest {}),
+                )
+                .await;
+            match res {
+                Ok(_) => {
+                    btracing::info!("Artist removed successfully");
+                }
+                Err(e) => {
+                    btracing::error!("Error removing artist: {:?}", e);
+                }
+            };
+        });
+    }
+
+
+
+pub fn update_artist_field(&mut self, field: String, value: String) {
+    match field.as_str(){
+        "display_name" => self.artist_input_field.set(ArtistInputField{
+            display_name: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "social_media" => self.artist_input_field.set(ArtistInputField{
+            social_media: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "medium" => self.artist_input_field.set(ArtistInputField{
+            medium: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "theme" => self.artist_input_field.set(ArtistInputField{
+           theme: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "introduction" => self.artist_input_field.set(ArtistInputField{
+           introduction: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+  
+        "biography" => self.artist_input_field.set(ArtistInputField{
+           biography: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }),
+        "art_style" => self.artist_input_field.set(ArtistInputField{
+           art_style: value,
+            ..self.artist_input_field.with(|field| field.clone())
+        }), 
+        _ => {}
+    }
+}
+
+    pub fn open_new_artist_form(&self) {
         let navigate = use_navigator();
-        navigate.push(Route::NewArtistPage{
+        navigate.push(Route::NewArtistPage {
             lang: self.lang,
-            agit_id: self.agit_id.with(|id| *id),
+            agit_id: self.agit_id.with(|id  | *id),
         });
     }
 }
