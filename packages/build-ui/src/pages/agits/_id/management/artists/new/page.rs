@@ -1,20 +1,26 @@
-use bdk::prelude::{by_components::icons::{arrows, other_devices, validations}, *};
+use bdk::prelude::{
+    by_components::icons::{arrows, other_devices, settings, validations},
+    *,
+};
 
-use crate::{pages::agits::_id::management::artists::{controllers::Controller, i18n::ArtistTranslate}, routes::Route};
+use crate::{
+    pages::agits::_id::management::artists::{controllers::Controller, i18n::ArtistTranslate},
+    routes::Route,
+};
 #[component]
 pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let _tr: ArtistTranslate = translate(&lang);
     let mut ctrl = Controller::new(lang, agit_id)?;
     let _profile_picture = use_signal(|| None::<String>);
-
+    let mut is_dropdown_open = use_signal(|| false);
     // Handle form submission
     let handle_save = move |_| {
-       // todo: similate api this
+        // todo: similate api this
     };
 
     rsx! {
         div { class: "w-full min-h-screen bg-background h-full flex text-white items-center",
-            div { class: "flex flex-col w-full h-full max-w-4xl p-6",
+            div { class: "flex flex-col w-full h-full  p-6",
                 // Header with title and back button
                 div { class: "flex items-center mb-6",
                     Link {
@@ -35,7 +41,39 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         }
                     }
 
+                    div {  class: "flex justify-between w-full",
                     h1 { class: "text-2xl font-bold", "Add Artist" }
+
+                    div { class: "relative",
+                    button{
+                        onclick: move |_| {
+                            let is_open = *is_dropdown_open.read();
+                            is_dropdown_open.set(!is_open);
+                        },
+                    settings::Settings2 { class: "ml-2 [&>path]:stroke-white", height: 20, width: 20}
+                    }
+                        div { class: "absolute right-0 mt-2 w-48 bg-background border border-border-primary rounded-md shadow-lg z-1 hidden aria-dropdown-open:block",
+                             "aria-dropdown-open": is_dropdown_open,
+                            div { class: "py-1",
+                                a {
+                                    class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
+                                    "Artist Detail"
+                                }
+                                a { class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
+                                    "Edit Artist Info"
+                                }
+                                a { class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
+                                    "Delete Artist"
+                                }
+                            }
+                        }
+
+                }
+
+
+
+
+                    }
                 }
 
                 p { class: "text-gray-400 mb-8",
@@ -50,7 +88,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
             }
 
             // Form fields
-            div { class: "space-y-4",
+            div { class: "space-y-4 max-w-4xl",
                 div { class: "flex items-center",
                     label { class: "text-sm w-40",
                         span { class: "text-red-500 mr-1", "*" }
@@ -101,7 +139,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         r#type: "text",
                         value:"{ctrl.artist_input_field().theme.clone()}",
                         oninput: move |evt| ctrl.update_artist_field("theme".to_string(), evt.value().clone())
-                  
+
                     }
                 }
 
@@ -158,7 +196,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                 }
 
                 // Introduction Section
-                div { class: "mb-8 mt-8",
+                div { class: "mb-8 mt-8 max-w-4xl",
                     div { class: "flex items-center mb-4",
                         h2 { class: "text-xl font-semibold", "Introduction" }
                         arrows::ChevronDown { class: "ml-2 [&>path]:stroke-white", height: 20, width: 20 }
@@ -168,7 +206,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         class: "bg-border-background border border-border-primary text-white p-4 w-full h-32",
                         placeholder: "Please feel free to describe your artistic work, style, and creative philosophy. It would be wonderful if you could share the message behind your art and the unique aspects of your work.",
                         value: "{ctrl.artist_input_field().introduction.clone()}",
-                      
+
                         oninput: move |evt| {
                             ctrl.update_artist_field("introduction".to_string(), evt.value().clone())
                         }
@@ -177,7 +215,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                 }
 
                 // Biography Section
-                div { class: "mt-8",
+                div { class: "mt-8 max-w-4xl",
                     div { class: "flex items-center mb-4",
                         h2 { class: "text-xl font-semibold", "Biography" }
                         arrows::ChevronDown { class: "ml-2 [&>path]:stroke-white", height: 20, width: 20 }
