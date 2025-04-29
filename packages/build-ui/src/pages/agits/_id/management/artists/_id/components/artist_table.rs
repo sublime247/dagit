@@ -1,9 +1,10 @@
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
 use crate::pages::agits::_id::management::model::Assets;
+use crate::routes::Route;
 use bdk::prelude::by_components::icons::arrows;
 use bdk::prelude::{by_components::icons::validations, *};
 #[component]
-pub fn ArtistTable(assets: Vec<Assets>     ,lang: Language) -> Element {
+pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:i64) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
 
   let tr: ArtistTranslate= translate(&lang);
@@ -79,12 +80,20 @@ pub fn ArtistTable(assets: Vec<Assets>     ,lang: Language) -> Element {
                 }
             }
             tbody {
-                { assets.iter().enumerate().map(|(index, asset)| {
+                { assets.into_iter().enumerate().map(|(index, asset)| {
                     let is_dropdown_open = active_dropdown.with(|active| active == &Some(index));
                     rsx! {
                         tr {
                             key: "owned-tr-{index}",
                             class: "border-b border-gray-800 hover:bg-gray-900",
+                            onclick: move |_| {
+                             
+                                use_navigator().push(Route::EditArtistPage { 
+                                    lang: lang, 
+                                    agit_id: agit_id(), 
+                                    artist_id: artist_id
+                                });
+                            },
                             td {
                                 class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                 div {

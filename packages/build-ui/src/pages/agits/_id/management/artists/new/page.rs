@@ -1,4 +1,4 @@
-use bdk::prelude::{by_components::icons::{arrows, validations}, *};
+use bdk::prelude::{by_components::icons::{arrows, other_devices, validations}, *};
 
 use crate::{pages::agits::_id::management::artists::{controllers::Controller, i18n::ArtistTranslate}, routes::Route};
 #[component]
@@ -198,6 +198,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     button {
                         class: "border border-white text-white px-6 py-2 flex items-center justify-center",
                         onclick: handle_save,
+                        other_devices::Save { class: "mr-2 [&>path]:stroke-white", height: 20, width: 20 }
                         "Save"
                     }
 

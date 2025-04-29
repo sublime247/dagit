@@ -33,6 +33,8 @@ pub enum Route {
                         ArtistPage { lang: Language, agit_id: i64 },
                     #[route("/artists/:artist_id")]
                         ArtistDetailPage { lang: Language, agit_id: i64, artist_id: i64 },
+                    #[route("/artists/:artist_id/edit")]
+                        EditArtistPage { lang: Language, agit_id: i64, artist_id: i64 },
                     #[route("/artists/new")]
                         NewArtistPage { lang: Language, agit_id: i64},
                     #[route("/collectors")]  

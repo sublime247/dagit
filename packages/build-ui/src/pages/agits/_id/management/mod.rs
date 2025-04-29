@@ -9,7 +9,7 @@ mod model;
 
 
 
-pub use artists::{ArtistPage, ArtistDetailPage, NewArtistPage};
+pub use artists::{ArtistPage, ArtistDetailPage, NewArtistPage, EditArtistPage};
 pub use artworks::ArtworkPage;
 pub use collectors::{CollectorsPage, CollectorDetailPage};
 pub use collections::{CollectionPage, CollectionDetailPage};

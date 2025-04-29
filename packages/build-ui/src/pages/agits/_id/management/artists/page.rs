@@ -151,7 +151,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         
                         
                           tr { 
-                              key: "owned-{artist.id}",
+                              key: "owned-tr-{artist.id}",
                               class: "hover:bg-gray-900 cursor-pointer",
                           onclick: move |_| {
                             let artist_id = artist.id.clone();
