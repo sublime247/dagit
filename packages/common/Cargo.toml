@@ -13,20 +13,9 @@ reqwest.workspace = true
 serde.workspace = true
 validator = { version = "0.20.0", features = ["derive"] }
 
-
 sqlx = { workspace = true, optional = true }
-# schemars = { version = "0.8.21", optional = true }
-# by-macros = { workspace = true, optional = true }
-# by-types.workspace = true
-# dioxus-translate.workspace = true
-# by-axum = { workspace = true, optional = true }
-
-# by-macros dependencies
-tracing.workspace = true
 serde_json.workspace = true
-rest-api.workspace = true
 serde_urlencoded.workspace = true
-bigdecimal = "0.4.7"
 bdk.workspace = true
 
 [features]

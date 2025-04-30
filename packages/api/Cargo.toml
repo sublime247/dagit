@@ -13,20 +13,12 @@ license.workspace = true
 serde = { workspace = true, features = ["derive"] }
 reqwest = { workspace = true, features = ["json"] }
 tokio = { version = "1.43.0", features = ["full"] }
-tracing.workspace = true
-sqlx = { version = "0.8.3", features = [
-    "sqlite",
-    "postgres",
-    "runtime-tokio",
-    "time",
-    "bigdecimal",
-] }
+sqlx = { workspace = true }
 
 common = { workspace = true, features = ["server"] }
 
 bdk = { workspace = true, features = ["be"] }
 
-rest-api.workspace = true
 chrono = "0.4.40"
 
 

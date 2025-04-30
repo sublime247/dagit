@@ -18,6 +18,9 @@ serde = { workspace = true, features = ["derive"] }
 getrandom = { version = "0.2", features = ["js"] }
 
 common = { workspace = true, features = ["web"] }
+async-trait = "0.1.88"
+google-wallet = { workspace = true }
+dioxus-oauth = { workspace = true }
 
 [features]
 default = []
