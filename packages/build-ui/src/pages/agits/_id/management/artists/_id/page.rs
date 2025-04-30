@@ -1,7 +1,9 @@
-use bdk::prelude::by_components::icons::{arrows, edit, layouts, settings, validations, other_devices};
+use bdk::prelude::by_components::icons::{
+    arrows, edit, layouts, other_devices, settings, validations,
+};
 use bdk::prelude::*;
 
-use crate::pages::agits::_id::management::artists::_id::components::ArtistTable;
+use crate::pages::agits::_id::management::artists::_id::components::{ArtistTable, InputField};
 use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
 use crate::pages::agits::_id::management::components::NftTable;
@@ -150,15 +152,19 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
 }
 
 #[component]
-pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i64) -> Element {
-    let _tr: ArtistTranslate = translate(&lang);
+pub fn EditArtistPage(
+    lang: Language,
+    agit_id: ReadOnlySignal<i64>,
+    artist_id: ReadOnlySignal<i64>,
+) -> Element {
+    let tr: ArtistTranslate = translate(&lang);
     let mut ctrl = Controller::new(lang, agit_id)?;
     let _profile_picture = use_signal(|| None::<String>);
-    let mut is_dropdown_open = use_signal(||false);
+    let mut is_dropdown_open = use_signal(|| false);
 
     // Handle form submission
     let handle_save = move |_| {
-       // todo: similate api this
+        // todo: similate api this
     };
 
     rsx! {
@@ -167,7 +173,7 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
                 // Header with title and back button
                 div { class: "flex items-center mb-6",
                     Link {
-                        to: Route::ArtistDetailPage { lang, agit_id: agit_id(), artist_id },
+                        to: Route::ArtistDetailPage { lang, agit_id: agit_id(), artist_id: artist_id() },
                         class: "text-gray-400 hover:text-white mr-4",
                         svg {
                             xmlns: "http://www.w3.org/2000/svg",
@@ -185,37 +191,40 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
                      }
                     div {  class: "flex justify-between w-full",
                     h1 { class: "text-2xl font-bold", "Edit {artist_id}'s Info" }
-                  
+
                     div { class: "relative",
                     button{
                         onclick: move |_| {
-                            let is_open = *is_dropdown_open.read();
-                            is_dropdown_open.set(!is_open);
+                            is_dropdown_open.toggle();
                         },
                     settings::Settings2 { class: "ml-2 [&>path]:stroke-white", height: 20, width: 20}
                     }
                         div { class: "absolute right-0 mt-2 w-48 bg-background border border-border-primary rounded-md shadow-lg z-1 hidden aria-dropdown-open:block",
                              "aria-dropdown-open": is_dropdown_open,
                             div { class: "py-1",
-                                Link {
-                                    to: Route::ArtistDetailPage { lang, agit_id: agit_id(), artist_id },
-                                    class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                    "Artist Detail"
-                                }
-                                a { class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                    "Edit Artist Info"
-                                }
-                                a { class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                    "Delete Artist"
-                                }
+                            Link{
+                                to:Route::ArtistPage { lang, agit_id: agit_id() },
+                                class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
+                                "Artist Detail"
+                            }
+                            Link {
+                                to:Route::ArtistPage { lang, agit_id: agit_id() },
+                                 class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
+                                "Edit Artist Info"
+                            }
+                            Link {
+                                to:Route::ArtistPage { lang, agit_id: agit_id() },
+                                class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
+                                "Delete Artist"
+                            }
                             }
                         }
-                    
+
                 }
-                            
-                    
-                        
-                    
+
+
+
+
                     }
                 }
 
@@ -232,77 +241,43 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
 
             // Form fields
             div { class: "space-y-4 max-w-4xl",
-                div { class: "flex items-center",
-                    label { class: "text-sm w-40",
-                        span { class: "text-red-500 mr-1", "*" }
-                        "Display Name or Email"
-                    }
-                    input {
-                        class: "bg-border-background border border-border-primary text-white p-2.5 flex-1",
-                        placeholder: "Input",
-                        r#type: "text",
-                        value:"{ctrl.artist_input_field().display_name.clone()}",
-                        oninput: move |evt| ctrl.update_artist_field("display_name".to_string(), evt.value().clone())
-                    }
-                }
 
-                div { class: "flex items-center",
-                    label { class: "text-sm w-40", "Social Media" }
-                    input {
-                        class: "bg-border-background border border-border-primary text-white p-2.5 flex-1",
-                        placeholder: "Input",
-                        r#type: "text",
-                        value:"{ctrl.artist_input_field().social_media.clone()}",
-                        oninput: move |evt| ctrl.update_artist_field("social_media".to_string(), evt.value().clone())
-                    }
-                }
+               InputField{
+                label: tr.input_artist_name,
+                placeholder: tr.input_artist_name_placeholder,
+                value: ctrl.artist_input_field().display_name.clone(),
+                onInput: move |evt: Event<FormData>| ctrl.update_artist_field("display_name".to_string(), evt.value().clone())
+               }
 
-                div { class: "flex items-center",
-                    label { class: "text-sm w-40",
-                        span { class: "text-red-500 mr-1", "*" }
-                        "Medium"
-                    }
-                    input {
-                        class: "bg-border-background border border-border-primary text-white p-2.5 flex-1",
-                        placeholder: "Input",
-                        r#type: "text",
-                        value:"{ctrl.artist_input_field().medium.clone()}",
-                        oninput: move |evt| ctrl.update_artist_field("medium".to_string(), evt.value().clone())
-                    }
-                }
+      InputField{
+                label: tr.social_media_label,
+                placeholder: tr.social_media_label,
+                value: ctrl.artist_input_field().social_media.clone(),
+                onInput: move |evt: Event<FormData>| ctrl.update_artist_field("social_media".to_string(), evt.value().clone())
+               }
 
-                div { class: "flex items-center",
-                    label { class: "text-sm w-40",
-                        span { class: "text-red-500 mr-1", "*" }
-                        "Theme"
-                    }
-                    input {
-                        class: "bg-border-background border border-border-primary text-white p-2.5 flex-1",
-                        placeholder: "Input",
-                        r#type: "text",
-                        value:"{ctrl.artist_input_field().theme.clone()}",
-                        oninput: move |evt| ctrl.update_artist_field("theme".to_string(), evt.value().clone())
-                  
-                    }
-                }
+               InputField{
+                label: tr.medium,
+                placeholder: tr.medium,
+                value: ctrl.artist_input_field().medium.clone(),
+                onInput: move |evt: Event<FormData>| ctrl.update_artist_field("medium".to_string(), evt.value().clone())
+               }
 
-                div { class: "flex items-center",
-                    label { class: "text-sm w-40",
-                        span { class: "text-red-500 mr-1", "*" }
-                        "Art Style"
-                    }
-                    input {
-                        class: "bg-border-background border border-border-primary text-white p-2.5 flex-1",
-                        placeholder: "Input",
-                        r#type: "text",
-                        value:"{ctrl.artist_input_field().art_style.clone()}",
-                        oninput: move |evt| ctrl.update_artist_field("art_style".to_string(), evt.value().clone())
-                    }
-                }
+               InputField{
+                label: tr.theme,
+                placeholder: tr.theme,
+                value: ctrl.artist_input_field().theme.clone(),
+                onInput: move |evt: Event<FormData>| ctrl.update_artist_field("theme".to_string(), evt.value().clone())
+               }
+
+               InputField{
+                label: tr.art_style,
+                placeholder: tr.art_style,
+                value: ctrl.artist_input_field().art_style.clone(),
+                onInput: move |evt: Event<FormData>| ctrl.update_artist_field("art_style".to_string(), evt.value().clone())
+               }
             }
-
-
-                        // Profile Picture Upload
+                         // Profile Picture Upload
                         div { class: "flex flex-col mt-8",
                             label { class: "mb-1 text-sm", "Profile Picture" }
                             div {
@@ -323,17 +298,17 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
                                     }
                                 }
                                 p { class: "text-sm text-gray-400",
-                                    "Please drag and drop your file here."
+                                    {tr.upload_img_label_1}
                                 }
                                 p { class: "text-xs text-gray-500",
-                                    "One or more files (JPG, PNG)"
+                                    {tr.upload_img_label_2}
                                 }
                             }
                             p { class: "text-xs text-gray-500 mt-1",
-                                "Maximum resolution: 3000px × 3000px (square format)"
+                                {tr.max_file_size}
                             }
                             p { class: "text-xs text-gray-500",
-                                "Uploads are allowed under 10MB"
+                                {tr.max_file_size_2}
                             }
                         }
                 }
@@ -341,15 +316,15 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
                 // Introduction Section
                 div { class: "mb-8 mt-8 max-w-4xl",
                     div { class: "flex items-center mb-4",
-                        h2 { class: "text-xl font-semibold", "Introduction" }
+                        h2 { class: "text-xl font-semibold", {tr.introduction_label} }
                         arrows::ChevronDown { class: "ml-2 [&>path]:stroke-white", height: 20, width: 20 }
                     }
 
                     textarea {
                         class: "bg-border-background border border-border-primary text-white p-4 w-full h-32",
-                        placeholder: "Please feel free to describe your artistic work, style, and creative philosophy. It would be wonderful if you could share the message behind your art and the unique aspects of your work.",
+                        placeholder: tr.introduction_placeholder,
                         value: "{ctrl.artist_input_field().introduction.clone()}",
-                      
+
                         oninput: move |evt| {
                             ctrl.update_artist_field("introduction".to_string(), evt.value().clone())
                         }
@@ -360,13 +335,13 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
                 // Biography Section
                 div { class: "mt-8 max-w-4xl",
                     div { class: "flex items-center mb-4",
-                        h2 { class: "text-xl font-semibold", "Biography" }
+                        h2 { class: "text-xl font-semibold", {tr.biography_label} }
                         arrows::ChevronDown { class: "ml-2 [&>path]:stroke-white", height: 20, width: 20 }
                     }
 
                     textarea {
                         class: "bg-border-background border border-border-primary text-white p-4 w-full h-32",
-                        placeholder: "Please provide a brief introduction about yourself, including your background, career, and areas of expertise. Sharing who you are and what experiences have shaped you would be greatly appreciated.",
+                        placeholder: tr.biography_placeholder,
                         value: "{ctrl.artist_input_field().biography.clone()}",
                         oninput: move |evt| {
                             ctrl.update_artist_field("biography".to_string(), evt.value().clone())

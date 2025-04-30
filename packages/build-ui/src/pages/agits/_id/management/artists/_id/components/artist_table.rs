@@ -4,17 +4,22 @@ use crate::routes::Route;
 use bdk::prelude::by_components::icons::arrows;
 use bdk::prelude::{by_components::icons::validations, *};
 #[component]
-pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:i64) -> Element {
+pub fn ArtistTable(
+    assets: Vec<Assets>,
+    lang: Language,
+    agit_id: ReadOnlySignal<i64>,
+    artist_id: i64,
+) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
 
-  let tr: ArtistTranslate= translate(&lang);
+    let tr: ArtistTranslate = translate(&lang);
 
     rsx! {
         table {
             class: "w-full text-sm text-left border-collapse min-w-[800px]",
             thead {
                 tr {
-    
+
                     th {class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                       div { class: "flex items-center",
                          span {{tr.title}}
@@ -69,14 +74,14 @@ pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<
                           arrows::UpDown { class: "[&>path]:stroke-white [&>circle]:stroke-white", height:18, width:18 }
                        }
                     }
-               
+
                    th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                     div { class: "flex items-center",
                         span { "" }
                         validations::Extra { class: "[&>circle]:stroke-white", height:18 }
                     }
                 }
-    
+
                 }
             }
             tbody {
@@ -87,12 +92,13 @@ pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<
                             key: "owned-tr-{index}",
                             class: "border-b border-gray-800 hover:bg-gray-900",
                             onclick: move |_| {
-                             
-                                use_navigator().push(Route::EditArtistPage { 
-                                    lang: lang, 
-                                    agit_id: agit_id(), 
+
+                                use_navigator().push(Route::EditArtistPage {
+                                    lang: lang,
+                                    agit_id: agit_id(),
                                     artist_id: artist_id
                                 });
+                                
                             },
                             td {
                                 class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
@@ -125,10 +131,10 @@ pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<
                             }
                             td {
                                 class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                              
+
                                                 {asset.medium.clone()}
-                                        
-                                  
+
+
                             }
                             td {
                                 class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
@@ -176,7 +182,7 @@ pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<
                                     }
                                 }
                             }
-              
+
                             td {
                                 class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                 div {
@@ -202,7 +208,7 @@ pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<
                                         },
                                         validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                                     }
-                                  
+
                                         div {
                                             class: "absolute right-0 mt-2 w-48 bg-black border border-green-500 rounded shadow-lg z-10 hidden aria-dropdown-open:block",
                                             "aria-dropdown-open": is_dropdown_open,
@@ -234,7 +240,7 @@ pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<
                                                 }
                                             }
                                         }
-                                    
+
                                 }
                             }
                         }
