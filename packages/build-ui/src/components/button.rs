@@ -4,7 +4,7 @@ use bdk::prelude::*;
 pub fn SecondaryButton(
     #[props(default = "".to_string())] class: String,
     label: String,
-    #[props(default = true)] disabled: bool,
+    #[props(default = false)] disabled: bool,
     onclick: EventHandler<MouseEvent>,
 ) -> Element {
     tracing::debug!(
@@ -31,12 +31,18 @@ pub fn SecondaryButton(
 pub fn PrimaryButton(
     #[props(default = "".to_string())] class: String,
     label: String,
-    disabled: bool,
+    #[props(default = true)] disabled: bool,
+    onclick: EventHandler<MouseEvent>,
 ) -> Element {
     rsx! {
         div { class: "flex flex-col gap-2",
             button {
                 class: "px-4.5 py-3 border border-black text-white bg-black active:bg-primary/25 active:border-primary hover:bg-primary/25 hover:border-primary disabled:border-neutral-80 disabled:text-neutral-80 disabled:bg-btn-disabled",
+                onclick: move |e| {
+                    if !disabled {
+                        onclick.call(e);
+                    }
+                },
                 disabled,
                 {label}
             }

@@ -7,7 +7,8 @@ use crate::services::user_service::{Chain, Status, UserService, Wallet};
 
 use super::components::BlockchainSelectionModal;
 use super::i18n::{
-    BlockchainSelectionModalTranslate, ConnectWalletModalTranslate, UserInfoModalTranslate,
+    BlockchainSelectionModalTranslate, BuildAgitModalTranslate, ConnectWalletModalTranslate,
+    UserInfoModalTranslate,
 };
 
 #[derive(Debug, Clone, Copy, DioxusController)]
@@ -21,7 +22,7 @@ impl Controller {
     pub fn new(lang: Language) -> Result<Self, RenderError> {
         let popup: PopupService = use_context();
         let user: UserService = use_context();
-        let ctrl: Controller = Self { lang, popup, user };
+        let ctrl = Controller { lang, popup, user };
         Ok(ctrl)
     }
 
@@ -123,8 +124,7 @@ impl Controller {
     #[allow(dead_code)]
     pub fn open_build_agit_modal(&self) {
         let mut popup = self.popup.clone();
-        let tr: UserInfoModalTranslate = translate(&self.lang);
-        // let ctrl = self.clone();
+        let tr: BuildAgitModalTranslate = translate(&self.lang);
 
         popup
             .open(rsx! {
@@ -136,7 +136,7 @@ impl Controller {
                     },
                 }
             })
-            .with_id("user_info_modal")
+            .with_id("build_agit_modal")
             .with_title(tr.title);
     }
 }

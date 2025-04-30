@@ -11,6 +11,8 @@ pub struct BuildAgitResult {
     pub agree_term_at: Option<i64>,
     pub agree_receive_ads_at: Option<i64>,
 }
+
+//FIXME: add validation
 #[component]
 pub fn BuildAgitModal(on_button_click: EventHandler<BuildAgitResult>, lang: Language) -> Element {
     let tr: BuildAgitModalTranslate = translate(&lang);

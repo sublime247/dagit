@@ -34,8 +34,8 @@ pub fn CheckBoxWithLabel(label: String, on_change: EventHandler<bool>) -> Elemen
             class: "flex flex-row justify-start items-center gap-2",
             onclick: move |_| {
                 tracing::debug!("Checkbox clicked");
-                on_change.call(!checked());
                 checked.toggle();
+                on_change.call(checked());
             },
             Checkbox { checked: checked(), onchange: move |_| {} }
             {label}

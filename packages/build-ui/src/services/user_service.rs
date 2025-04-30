@@ -226,13 +226,14 @@ impl UserService {
             WalletEvent::Logout => {
                 tracing::debug!("UserService::firebase_login: logout");
                 self.user_info.set(None);
+                rest_api::remove_signer();
                 Status::Logout
             }
         };
 
         if next_status == Status::Login {
             self.signer.set(Some(WalletSigner::Firebase(firebase)));
-            rest_api::set_signer(Box::new(*self));
+            rest_api::set_signer(Box::new(self.clone()));
         } else {
             self.signer.set(None);
         }

@@ -12,6 +12,8 @@ pub struct UserInfoResult {
     pub terms_agreed_at: i64,
     pub ads_agreed_at: Option<i64>,
 }
+
+//FIXME: add validation
 #[component]
 pub fn UserInfoModal(
     on_button_click: EventHandler<UserInfoResult>,
