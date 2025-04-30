@@ -10,7 +10,6 @@ use by_axum::{
 use controllers::v1;
 
 use by_types::DatabaseConfig;
-use common::Result;
 use common::tables::{
     agit_admins::AgitAdmins,
     agits::Agit,
@@ -19,6 +18,7 @@ use common::tables::{
     collections::Collection,
     users::{User, UserCredit},
 };
+use common::{Result, tables::user_terms::UserTerms};
 use sqlx::{migrate, postgres::PgPoolOptions};
 use tokio::net::TcpListener;
 mod utils;
@@ -43,7 +43,7 @@ async fn migration(pool: &sqlx::Pool<sqlx::Postgres>) -> Result<()> {
     //TODO: Add Model Migration
     tracing::info!("Running migration");
     migrate!(
-        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmins
+        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmins, UserTerms
     );
     tracing::info!("Migration done");
 
