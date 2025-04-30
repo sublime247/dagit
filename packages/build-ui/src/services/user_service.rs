@@ -1,6 +1,8 @@
 use crate::config;
 use bdk::prelude::*;
 use common::error::ServiceError;
+use common::tables::agits::Agit;
+use common::tables::users::AuthProvider;
 use common::{Result, tables::users::User};
 use google_wallet::{FirebaseWallet, WalletEvent};
 
@@ -16,14 +18,17 @@ pub enum Status {
     Logout,
 }
 
-#[derive(Debug, Copy, Clone, Translate)]
+#[derive(Debug, Copy, Clone, Translate, Eq, PartialEq)]
 pub enum Chain {
+    Bitcoin,
+    Ethereum,
     InternetComputer,
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone, Copy, Translate, Eq, PartialEq)]
 pub enum Wallet {
     Google,
+    MetaMask,
 }
 
 #[derive(Debug, Clone)]
@@ -56,32 +61,12 @@ pub fn get_firebase_wallet() -> google_wallet::FirebaseWallet {
 
 #[derive(Debug, Clone)]
 pub struct UserInfo {
+    pub provider: AuthProvider,
     pub principal: String,
-    pub email: Option<String>,
-    pub nickname: Option<String>,
+    pub email: String,
+    pub nickname: String,
     pub profile_url: Option<String>,
-}
-
-impl UserInfo {
-    pub fn new(principal: String, email: String, nickname: String, profile_url: String) -> Self {
-        Self {
-            principal,
-            email: Some(email),
-            nickname: Some(nickname),
-            profile_url: Some(profile_url),
-        }
-    }
-}
-
-impl Default for UserInfo {
-    fn default() -> Self {
-        Self {
-            principal: "".to_string(),
-            email: None,
-            nickname: None,
-            profile_url: None,
-        }
-    }
+    pub agits: Vec<Agit>,
 }
 
 #[derive(Debug, Clone, Copy, DioxusController)]
@@ -91,15 +76,76 @@ pub struct UserService {
 }
 
 impl UserService {
-    pub fn init() -> Self {
+    pub fn init() {
         // let firebase = get_firebase_wallet();
-
-        UserService {
+        let user = UserService {
             signer: use_signal(|| None),
             user_info: use_signal(|| None),
+        };
+        use_context_provider(move || user);
+    }
+
+    pub fn update_email(&mut self, email: String) {
+        if let Some(user_info) = self.user_info() {
+            self.user_info.set(Some(UserInfo { email, ..user_info }));
+        }
+    }
+    pub fn update_nickname(&mut self, nickname: String) {
+        if let Some(user_info) = self.user_info() {
+            self.user_info.set(Some(UserInfo {
+                nickname,
+                ..user_info
+            }));
         }
     }
 
+    pub async fn signup(
+        &mut self,
+        email: String,
+        nickname: String,
+        terms_agreed_at: i64,
+        ads_agreed_at: Option<i64>,
+    ) -> Result<Status> {
+        let client = User::get_client(config::get().api_url);
+        if let Some(user_info) = self.user_info() {
+            let user_info = user_info.clone();
+            client
+                .signup(
+                    user_info.provider,
+                    user_info.principal,
+                    email,
+                    nickname,
+                    user_info.profile_url,
+                    terms_agreed_at,
+                    ads_agreed_at,
+                )
+                .await?;
+            return Ok(Status::Login);
+        };
+        Err(ServiceError::Unknown(
+            "User info is not set. Please login first.".to_string(),
+        ))
+    }
+    pub async fn login(&mut self, chain: Chain, wallet: Wallet) -> Result<Status> {
+        tracing::debug!("UserService::login: chain={:?}, wallet={:?}", chain, wallet);
+        match chain {
+            Chain::InternetComputer => match wallet {
+                Wallet::Google => {
+                    tracing::debug!("UserService::login: Google");
+                    return self.firebase_login().await;
+                }
+                _ => {
+                    btracing::error!("UserService::login: Unsupported wallet");
+                }
+            },
+            _ => {
+                btracing::error!("UserService::login: Unsupported chain");
+            }
+        };
+        Err(ServiceError::Unsupported(
+            "Unsupported chain or wallet".to_string(),
+        ))
+    }
     pub async fn firebase_login(&mut self) -> Result<Status> {
         let mut firebase = get_firebase_wallet();
         let (evt, user_info, principal) = match firebase.request_wallet_with_google().await {
@@ -116,28 +162,36 @@ impl UserService {
                 return Err(ServiceError::Unauthorized);
             }
         };
+        tracing::debug!("UserService::firebase_login: evt={:?}", evt);
         let next_status = match evt {
             WalletEvent::Login => {
                 tracing::debug!("UserService::firebase_login: login");
+
                 self.user_info.set(Some(UserInfo {
-                    principal,
-                    email: Some(user_info.0),
-                    nickname: Some(user_info.1),
-                    profile_url: Some(user_info.2),
+                    provider: AuthProvider::Google,
+                    principal: principal.clone(),
+                    email: user_info.0.clone(),
+                    nickname: user_info.1.clone(),
+                    profile_url: Some(user_info.2.clone()),
+                    agits: vec![],
                 }));
-                Status::Login
-            }
-            WalletEvent::Signup => {
-                tracing::debug!("UserService::firebase_login: signup");
+
                 let client = User::get_client(config::get().api_url);
-                let res = client.get_user_by_address(principal.clone()).await;
+                let res = client
+                    .login(
+                        common::tables::users::AuthProvider::Google,
+                        principal.clone(),
+                    )
+                    .await;
                 match res {
                     Ok(user) => {
                         self.user_info.set(Some(UserInfo {
+                            provider: AuthProvider::Google,
                             principal: user.address,
-                            email: Some(user.email),
-                            nickname: Some(user.name),
+                            email: user.email,
+                            nickname: user.name,
                             profile_url: user.profile_url,
+                            agits: user.agits,
                         }));
                         Status::Login
                     }
@@ -152,8 +206,26 @@ impl UserService {
                     }
                 }
             }
+            WalletEvent::Signup => {
+                tracing::debug!("UserService::firebase_login: signup");
+                self.user_info.set(Some(UserInfo {
+                    provider: AuthProvider::Google,
+                    principal: principal.clone(),
+                    email: user_info.0.clone(),
+                    nickname: user_info.1.clone(),
+                    profile_url: Some(user_info.2.clone()),
+                    agits: vec![],
+                }));
+                Status::Signup {
+                    principal,
+                    email: Some(user_info.0),
+                    nickname: Some(user_info.1),
+                    profile_url: Some(user_info.2),
+                }
+            }
             WalletEvent::Logout => {
                 tracing::debug!("UserService::firebase_login: logout");
+                self.user_info.set(None);
                 Status::Logout
             }
         };
