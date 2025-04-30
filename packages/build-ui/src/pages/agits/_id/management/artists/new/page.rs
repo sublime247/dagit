@@ -22,7 +22,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         class: "text-gray-400 hover:text-white mr-4",
                         svg {
                             xmlns: "http://www.w3.org/2000/svg",
-                            class: "h-6 w-6",
+                              class: "h-6 w-6",
                             fill: "none",
                             view_box: "0 0 24 24",
                             stroke: "currentColor",

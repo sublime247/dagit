@@ -6,10 +6,17 @@ use common::tables::{
 };
 use wasm_bindgen_futures::spawn_local;
 
-use bdk::prelude::*;
+use bdk::prelude::{dioxus_popup::PopupService, *};
 
-use crate::{config::Config, pages::agits::_id::management::Assets, routes::Route};
+use crate::{config::Config, pages::agits::_id::management::{artists::RemoveArtistModal, Assets}, routes::Route};
+#[derive(Debug, Clone, PartialEq)]
+enum ModalState{
+    None,
+    ConfirmRemoval,
+    ConfirmNameRemoval,
+    Success,
 
+}
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
     lang: Language,
@@ -17,9 +24,13 @@ pub struct Controller {
     artist: Signal<Vec<Artist>>,
     artist_input_field: Signal<ArtistInputField>,
     artist_asset: Signal<Vec<Assets>>,
+    modal_state:Signal<ModalState>,
+    popup:PopupService
+
 }
 impl Controller {
     pub fn new(lang: Language, agit_id: ReadOnlySignal<i64>) -> Result<Self, RenderError> {
+        let mut popup:PopupService = use_context();
         let res = use_server_future(move || async move {
             let endpoint = crate::config::get().api_url;
             let client = ArtistModel::get_client(endpoint);
@@ -86,12 +97,16 @@ impl Controller {
               rarity: "Rare".to_string(),
           }).collect::<Vec<_>>()
         });
+        let modal_state = use_signal(|| ModalState::None);
+
         let ctrl = Self {
             lang,
             agit_id,
             artist,
             artist_input_field,
             artist_asset,
+            modal_state,
+            popup 
         };
         use_context_provider(|| ctrl);
         Ok(ctrl)
@@ -192,4 +207,65 @@ pub fn update_artist_field(&mut self, field: String, value: String) {
             agit_id: self.agit_id.with(|id  | *id),
         });
     }
+
+
+fn update_modal_state(&mut self, state:ModalState){
+    self.modal_state.set(state.clone());
+    self.popup.close();
+
+    match state {
+        ModalState::None=>{},
+        ModalState::ConfirmRemoval=>{
+            let mut this = self.clone();
+            self.popup.open(
+                rsx!(
+                    RemoveArtistModal{show:true,
+                    on_back: move |_| this.update_modal_state(ModalState::None),
+                    on_remove: move |_| {
+                        // self.remove_artist(self.agit_id.with(|id| *id));
+                        this.update_modal_state(ModalState::ConfirmNameRemoval);
+                    },
+                }
+                )
+            ).with_id("remove-artist-modal");
+        },
+        ModalState::ConfirmNameRemoval=>{
+            let mut this = self.clone();
+            self.popup.open(
+                rsx!(
+                    RemoveArtistModal{
+                    show:true,
+                    on_back: move |_| this.update_modal_state(ModalState::None),
+                    on_remove: move |_| {
+                        this.remove_artist(this.agit_id.with(|id| *id));
+                        this.update_modal_state(ModalState::Success);
+                    },
+                }
+                )
+            ).with_id("remove-artistName-modal");
+
+        },
+        ModalState::Success=>{
+            let mut this = self.clone();
+            self.popup.open(
+                rsx!(
+                    RemoveArtistModal{show:true,
+                    on_back: move |_| this.update_modal_state(ModalState::None),
+                    on_remove: move |_| {
+                        this.update_modal_state(ModalState::None);
+                    },
+                }
+                )
+            ).with_id("remove-artist-modal-success");
+        }
+    }
+
+}
+
+
+
+
+pub fn remove_artist_popup(&mut self){
+    self.update_modal_state(ModalState::ConfirmRemoval);
+}
 }

@@ -93,6 +93,7 @@ pub fn ArtistTable(assets: Vec<Assets> ,lang: Language, agit_id: ReadOnlySignal<
                                     agit_id: agit_id(), 
                                     artist_id: artist_id
                                 });
+                                // on_asset_click.call(agit_id, artist_id);
                             },
                             td {
                                 class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",

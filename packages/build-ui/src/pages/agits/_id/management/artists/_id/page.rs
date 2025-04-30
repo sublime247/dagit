@@ -150,7 +150,7 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
 }
 
 #[component]
-pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i64) -> Element {
+pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: ReadOnlySignal<i64>) -> Element {
     let _tr: ArtistTranslate = translate(&lang);
     let mut ctrl = Controller::new(lang, agit_id)?;
     let _profile_picture = use_signal(|| None::<String>);
@@ -167,7 +167,7 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
                 // Header with title and back button
                 div { class: "flex items-center mb-6",
                     Link {
-                        to: Route::ArtistDetailPage { lang, agit_id: agit_id(), artist_id },
+                        to: Route::ArtistDetailPage { lang, agit_id: agit_id(),artist_id: artist_id()},
                         class: "text-gray-400 hover:text-white mr-4",
                         svg {
                             xmlns: "http://www.w3.org/2000/svg",
@@ -197,10 +197,12 @@ pub fn EditArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i
                         div { class: "absolute right-0 mt-2 w-48 bg-background border border-border-primary rounded-md shadow-lg z-1 hidden aria-dropdown-open:block",
                              "aria-dropdown-open": is_dropdown_open,
                             div { class: "py-1",
-                                Link {
-                                    to: Route::ArtistDetailPage { lang, agit_id: agit_id(), artist_id },
+                                a {
                                     class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                    "Artist Detail"
+                                    onclick: move |_| {
+                                      ctrl.remove_artist_popup();  
+                                    },
+                                    "Remove Artist"
                                 }
                                 a { class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
                                     "Edit Artist Info"
