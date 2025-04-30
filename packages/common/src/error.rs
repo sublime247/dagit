@@ -25,6 +25,8 @@ pub enum ServiceError {
     JwtGenerationFailed(String),
 }
 
+impl std::error::Error for ServiceError {}
+
 impl From<reqwest::Error> for ServiceError {
     fn from(e: reqwest::Error) -> Self {
         ServiceError::ReqwestError(e.to_string())
