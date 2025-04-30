@@ -3,7 +3,7 @@ use bdk::prelude::*;
 use crate::tables::agits::Agit;
 
 #[derive(validator::Validate)]
-#[api_model(base = "/v1/users", table = users)]
+#[api_model(base = "/v1/users", table = users, action = [signup(terms_agreed_at = i64, ads_agreed_at = Option<i64>)])]
 pub struct User {
     #[api_model(primary_key)]
     pub id: i64,

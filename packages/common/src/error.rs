@@ -23,6 +23,7 @@ pub enum ServiceError {
     DatabaseError(String),
     ValidationError(String),
     JwtGenerationFailed(String),
+    Unsupported(String),
 }
 
 impl std::error::Error for ServiceError {}
