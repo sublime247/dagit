@@ -13,7 +13,7 @@ wasm-bindgen = { version = "0.2.100" }
 wasm-bindgen-futures = { version = "0.4.49" }
 web-sys = { version = "0.3.74" }
 serde = { workspace = true, features = ["derive"] }
-
+chrono.workspace = true
 #FIXME: `rest-api` crate has `getrandom` dependency, but it's listed here
 getrandom = { version = "0.2", features = ["js"] }
 

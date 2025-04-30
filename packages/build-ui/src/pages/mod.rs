@@ -2,12 +2,12 @@
 mod _route;
 
 // Root Page
+mod agits;
 mod components;
+mod controller;
+mod i18n;
 mod layout;
 mod page;
-mod controllers;
-
-mod agits;
 
 pub use _route::*;
 pub use layout::HeaderLayout;
