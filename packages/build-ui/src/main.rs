@@ -5,6 +5,8 @@ pub mod components;
 pub mod config;
 pub mod pages;
 pub mod routes;
+pub mod services;
+
 use dioxus_popup::PopupService;
 use routes::Route;
 

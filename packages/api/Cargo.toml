@@ -28,6 +28,7 @@ server = []
 lambda = ["bdk/lambda"]
 
 [dev-dependencies]
+rest-api.workspace = true
 ic-agent = "0.39.3"
 ring = "=0.17.8"
 base64 = "0.22.1"
