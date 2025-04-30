@@ -1,5 +1,5 @@
 mod bitcoin;
-mod etherium;
+mod ethereum;
 mod icp;
 
 use bdk::prelude::*;
@@ -15,7 +15,7 @@ pub fn ChainIcon(chain: Chain, #[props(default = "".to_string())] class: String)
                     bitcoin::BitcoinIcon {}
                 },
                 Chain::Ethereum => rsx! {
-                    etherium::EthereumIcon {}
+                    ethereum::EthereumIcon {}
                 },
                 Chain::InternetComputer => rsx! {
                     icp::IcpIcon {}
