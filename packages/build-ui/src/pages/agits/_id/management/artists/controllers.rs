@@ -8,7 +8,7 @@ use wasm_bindgen_futures::spawn_local;
 
 use bdk::prelude::{dioxus_popup::PopupService, *};
 
-use crate::{config::Config, pages::agits::_id::management::{artists::RemoveArtistModal, Assets}, routes::Route};
+use crate::{config::Config, pages::agits::_id::management::{artists::{ConfirmRemoveArtistModal, RemoveArtistModal, SuccessModal}, Assets}, routes::Route};
 #[derive(Debug, Clone, PartialEq)]
 enum ModalState{
     None,
@@ -217,20 +217,23 @@ fn update_modal_state(&mut self, state:ModalState){
         ModalState::None=>{},
         ModalState::ConfirmRemoval=>{
             let mut this = self.clone();
+            let lang = self.lang;
             self.popup.open(
                 rsx!(
-                    RemoveArtistModal{show:true,
+                    ConfirmRemoveArtistModal{show:true,
                     on_back: move |_| this.update_modal_state(ModalState::None),
                     on_remove: move |_| {
                         // self.remove_artist(self.agit_id.with(|id| *id));
                         this.update_modal_state(ModalState::ConfirmNameRemoval);
                     },
+                    lang: lang
                 }
                 )
             ).with_id("remove-artist-modal");
         },
         ModalState::ConfirmNameRemoval=>{
             let mut this = self.clone();
+            let lang = self.lang;
             self.popup.open(
                 rsx!(
                     RemoveArtistModal{
@@ -240,6 +243,7 @@ fn update_modal_state(&mut self, state:ModalState){
                         this.remove_artist(this.agit_id.with(|id| *id));
                         this.update_modal_state(ModalState::Success);
                     },
+                    lang: lang
                 }
                 )
             ).with_id("remove-artistName-modal");
@@ -247,13 +251,14 @@ fn update_modal_state(&mut self, state:ModalState){
         },
         ModalState::Success=>{
             let mut this = self.clone();
+            let lang = self.lang;
             self.popup.open(
                 rsx!(
-                    RemoveArtistModal{show:true,
+                    SuccessModal{
+                    show:true,
                     on_back: move |_| this.update_modal_state(ModalState::None),
-                    on_remove: move |_| {
-                        this.update_modal_state(ModalState::None);
-                    },
+                    on_confirm: move |_| this.update_modal_state(ModalState::None),
+                    lang: lang
                 }
                 )
             ).with_id("remove-artist-modal-success");

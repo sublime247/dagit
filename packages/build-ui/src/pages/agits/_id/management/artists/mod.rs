@@ -6,5 +6,5 @@ mod new;
 mod models;
 
 pub use page::ArtistPage;
-pub use _id::{ArtistDetailPage, EditArtistPage, RemoveArtistModal};
+pub use _id::{ArtistDetailPage, EditArtistPage, ConfirmRemoveArtistModal, RemoveArtistModal, SuccessModal};
 pub use new::NewArtistPage;

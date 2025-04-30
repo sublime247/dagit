@@ -2,5 +2,5 @@ mod page;
 mod components;
 
 pub use page::{ArtistDetailPage, EditArtistPage};
-pub use components::InputField;
-pub use components::RemoveArtistModal;
+
+pub use components::{InputField, RemoveArtistModal, ConfirmRemoveArtistModal,SuccessModal};

@@ -202,10 +202,13 @@ pub fn EditArtistPage(
                         div { class: "absolute right-0 mt-2 w-48 bg-background border border-border-primary rounded-md shadow-lg z-1 hidden aria-dropdown-open:block",
                              "aria-dropdown-open": is_dropdown_open,
                             div { class: "py-1",
-                            Link{
-                                to:Route::ArtistPage { lang, agit_id: agit_id() },
+                            a{
+                                // to:Route::ArtistPage { lang, agit_id: agit_id() },
+                                onclick: move|_|{
+                                    ctrl.remove_artist_popup();
+                                },
                                 class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                "Artist Detail"
+                                "Remove Artist"
                             }
                             Link {
                                 to:Route::ArtistPage { lang, agit_id: agit_id() },
