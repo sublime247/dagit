@@ -53,24 +53,22 @@ impl Controller {
             .open(rsx! {
                 ConnectWalletModal {
                     lang: self.lang,
-                    on_select: move |wallet: Wallet| {
+                    on_select: move |wallet: Wallet| async move {
                         tracing::debug!("Selected wallet: {:?}", wallet);
-                        spawn(async move {
-                            if let Ok(status) = ctrl.user.login(chain, wallet).await {
-                                tracing::debug!("Login status: {:?}", status);
-                                match status {
-                                    Status::Login => {
-                                        popup.close();
-                                    }
-                                    Status::Signup { principal: _, profile_url: _, nickname, email } => {
-                                        ctrl.open_user_info_modal(nickname, email);
-                                    }
-                                    _ => {
-                                        popup.close();
-                                    }
+                        if let Ok(status) = ctrl.user.login(chain, wallet).await {
+                            tracing::debug!("Login status: {:?}", status);
+                            match status {
+                                Status::Login => {
+                                    popup.close();
+                                }
+                                Status::Signup { principal: _, profile_url: _, nickname, email } => {
+                                    ctrl.open_user_info_modal(nickname, email);
+                                }
+                                _ => {
+                                    popup.close();
                                 }
                             }
-                        });
+                        }
                     },
                 }
             })
@@ -83,37 +81,44 @@ impl Controller {
         let mut popup = self.popup.clone();
         let tr: UserInfoModalTranslate = translate(&self.lang);
         let mut ctrl = self.clone();
+        let lang = self.lang;
         popup
             .open(rsx! {
                 UserInfoModal {
                     nickname,
                     email,
                     lang: self.lang,
-                    on_button_click: move |result: UserInfoResult| {
+                    on_button_click: move |result: UserInfoResult| async move {
                         tracing::debug!("Selected wallet: {:?}", result);
-                        spawn(async move {
-                            if let Ok(status) = ctrl
-                                .user
-                                .signup(
-                                    result.email,
-                                    result.nickname,
-                                    result.terms_agreed_at,
-                                    result.ads_agreed_at,
-                                )
-                                .await
-                            {
+                        match ctrl
+                            .user
+                            .signup(
+                                result.email,
+                                result.nickname,
+                                result.terms_agreed_at,
+                                result.ads_agreed_at,
+                            )
+                            .await
+                        {
+                            Ok(status) => {
+                                tracing::debug!("Signup status: {:?}", status);
                                 match status {
                                     Status::Login => {
                                         popup.close();
                                     }
+                                    Status::Signup { principal: _, profile_url: _, nickname, email } => {
+                                        ctrl.open_user_info_modal(nickname, email);
+                                    }
                                     _ => {
-                                        btracing::error!("{} : {:?}", tr.signup_failed, status);
                                         popup.close();
                                     }
                                 }
                             }
-                        });
-                        popup.close();
+                            Err(e) => {
+                                btracing::e!(lang, e);
+                                popup.close();
+                            }
+                        }
                     },
                 }
             })

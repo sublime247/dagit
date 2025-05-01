@@ -1,7 +1,7 @@
 use bdk::prelude::*;
 
 #[derive(validator::Validate)]
-#[api_model(base = "/v1/user_terms", table = user_terms)]
+#[api_model(base = "/v1/user-terms", table = user_terms)]
 pub struct UserTerms {
     #[api_model(primary_key)]
     pub id: i64,

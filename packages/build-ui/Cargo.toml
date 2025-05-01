@@ -17,7 +17,7 @@ chrono.workspace = true
 #FIXME: `rest-api` crate has `getrandom` dependency, but it's listed here
 getrandom = { version = "0.2", features = ["js"] }
 
-common = { workspace = true, features = ["web"] }
+common = { workspace = true }
 async-trait = "0.1.88"
 google-wallet = { workspace = true }
 dioxus-oauth = { workspace = true }
@@ -25,5 +25,5 @@ dioxus-oauth = { workspace = true }
 [features]
 default = []
 web = ["bdk/web"]
-server = ["bdk/server"]
+server = ["bdk/server", "common/server"]
 lambda = ["server", "bdk/lambda"]

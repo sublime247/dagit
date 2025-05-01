@@ -109,7 +109,7 @@ impl UserService {
         let client = User::get_client(config::get().api_url);
         if let Some(user_info) = self.user_info() {
             let user_info = user_info.clone();
-            client
+            let res = client
                 .signup(
                     user_info.provider,
                     user_info.principal,
@@ -119,12 +119,19 @@ impl UserService {
                     terms_agreed_at,
                     ads_agreed_at,
                 )
-                .await?;
-            return Ok(Status::Login);
-        };
-        Err(ServiceError::Unknown(
-            "User info is not set. Please login first.".to_string(),
-        ))
+                .await;
+            match res {
+                Ok(_) => Ok(Status::Login),
+                Err(_) => {
+                    self.user_info.set(None);
+                    Err(ServiceError::SignupFailed)
+                }
+            }
+        } else {
+            Err(ServiceError::Unknown(
+                "User info is not set. Please login first.".to_string(),
+            ))
+        }
     }
     pub async fn login(&mut self, chain: Chain, wallet: Wallet) -> Result<Status> {
         tracing::debug!("UserService::login: chain={:?}, wallet={:?}", chain, wallet);
