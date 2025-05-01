@@ -3,7 +3,7 @@ use bdk::prelude::*;
 use crate::tables::agits::Agit;
 
 #[derive(validator::Validate)]
-#[api_model(base = "/v1/users", table = users, response = [signup_or_login(UserResponse)])]
+#[api_model(base = "/v1/users", table = users, action = [signup(terms_agreed_at = i64, ads_agreed_at = Option<i64>)])]
 pub struct User {
     #[api_model(primary_key)]
     pub id: i64,
@@ -12,18 +12,18 @@ pub struct User {
     #[api_model(auto = [insert, update])]
     pub updated_at: i64,
 
-    #[api_model(action = signup_or_login, type = INTEGER)]
+    #[api_model(action = [signup, login], type = INTEGER)]
     pub provider: AuthProvider,
-    #[api_model(unique, read_action = get_user_by_address)]
+    #[api_model(unique, action = [signup, login], read_action = get_user_by_address)]
     pub address: String,
 
-    #[api_model(action = signup_or_login)]
+    #[api_model(action = [signup, update_profile])]
     #[validate(email)]
     pub email: String,
-    #[api_model(action = [signup_or_login, update_profile])]
+    #[api_model(action = [signup, update_profile])]
     pub name: String,
 
-    #[api_model(action = [signup_or_login, update_profile], nullable)]
+    #[api_model(action = [signup, update_profile], nullable)]
     #[validate(url)]
     pub profile_url: Option<String>,
 
@@ -40,21 +40,4 @@ pub struct User {
 pub enum AuthProvider {
     #[default]
     Google = 1,
-}
-
-#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
-#[cfg_attr(feature = "server", derive(schemars::JsonSchema, aide::OperationIo))]
-pub struct UserResponse {
-    #[serde(flatten)]
-    pub user: User,
-    pub action: UserResponseType,
-}
-
-#[derive(Debug, Clone, Eq, PartialEq, ApiModel, Default)]
-#[cfg_attr(feature = "server", derive(schemars::JsonSchema, aide::OperationIo))]
-pub enum UserResponseType {
-    #[default]
-    SignUp = 1,
-    Login = 2,
-    UpdateProfile = 3,
 }

@@ -1,3 +1,12 @@
 mod icons;
 
+pub use icons::chain_icon::ChainIcon;
 pub use icons::dagit_logo::ServiceLogo;
+pub use icons::wallet_icon::WalletIcon;
+
+pub mod popup_zone;
+
+pub mod button;
+pub mod checkbox;
+pub mod input;
+pub mod option_list;

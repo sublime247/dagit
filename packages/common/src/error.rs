@@ -23,7 +23,16 @@ pub enum ServiceError {
     DatabaseError(String),
     ValidationError(String),
     JwtGenerationFailed(String),
+    Unsupported(String),
+
+    #[translate(
+        ko = "회원 가입에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        en = "Failed to sign up. Please try again later."
+    )]
+    SignupFailed,
 }
+
+impl std::error::Error for ServiceError {}
 
 impl From<reqwest::Error> for ServiceError {
     fn from(e: reqwest::Error) -> Self {

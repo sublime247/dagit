@@ -24,10 +24,11 @@ serde = { version = "1.0.218" }
 reqwest = { version = "0.12.12" }
 serde_json = { version = "1.0.139" }
 serde_urlencoded = { version = "0.7.1" }
+chrono = { version = "0.4.40" }
 
 dioxus-oauth = { path = "./deps/rust-sdk/packages/dioxus-oauth" }
 google-wallet = { path = "./deps/rust-sdk/packages/google-wallet" }
-
+rest-api = { path = "./deps/rust-sdk/packages/rest-api" }
 
 sqlx = { version = "0.8.3", features = [
     "sqlite",

@@ -13,9 +13,9 @@ use by_axum::{
     },
 };
 use by_types::{Claims, JsonWithHeaders};
-use common::Result;
 use common::error::ServiceError;
 use common::tables::prelude::*;
+use common::{Result, tables::user_terms::UserTerms};
 use sqlx::postgres::PgRow;
 
 #[derive(Clone, Debug)]
@@ -41,10 +41,10 @@ impl UserController {
         State(ctrl): State<UserController>,
         Extension(auth): Extension<Option<Authorization>>,
         Json(body): Json<UserAction>,
-    ) -> Result<by_types::JsonWithHeaders<UserResponse>> {
-        tracing::debug!("act_user: {:?}", auth);
+    ) -> Result<by_types::JsonWithHeaders<User>> {
         match body {
-            UserAction::SignupOrLogin(req) => ctrl.signup_or_login(auth, req).await,
+            UserAction::Signup(req) => ctrl.signup(req).await,
+            UserAction::Login(req) => ctrl.login(req).await,
             UserAction::UpdateProfile(req) => ctrl.update_profile(req, auth).await,
         }
     }
@@ -86,17 +86,7 @@ impl UserController {
             ServiceError::JwtGenerationFailed(e.to_string())
         })?)
     }
-    fn get_principal(&self, auth: Option<Authorization>) -> Result<String> {
-        match auth {
-            Some(Authorization::UserSig(sig)) => {
-                let principal = sig
-                    .principal()
-                    .map_err(|_| common::error::ServiceError::Unauthorized)?;
-                Ok(principal)
-            }
-            _ => Err(common::error::ServiceError::Unauthorized),
-        }
-    }
+
     async fn get_user_by_address(
         &self,
         UserReadAction { address, .. }: UserReadAction,
@@ -111,44 +101,57 @@ impl UserController {
         Ok(user)
     }
 
-    async fn signup_or_login(
+    async fn signup(
         &self,
-        auth: Option<Authorization>,
-        UserSignupOrLoginRequest {
+        UserSignupRequest {
+            address,
             name,
             email,
             profile_url,
             provider,
-        }: UserSignupOrLoginRequest,
-    ) -> Result<JsonWithHeaders<UserResponse>> {
-        let principal = self.get_principal(auth)?;
-        let mut action = UserResponseType::SignUp;
-        let user = match self
-            .repo
-            .insert(provider, principal.clone(), email, name, profile_url)
-            .await
-        {
-            Ok(user) => user,
-            Err(_) => {
-                action = UserResponseType::Login;
-                User::query_builder()
-                    .address_equals(principal)
-                    .query()
-                    .map(|r: PgRow| r.into())
-                    .fetch_one(&self.pool)
-                    .await?
-            }
-        };
-        let jwt = self.generate_token(&user)?;
+            terms_agreed_at,
+            ads_agreed_at,
+        }: UserSignupRequest,
+    ) -> Result<JsonWithHeaders<User>> {
+        let user_terms_repo = UserTerms::get_repository(self.pool.clone());
+        let mut tx = self.pool.begin().await?;
 
-        Ok(JsonWithHeaders::new(UserResponse { user, action }).with_bearer_token(&jwt))
+        let user = self
+            .repo
+            .insert_with_tx(&mut *tx, provider, address, email, name, profile_url)
+            .await?
+            .ok_or(ServiceError::DuplicateUser)?;
+
+        user_terms_repo
+            .insert_with_tx(&mut *tx, user.id, terms_agreed_at, ads_agreed_at)
+            .await?;
+        tx.commit().await?;
+
+        let jwt = self.generate_token(&user)?;
+        Ok(JsonWithHeaders::new(user).with_bearer_token(&jwt))
+    }
+
+    async fn login(
+        &self,
+        UserLoginRequest { address, provider }: UserLoginRequest,
+    ) -> Result<JsonWithHeaders<User>> {
+        let user = User::query_builder()
+            .address_equals(address)
+            .provider_equals(provider)
+            .query()
+            .map(|r: PgRow| r.into())
+            .fetch_one(&self.pool)
+            .await?;
+
+        let jwt = self.generate_token(&user)?;
+        Ok(JsonWithHeaders::new(user).with_bearer_token(&jwt))
     }
 
     pub async fn update_profile(
         &self,
         req: UserUpdateProfileRequest,
         auth: Option<Authorization>,
-    ) -> Result<JsonWithHeaders<UserResponse>> {
+    ) -> Result<JsonWithHeaders<User>> {
         let principal = match auth {
             Some(Authorization::Bearer { claims }) => claims.sub,
             _ => {
@@ -167,9 +170,6 @@ impl UserController {
             .await?;
 
         let user = self.repo.update(user.id, repo_req).await?;
-        Ok(JsonWithHeaders::new(UserResponse {
-            user,
-            action: UserResponseType::UpdateProfile,
-        }))
+        Ok(JsonWithHeaders::new(user))
     }
 }
