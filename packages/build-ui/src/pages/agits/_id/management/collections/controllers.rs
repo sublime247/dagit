@@ -1,10 +1,22 @@
 #![allow(unused)]
-use crate::pages::agits::_id::management::{collections::components::{
-    CollectionNameModal, NewCollectionModal, SuccessModal, TransferConfirmationModal,
-}, Activity, Assets};
-
 use super::models::*;
+use crate::config::Config;
+use crate::pages::agits::_id::management::{
+    Activity, Assets,
+    collections::components::{
+        CollectionNameModal, NewCollectionModal, SuccessModal, TransferConfirmationModal,
+    },
+};
 use bdk::prelude::{dioxus_popup::PopupService, *};
+use common::tables::{
+    artists::Artist as ArtistModel,
+    collections::Collection as CollectionModel,
+    prelude::{
+        ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery,
+        CollectionByIdAction, CollectionCreateRequest, CollectionDeleteRequest, CollectionQuery,
+    },
+};
+use wasm_bindgen_futures::spawn_local;
 
 // Define modal states to track which modal is currently shown
 #[derive(Debug, Clone, PartialEq)]
@@ -15,6 +27,7 @@ enum ModalState {
     CollectionName,
     Success,
 }
+
 
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
@@ -34,6 +47,17 @@ pub struct Controller {
 impl Controller {
     pub fn new(lang: Language, agit_id: ReadOnlySignal<i64>) -> Result<Self, RenderError> {
         let mut popup: PopupService = use_context();
+        let res = use_server_future(move || async move {
+            let endpoint = crate::config::get().api_url;
+            let client = CollectionModel::get_client(endpoint);
+            client
+                .query(CollectionQuery::new(100).with_page(0))
+                .await
+                .unwrap_or_default()
+        })?;
+
+        tracing::debug!("res: {:?}", res);
+
         let collections = use_signal(|| {
             (1..15)
                 .map(|id| Collection {
@@ -71,7 +95,7 @@ impl Controller {
                 })
                 .collect::<Vec<_>>()
         });
-        let asset = use_signal(||{
+        let asset = use_signal(|| {
             (0..8).map(|id| Assets{
                 id : id.to_string(),
                 title: "Asset Title".to_string(),
@@ -95,18 +119,20 @@ impl Controller {
                 medium: "Digital".to_string(),
                 rarity: "Rare".to_string(),
             }).collect::<Vec<_>>()
-         });
-        
-         let activity = use_signal(||{
-            (0..6).map(|id|Activity{
-                id: id.to_string(),
-                from: "20114FWO".to_string(),
-                to: "20114FWO".to_string(),
-                time: "30 mins ago".to_string(),
-                title: "Art Title".to_string()
-            }).collect::<Vec<_>>()
-         });
-        
+        });
+
+        let activity = use_signal(|| {
+            (0..6)
+                .map(|id| Activity {
+                    id: id.to_string(),
+                    from: "20114FWO".to_string(),
+                    to: "20114FWO".to_string(),
+                    time: "30 mins ago".to_string(),
+                    title: "Art Title".to_string(),
+                })
+                .collect::<Vec<_>>()
+        });
+
         let selected_artworks = use_signal(|| Vec::<usize>::new());
         let modal_state = use_signal(|| ModalState::None);
         let collection_name = use_signal(|| String::new());
@@ -128,24 +154,72 @@ impl Controller {
         Ok(ctrl)
     }
 
-    
-    // Method to update the modal state and open the appropriate modal using popup_service
+    pub fn create_collection(&self) {
+        spawn_local(async move {
+            let endpoint = crate::config::get().api_url;
+            let client = CollectionModel::get_client(endpoint);
+            let res = client
+                .act(common::tables::prelude::CollectionAction::Create(
+                    CollectionCreateRequest {
+                        title: "".to_string(),
+                        description: "".to_string(),
+                        external_link: None,
+                        banner_url: "".to_string(),
+                        logo_url: "".to_string(),
+                    },
+                ))
+                .await;
+            match res {
+                Ok(_) => {
+                    tracing::debug!("Collection created successfully");
+                }
+                Err(err) => {
+                    tracing::error!("Error creating collection: {:?}", err);
+                }
+            }
+        });
+    }
 
-    fn update_modal_state(&mut self, state: ModalState) {
+    pub fn remove_collection(&self, collection_id: i64) {
+        spawn_local(async move {
+            let endpoint = crate::config::get().api_url;
+            let client = CollectionModel::get_client(endpoint);
+            let res = client
+                .act_by_id(
+                    collection_id,
+                    CollectionByIdAction::Delete(CollectionDeleteRequest {}),
+                )
+                .await;
+            match res {
+                Ok(_) => {
+                    tracing::debug!("Collection removed successfully");
+                }
+                Err(err) => {
+                    tracing::error!("Error removing collection: {:?}", err);
+                }
+            }
+        });
+    }
+
+
+
+
+
+    // Method to update the modal state and open the appropriate modal using popup_service
+ fn update_modal_state(&mut self, state: ModalState) {
         self.modal_state.set(state.clone());
         self.popup.close();
-        
-        
+
         // Open the appropriate modal based on state
         match state {
-            ModalState::None => {},
+            ModalState::None => {}
             ModalState::NewCollection => {
                 let artworks_data = self.artworks.read().clone();
                 let mut selected_artworks = self.selected_artworks.clone();
                 let mut this = self.clone();
-                
-                self.popup.open(rsx!(
-                    NewCollectionModal {
+
+                self.popup
+                    .open(rsx!(NewCollectionModal {
                         show: true,
                         on_close: move |_| this.update_modal_state(ModalState::None),
                         artworks: artworks_data,
@@ -153,66 +227,63 @@ impl Controller {
                             selected_artworks.set(selected.clone());
                             this.update_modal_state(ModalState::TransferConfirmation);
                         },
-                    }
-                )).with_id("new-collection-modal");
-            },
+                    }))
+                    .with_id("new-collection-modal");
+            }
 
             ModalState::TransferConfirmation => {
                 let selected_count = self.selected_artworks.read().len();
                 let mut this = self.clone();
-                
-                self.popup.open(rsx!(
-                    TransferConfirmationModal {
+
+                self.popup
+                    .open(rsx!(TransferConfirmationModal {
                         show: true,
                         selected_count,
                         on_back: move |_| this.update_modal_state(ModalState::NewCollection),
                         on_continue: move |_| this.update_modal_state(ModalState::CollectionName),
-                    }
-                )).with_id("transfer-confirmation-modal");
-            },
-
+                    }))
+                    .with_id("transfer-confirmation-modal");
+            }
 
             ModalState::CollectionName => {
                 let mut this = self.clone();
                 let mut collection_name = self.collection_name.clone();
-                
-                self.popup.open(rsx!(
-                    CollectionNameModal {
+
+                self.popup
+                    .open(rsx!(CollectionNameModal {
                         show: true,
                         on_back: move |_| this.update_modal_state(ModalState::TransferConfirmation),
                         on_add: move |name: String| {
                             collection_name.set(name.clone());
                             tracing::debug!("Collection Name: {}", name);
-                        //    todo:: function to simulate the api to addcollection will be called here before the success modal
+                            //    todo:: function to simulate the api to addcollection will be called here before the success modal
                             this.update_modal_state(ModalState::Success);
                         },
-                    }
-                )).with_id("collection-name-modal");
-            },
-
+                    }))
+                    .with_id("collection-name-modal");
+            }
 
             ModalState::Success => {
                 let collection_name = self.collection_name.read().clone();
                 let mut this = self.clone();
-                
-                self.popup.open(rsx!(
-                    SuccessModal {
+
+                self.popup
+                    .open(rsx!(SuccessModal {
                         show: true,
                         collection_name,
                         on_confirm: move |_| {
                             // Reset state and close modal
-                           
+
                             this.update_modal_state(ModalState::None);
                         },
-                    }
-                )).with_id("success-modal");
-            },
+                    }))
+                    .with_id("success-modal");
+            }
         }
     }
 
-
     // Public method to start the modal flow
     pub fn open_new_collection_popup(&mut self) {
-            self.update_modal_state(ModalState::NewCollection);
-        }
+        self.update_modal_state(ModalState::NewCollection);
+    }
 }
