@@ -1,9 +1,5 @@
-
-pub mod trade_table;
 pub mod created_table;
+pub mod trade_table;
 
-
-
-pub use trade_table::TradeTable;
 pub use created_table::CreatedTable;
-
+pub use trade_table::TradeTable;

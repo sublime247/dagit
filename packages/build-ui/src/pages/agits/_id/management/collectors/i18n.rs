@@ -62,7 +62,7 @@ translate! {
    average_price:{
         en: "Average Price",
         ko: "평균 가격",
-   
+
     }
     price_change:{
         en: "Price Change",
@@ -96,5 +96,5 @@ translate! {
         en: "Search by title",
         ko: "제목으로 검색",
     }
-    
+
 }

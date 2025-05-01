@@ -4,14 +4,13 @@ use std::io::Read;
 use super::models::*;
 use crate::pages::agits::_id::management::{Activity, Assets};
 use bdk::prelude::{dioxus_popup::PopupService, *};
-use wasm_bindgen_futures::spawn_local;
 use common::tables::{
     collectors::Collector as CollectorModel,
-    prelude::{CollectorByIdAction, CollectorCreateRequest, CollectorDeleteRequest, CollectorQuery},
+    prelude::{
+        CollectorByIdAction, CollectorCreateRequest, CollectorDeleteRequest, CollectorQuery,
+    },
 };
-
-
-
+use wasm_bindgen_futures::spawn_local;
 
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
@@ -100,60 +99,50 @@ impl Controller {
         use_context_provider(|| ctrl);
         Ok(ctrl)
     }
-  pub fn create_collector(&self) {
-    spawn_local(async move{
-        let endpoint = crate::config::get().api_url;
-        let client = CollectorModel::get_client(endpoint);
-        let res = client.act(
-            common::tables::prelude::CollectorAction::Create(
-                CollectorCreateRequest {
-                    title: "".to_string(),
-                    description: "".to_string(),
-                    external_link: None,
-                    banner_url: "".to_string(),
-                    logo_url: "".to_string(),
-                },
-            )
-        ).await;
-        match res {
-            Ok(_) => {
-                tracing::debug!("Collector created successfully");
+    pub fn create_collector(&self) {
+        spawn_local(async move {
+            let endpoint = crate::config::get().api_url;
+            let client = CollectorModel::get_client(endpoint);
+            let res = client
+                .act(common::tables::prelude::CollectorAction::Create(
+                    CollectorCreateRequest {
+                        title: "".to_string(),
+                        description: "".to_string(),
+                        external_link: None,
+                        banner_url: "".to_string(),
+                        logo_url: "".to_string(),
+                    },
+                ))
+                .await;
+            match res {
+                Ok(_) => {
+                    tracing::debug!("Collector created successfully");
+                }
+                Err(err) => {
+                    tracing::error!("Error creating collector: {:?}", err);
+                }
             }
-            Err(err) => {
-                tracing::error!("Error creating collector: {:?}", err);
-            }
-            
-        }
-    });
-  }
-
-  pub fn remove_collector(&self, collector_id:i64){
-
-   spawn_local(async move{
-    let endpoint = crate::config::get().api_url;
-    let client = CollectorModel::get_client(endpoint);
-    let res = client.act_by_id(
-        collector_id,
-        CollectorByIdAction::Delete(CollectorDeleteRequest {}),
-    ).await;
-    match res {
-        Ok(_) => {
-            tracing::debug!("Collector removed successfully");
-        }
-        Err(err) => {
-            tracing::error!("Error removing collector: {:?}", err);
-        }
-        
+        });
     }
 
-   });
-
-
-
-
-  }
-  
-
-
-
+    pub fn remove_collector(&self, collector_id: i64) {
+        spawn_local(async move {
+            let endpoint = crate::config::get().api_url;
+            let client = CollectorModel::get_client(endpoint);
+            let res = client
+                .act_by_id(
+                    collector_id,
+                    CollectorByIdAction::Delete(CollectorDeleteRequest {}),
+                )
+                .await;
+            match res {
+                Ok(_) => {
+                    tracing::debug!("Collector removed successfully");
+                }
+                Err(err) => {
+                    tracing::error!("Error removing collector: {:?}", err);
+                }
+            }
+        });
+    }
 }

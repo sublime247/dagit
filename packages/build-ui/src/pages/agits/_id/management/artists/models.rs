@@ -10,11 +10,11 @@ pub struct Artist {
     pub status: String,
     pub social_media: String,
     pub featured_work: String,
-    pub artwork:String,
+    pub artwork: String,
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct ArtistInputField{
+pub struct ArtistInputField {
     pub display_name: String,
     pub social_media: String,
     pub medium: String,

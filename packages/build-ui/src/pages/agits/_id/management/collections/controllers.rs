@@ -28,7 +28,6 @@ enum ModalState {
     Success,
 }
 
-
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
     lang: Language,
@@ -201,12 +200,8 @@ impl Controller {
         });
     }
 
-
-
-
-
     // Method to update the modal state and open the appropriate modal using popup_service
- fn update_modal_state(&mut self, state: ModalState) {
+    fn update_modal_state(&mut self, state: ModalState) {
         self.modal_state.set(state.clone());
         self.popup.close();
 
@@ -256,7 +251,6 @@ impl Controller {
                         on_add: move |name: String| {
                             collection_name.set(name.clone());
                             tracing::debug!("Collection Name: {}", name);
-                            //    todo:: function to simulate the api to addcollection will be called here before the success modal
                             this.update_modal_state(ModalState::Success);
                         },
                     }))
@@ -272,8 +266,6 @@ impl Controller {
                         show: true,
                         collection_name,
                         on_confirm: move |_| {
-                            // Reset state and close modal
-
                             this.update_modal_state(ModalState::None);
                         },
                     }))

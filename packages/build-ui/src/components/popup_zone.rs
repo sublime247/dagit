@@ -30,7 +30,6 @@ pub fn PopupZone() -> Element {
                                     }
                                     None => rsx! {},
                                 }
-                            
                             }
                             if (popup.close)() {
                                 button {
@@ -44,7 +43,6 @@ pub fn PopupZone() -> Element {
                         }
                         {popup.render()}
                     }
-                
                 }
             }
         }

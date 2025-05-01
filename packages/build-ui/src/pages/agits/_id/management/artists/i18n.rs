@@ -183,5 +183,5 @@ translate! {
         en: "The artist has been removed from your agit. Returning to the previous screen.",
         ko: "작가가 아짓에서 제거되었습니다. 이전 화면으로 돌아갑니다.",
     }
-    
+
 }
