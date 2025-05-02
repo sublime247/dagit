@@ -1,19 +1,13 @@
 mod artists;
 mod artworks;
-mod collectors;
 mod collections;
+mod collectors;
 mod components;
 mod model;
 
-
-
-
-
-pub use artists::{ArtistPage, ArtistDetailPage, NewArtistPage, EditArtistPage};
+pub use artists::{ArtistDetailPage, ArtistPage, EditArtistPage, NewArtistPage};
 pub use artworks::ArtworkPage;
-pub use collectors::{CollectorsPage, CollectorDetailPage};
-pub use collections::{CollectionPage, CollectionDetailPage};
+pub use collections::{CollectionDetailPage, CollectionPage};
+pub use collectors::{CollectorDetailPage, CollectorsPage};
 pub use components::TableHeader;
-pub use model::{Assets, Activity};
-
-
+pub use model::{Activity, Assets};

@@ -1,8 +1,8 @@
-use crate::pages::agits::_id::management::model::{Assets, Activity};
+use crate::pages::agits::_id::management::model::{Activity, Assets};
 use crate::pages::agits::_id::management::{TableHeader, collections::CollectionTranslate};
 use bdk::prelude::{by_components::icons::validations, *};
 #[component]
-pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
+pub fn OwnedTable(assets: Vec<Assets>, lang: Language) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
 
     rsx! {
@@ -139,7 +139,7 @@ pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
                                         validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                                     }
                                     // Render dropdown if this row's dropdown is active
-                                  
+
                                         div {
                                             class: "absolute right-0 mt-2 w-48 bg-black border border-green-500 rounded shadow-lg z-10 hidden aria-dropdown-open:block",
                                             "aria-dropdown-open": is_dropdown_open,
@@ -171,7 +171,7 @@ pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
                                                 }
                                             }
                                         }
-                                    
+
                                 }
                             }
                         }

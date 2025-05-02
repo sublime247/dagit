@@ -18,6 +18,10 @@ translate! {
         en: "New Artist",
         ko: "신규 작가",
     }
+    remove_artist:{
+        en: "Remove Artist",
+        ko: "작가 제거",
+    }
     status:{
         en: "Status",
         ko: "상태",
@@ -183,5 +187,5 @@ translate! {
         en: "The artist has been removed from your agit. Returning to the previous screen.",
         ko: "작가가 아짓에서 제거되었습니다. 이전 화면으로 돌아갑니다.",
     }
-    
+
 }

@@ -1,8 +1,7 @@
 mod common_tables;
-mod table_head;
 mod nft_table;
+mod table_head;
 
-
-pub use table_head::TableHeader;
+pub use common_tables::{ActivityTable, OwnedTable};
 pub use nft_table::NftTable;
-pub use common_tables::{OwnedTable, ActivityTable};
+pub use table_head::TableHeader;

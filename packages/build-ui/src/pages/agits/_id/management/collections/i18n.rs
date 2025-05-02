@@ -133,4 +133,6 @@ translate! {
         en: "Search by title",
         ko: "제목으로 검색",
     }
+
+
 }

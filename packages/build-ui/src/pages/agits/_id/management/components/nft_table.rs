@@ -1,5 +1,4 @@
-use crate::pages::agits::_id::management::{ collections::CollectionTranslate, Assets};
-
+use crate::pages::agits::_id::management::{Assets, collections::CollectionTranslate};
 
 use bdk::prelude::*;
 #[component]

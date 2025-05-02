@@ -28,7 +28,6 @@ enum ModalState {
     Success,
 }
 
-
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
     lang: Language,
@@ -201,12 +200,8 @@ impl Controller {
         });
     }
 
-
-
-
-
     // Method to update the modal state and open the appropriate modal using popup_service
- fn update_modal_state(&mut self, state: ModalState) {
+    fn update_modal_state(&mut self, state: ModalState) {
         self.modal_state.set(state.clone());
         self.popup.close();
 

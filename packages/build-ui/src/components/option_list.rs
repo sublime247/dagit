@@ -21,7 +21,7 @@ pub fn OptionList(
                         }
                     },
                     span { class: "flex-1 text-right text-neutral-500", "{option}" }
-                
+
                 }
             }
         }

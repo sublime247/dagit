@@ -4,19 +4,17 @@ pub fn TransferConfirmationModal(
     show: bool,
     selected_count: usize,
     on_back: EventHandler<()>,
-    on_continue: EventHandler<String> // Changed to pass the collection name
+    on_continue: EventHandler<String>, // Changed to pass the collection name
 ) -> Element {
     if !show {
-        return rsx! (
-            div {}
-        );
+        return rsx!(div {});
     }
 
     rsx! {
         // Modal backdrop with purple glow effect
         div {
             class: "fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50",
-           
+
             onclick: move |_| on_back.call(()),
             // Modal content
             div {

@@ -1,14 +1,14 @@
-use bdk::prelude::by_components::icons::{
-    arrows, edit, layouts, other_devices, settings, validations,
-};
+use bdk::prelude::by_components::icons::{arrows, other_devices, settings};
 use bdk::prelude::*;
 
+use crate::components::search_filter_bar::SearchFilterBar;
 use crate::pages::agits::_id::management::artists::_id::components::{ArtistTable, InputField};
 use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
 use crate::pages::agits::_id::management::components::NftTable;
 use crate::routes::Route;
 #[component]
+#[allow(unused_variables)]
 pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id: i64) -> Element {
     let tr: ArtistTranslate = translate(&lang);
     let mut view_mode = use_signal(|| "table");
@@ -58,76 +58,32 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
     }
 
 
-                                  // Search and view controls
-                                  div {
-                                    class: "flex flex-col md:flex-row justify-between mb-6 gap-4",
+                // Search and view controls
+                SearchFilterBar {
+                    placeholder: tr.search_by_title,
+                    show_filter_btn: true,
+                    on_filter_click: move |_| {
+                        // Handle filter button click
+                    },
+                    on_search_change: move |search_text| {
+                        // Handle search input change
+                    },
+                    on_search: move |search_text| {
+                        // Handle search input change
+                    },
+                    show_all_filter_field: true,
+                    show_art_btn: true,
+                    on_view_mode_click: move |_| {
+                        view_mode.set(if *view_mode.read() == "table" { "nftImages" } else { "table" });
+                    },
+                    show_add_btn: true,
+                    add_btn_text: tr.new_artist,
+                    on_add_click: move |_| {
+                        // Handle add button click
+                    },
+                    remove_btn_text: tr.remove_artist,
 
-                                    // View mode buttons
-                                    div {
-                                        class: "flex space-x-2",
-
-
-
-                                             // Filter dropdown
-                                             button {
-                                                class: "p-2 border border-border-primary text-white w-full sm:w-auto",
-                                                // onclick: move |_| show_filters.toggle(),
-                                                settings::Sliders { class: "[&>path]:stroke-white" }
-                                            }
-
-                                            button {
-                                                class: format!("p-2 border {} text-white w-full sm:w-auto",
-                                                    if *view_mode.read() == "nftImages" { "border-white" } else { "border-border-primary" }
-                                                ),
-                                                onclick: move |_| {
-                                                    if *view_mode.read() == "table" {
-                                                        view_mode.set("nftImages");
-                                                    } else {
-                                                        view_mode.set("table");
-                                                    }
-                                                },
-                                                layouts::Window{ class: "[&>path]:stroke-white" }
-                                            }
-
-
-
-
-                                        // All dropdown
-                                        div { class: "relative",
-                                        div { class: "absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none",
-                                            arrows::ChevronDown{ class: "[&>path]:stroke-white", height: 20, width: 20 }
-                                        }
-                                        input {
-                                            class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-3 p-2.5",
-                                            placeholder: "All",
-                                            r#type: "text",
-                                        }
-                                    }
-
-                                    }
-
-                                    // Search
-                                    div {
-                                        class: "relative flex-1",
-                                        div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                                        edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
-                                    }
-                                    input {
-                                        class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
-                                        placeholder: "Search",
-                                        r#type: "text",
-                                    }
-                                    }
-                                    button {
-                                        class: "bg-border-background border border-white text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
-                                        onclick: move |_| {
-                                            // ctrl.open_new_collection_popup();
-                                        },
-                                        validations::Add { class: "mr-3 [&>path]:stroke-white [&>circle]:stroke-white" }
-                                        {tr.new_artist}
-                                    }
-
-                                }
+                }
 
                                     // Assets table
                     div {

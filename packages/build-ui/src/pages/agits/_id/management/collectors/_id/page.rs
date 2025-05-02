@@ -1,4 +1,5 @@
 use crate::{
+    components::{search_filter_bar::SearchFilterBar, tab_button::TabButton},
     pages::agits::_id::management::{
         collectors::{
             _id::components::{CreatedTable, TradeTable},
@@ -9,10 +10,8 @@ use crate::{
     },
     routes::Route,
 };
-use bdk::prelude::{
-    by_components::icons::{arrows, edit, layouts, settings},
-    *,
-};
+use bdk::prelude::*;
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum AssetTab {
     Owned,
@@ -185,126 +184,53 @@ pub fn CollectorDetailPage(
         class: "mb-10",
         div {
             class: "flex space-x-8 text-sm font-medium",
-            button {
-                class: format!("pb-2 px-5 flex items-center space-x-1 {}",
-                    if *active_tab.read() == AssetTab::Owned {
-                        "border-b border-white font-semibold text-white"
-                    } else {
-                        "text-gray-400 hover:text-white"
-                    }
-                ),
+            TabButton{
+                label: tr.owned,
+                is_active: *active_tab.read() == AssetTab::Owned,
+                badge_text: Some("585".to_string()),
                 onclick: move |_| active_tab.set(AssetTab::Owned),
-                span { "Owned" }
-                span {
-                    class: "ml-1 px-1.5 py-0.5 rounded text-xs bg-white text-black font-semibold",
-                    "585"
-                }
             }
 
-            button {
-                class: format!("pb-2 px-5 flex items-center space-x-1 {}",
-                    if *active_tab.read() == AssetTab::Created {
-                        "border-b border-white font-semibold text-white"
-                    } else {
-                        "text-gray-400 hover:text-white"
-                    }
-                ),
+            TabButton{
+                label: tr.created,
+                is_active: *active_tab.read() == AssetTab::Created,
+                badge_text: Some("585".to_string()),
                 onclick: move |_| active_tab.set(AssetTab::Created),
-                span { "Created" }
-                span {
-                    class: "ml-1 px-1.5 py-0.5 rounded text-xs bg-white text-black font-semibold",
-                    "585"
-                }
             }
 
-            button {
-                class: format!("pb-2 px-5 flex items-center space-x-1 {}",
-                if *active_tab.read() == AssetTab::Trade {
-                    "border-b border-white font-semibold text-white"
-                } else {
-                    "text-gray-400 hover:text-white"
-                }
-            ),
+            TabButton{
+                label: tr.trade,
+                is_active: *active_tab.read() == AssetTab::Trade,
+                badge_text: Some("585".to_string()),
                 onclick: move |_| active_tab.set(AssetTab::Trade),
-                "Trade"
             }
 
-            button {
-                class: format!("pb-2 px-5 flex items-center space-x-1 {}",
-                if *active_tab.read() == AssetTab::Activity {
-                    "border-b border-white font-semibold text-white"
-                } else {
-                    "text-gray-400 hover:text-white"
-                }
-            ),
+            TabButton{
+                label: tr.activity,
+                is_active: *active_tab.read() == AssetTab::Activity,
                 onclick: move |_| active_tab.set(AssetTab::Activity),
-                "Activity"
             }
         }
     }
-
-
-                    // Search and view controls
-                    div {
-                        class: "flex flex-col md:flex-row justify-between mb-6 gap-4",
-
-                        // View mode buttons
-                        div {
-                            class: "flex space-x-2",
-
-
-
-                                 // Filter dropdown
-                                 button {
-                                    class: "p-2 border border-border-primary text-white w-full sm:w-auto",
-                                    // onclick: move |_| show_filters.toggle(),
-                                    settings::Sliders { class: "[&>path]:stroke-white" }
-                                }
-
-                                button {
-                                    class: format!("p-2 border {} text-white w-full sm:w-auto",
-                                        if *view_mode.read() == "nftImages" { "border-white" } else { "border-border-primary" }
-                                    ),
-                                    onclick: move |_| {
-                                        if *view_mode.read() == "table" {
-                                            view_mode.set("nftImages");
-                                        } else {
-                                            view_mode.set("table");
-                                        }
-                                    },
-                                    layouts::Window{ class: "[&>path]:stroke-white" }
-                                }
-
-
-
-
-                            // All dropdown
-                            div { class: "relative",
-                            div { class: "absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none",
-                                arrows::ChevronDown{ class: "[&>path]:stroke-white", height: 20, width: 20 }
-                            }
-                            input {
-                                class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-3 p-2.5",
-                                placeholder: "All",
-                                r#type: "text",
-                            }
+                SearchFilterBar{
+                    placeholder: tr.search_by_title,
+                    show_filter_btn: true,
+                    show_art_btn: true,
+                    on_search_change: move |search_text| {
+                    },
+                    on_search: move |search_text| {
+                    },
+                    on_view_mode_click: move |_| {
+                        if *view_mode.read() == "table" {
+                            view_mode.set("nftImages");
+                        } else {
+                            view_mode.set("table");
                         }
+                    },
 
-                        }
 
-                        // Search
-                        div {
-                            class: "relative flex-grow",
-                            div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                            edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
-                        }
-                        input {
-                            class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
-                            placeholder: "Search",
-                            r#type: "text",
-                        }
-                        }
-                    }
+
+                }
 
                     // Assets table
                     div {
@@ -337,7 +263,11 @@ pub fn CollectorDetailPage(
                             },
                             AssetTab::Activity => {
                                 // Activity is always shown as a table
-                                rsx!{ ActivityTable { activity: activities.clone(), lang  } }
+                                if *view_mode.read() == "nftImages" {
+                                    rsx!{ NftTable { assets: assets.clone(), lang } }
+                                } else {
+                                    rsx!{ ActivityTable { activity: activities.clone(), lang } }
+                                }
                             },
                             }}
 

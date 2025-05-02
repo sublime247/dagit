@@ -24,7 +24,7 @@ pub struct Assets {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Activity{
+pub struct Activity {
     pub id: String,
     pub from: String,
     pub to: String,

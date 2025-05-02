@@ -1,15 +1,9 @@
 use bdk::prelude::*;
 
 #[component]
-pub fn SuccessModal(
-    show: bool,
-    collection_name: String,
-    on_confirm: EventHandler<()>
-) -> Element {
+pub fn SuccessModal(show: bool, collection_name: String, on_confirm: EventHandler<()>) -> Element {
     if !show {
-        return rsx!(
-            div {}
-        );
+        return rsx!(div {});
     }
 
     rsx! {

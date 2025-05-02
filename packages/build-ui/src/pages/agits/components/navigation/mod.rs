@@ -199,7 +199,7 @@ pub fn Navigation(lang: Language, agit_id: i64) -> Element {
                             {tr.collectors}
                         }
                     }
-                  
+
                 }
                 Section {
                     label: tr.hub,

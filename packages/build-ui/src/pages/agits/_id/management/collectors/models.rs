@@ -11,8 +11,6 @@ pub struct Collector {
     pub verified: bool,
 }
 
-
-
 #[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)] // Replace Params with a valid derive macro
 pub struct CollectorDetailParams {
     id: String,

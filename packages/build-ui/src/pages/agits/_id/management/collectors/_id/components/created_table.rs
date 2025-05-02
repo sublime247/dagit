@@ -1,5 +1,5 @@
 use crate::pages::agits::_id::management::{
-    collectors::i18n::CollectorsTranslate, Assets, TableHeader
+    Assets, TableHeader, collectors::i18n::CollectorsTranslate,
 };
 
 use bdk::prelude::{by_components::icons::validations, *};

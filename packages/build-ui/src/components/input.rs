@@ -25,7 +25,7 @@ pub fn Input(
             if invalid {
                 span { class: "text-[15px]/[23px] text-pink", {invalid_message} }
             }
-        
+
         }
     }
 }
