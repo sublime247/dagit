@@ -6,7 +6,7 @@ pub fn InputField(
     onInput: EventHandler<Event<FormData>>,
     value: String,
 ) -> Element {
-    rsx! {
+  rsx! {
         div { class: "flex items-center",
                         label { class: "text-sm w-40",
                             span { class: "text-red-500 mr-1", "*" }

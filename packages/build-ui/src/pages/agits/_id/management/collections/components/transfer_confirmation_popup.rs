@@ -14,7 +14,6 @@ pub fn TransferConfirmationModal(
         // Modal backdrop with purple glow effect
         div {
             class: "fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50",
-
             onclick: move |_| on_back.call(()),
             // Modal content
             div {

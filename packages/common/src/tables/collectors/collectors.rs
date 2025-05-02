@@ -34,6 +34,4 @@ pub struct Collector {
 
     #[api_model(summary, many_to_many = collector_holders, table_name = users, foreign_primary_key = user_id, foreign_reference_key = collector_id, aggregator = exist)]
     pub holder: bool,
-
 }
-

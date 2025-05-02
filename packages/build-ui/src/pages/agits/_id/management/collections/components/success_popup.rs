@@ -8,8 +8,7 @@ pub fn SuccessModal(show: bool, collection_name: String, on_confirm: EventHandle
 
     rsx! {
         // Modal backdrop
-        div {
-            class: "fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50",
+        div { class: "fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50",
             // Modal content
             div { class: "fixed inset-0 flex items-center justify-center p-4",
                 div { class: "bg-filter-bg border border-border-primary rounded-lg  w-full max-w-md text-center p-6 shadow-[0_0_40px_10px_rgba(255,41,144,0.5)]",
