@@ -15,7 +15,7 @@ use by_components::icons::{arrows, validations};
 pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let tr: CollectionTranslate = translate(&lang);
     //FIXME: Logics Should be implemented in Controller
-    let mut ctrl = Controller::new(lang, agit_id)?;
+    let  ctrl = Controller::new(lang, agit_id)?;
 
     //FIXME: Use PopupService(ex. popup.open)
     let mut show_filters = use_signal(|| false);
@@ -42,13 +42,14 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     },
                     placeholder: tr.search_by_title,
                     on_add_click: move |_| {
-                        ctrl.open_new_collection_popup();
+                        ctrl.open_new_collection_modal();
                     },
                     // Fixme:
                     on_search_change: move |search_text| {},
                     on_search: move |search_text| {},
                     show_add_btn: true,
                     add_btn_text: tr.new_collection,
+                
                 }
 
                 // Content area (FilterSidebar and Table)

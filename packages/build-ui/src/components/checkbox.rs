@@ -7,21 +7,26 @@ pub fn Checkbox(
     onchange: EventHandler<bool>,
 ) -> Element {
     rsx! {
-        input {
-            id,
-            r#type: "checkbox",
-            class: "sr-only",
-            checked,
-            onchange: move |e| {
-                let v = e.value() == "true";
-                onchange(v);
-            },
-        }
-        CheckIcon {
-            class: format!(
-                "border {}",
-                if checked { "border-white bg-white" } else { "border-neutral-80" },
-            ),
+        label { class: "cursor-pointer flex items-center", // Add cursor-pointer for better UX
+
+            input {
+                id,
+                r#type: "checkbox",
+                class: "sr-only",
+                checked,
+                onchange: move |e| {
+                    let v = e.value() == "true";
+                    onchange(v);
+                },
+            }
+            CheckIcon {
+                class: format!(
+                    "border {}",
+                    if checked { "border-white bg-white" } else { "border-neutral-80" },
+                ),
+                height: 18,
+                width: 18,
+            }
         }
     }
 }

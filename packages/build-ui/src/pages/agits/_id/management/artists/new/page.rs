@@ -90,10 +90,8 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                     }
                                 }
                             }
-                        
                         }
                     
-
 
 
                     }
@@ -204,7 +202,6 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         oninput: move |evt| {
                             ctrl.update_artist_field("introduction".to_string(), evt.value().clone())
                         },
-                    
                     }
                 }
 

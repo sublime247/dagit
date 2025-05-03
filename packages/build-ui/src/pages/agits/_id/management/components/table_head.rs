@@ -113,7 +113,6 @@ pub fn TableHeader(lang: Language) -> Element {
                         validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                     }
                 }
-            
             }
         }
     }

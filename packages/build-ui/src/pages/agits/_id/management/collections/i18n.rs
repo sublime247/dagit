@@ -136,3 +136,138 @@ translate! {
 
 
 }
+
+
+translate!{
+    NewCollectionModalTranslate;
+    title:{
+        en: "Please select the artwork to include in the collection",
+        ko: "컬렉션에 포함할 작품을 선택하세요",
+    }
+    sub_title:{
+        en: "Add artwork to the collection. You can also move artwork from another collection.",
+        ko: "컬렉션에 작품을 추가하세요. 다른 컬렉션에서 작품을 이동할 수도 있습니다.",
+    }
+    search_placeholder:{
+        en: "Search by title",
+        ko: "제목으로 검색",
+    }
+    cancel_btn_text:{
+        en: "Cancel",
+        ko: "취소",
+    }
+    confirm_btn_txt:{
+        en: "Confirm",
+        ko: "확인",
+    }
+    artwork_selected:{
+        en:"artworks have been selected.",
+        ko:"작품이 선택되었습니다.",
+    }
+
+}
+
+translate!{
+    TransferConfirmationModalTranslate;
+ 
+    title:{
+        en: "Transfer Artwork",
+        ko: "작품 전송",
+    }
+    description:{
+        en: "artworks are already included in another collection. Would you like to transfer the artworks to the designated collection?",
+        ko: "개의 선택된 작품은 이미 다른 컬렉션에 포함되어 있습니다. 지정된 컬렉션으로 작품을 전송하시겠습니까?",
+    }
+    back_btn_text:{
+        en: "Back",
+        ko: "백",
+    
+    }
+    continue_btn_text:{
+        en: "Continue",
+        ko: "계속",
+    }
+
+}
+
+translate!{
+    CollectionNameInputModalTranslate;
+    title:{
+        en: "What is the name of collection?",
+        ko: "컬렉션의 이름은 무엇인가요?",
+    }
+    sub_title:{
+        en:"Choose a collection name.",
+        ko:"컬렉션 이름을 선택하세요.",
+    }
+    collection_name_placeholder:{
+        en: "Collection Name",
+        ko: "컬렉션 이름",
+    }
+    short_url_placeholder:{
+        en: "Short URL",
+        ko: "짧은 URL",
+    }
+    collection_name:{
+        en: "Collection Name",
+        ko: "컬렉션 이름",
+    }
+    short_url:{
+        en: "Short URL",
+        ko: "짧은 URL",
+    }
+    collection_name_error:{
+        en: "Collection name is required",
+        ko: "컬렉션 이름은 필수입니다",
+    }
+    short_url_error:{
+        en: "Short URL is required",
+        ko: "짧은 URL은 필수입니다",
+    }
+    collection_name_invalid:{
+        en: "Collection name is invalid",
+        ko: "컬렉션 이름이 유효하지 않습니다",
+    }
+    short_url_invalid:{
+        en: "Short URL is invalid",
+        ko: "짧은 URL이 유효하지 않습니다",
+    }
+    collection_name_taken:{
+        en: "Collection name is already taken",
+        ko: "컬렉션 이름이 이미 사용 중입니다",
+    }
+    short_url_taken:{
+        en: "Short URL is already taken",
+        ko: "짧은 URL이 이미 사용 중입니다",
+    }
+    collection_name_success:{
+        en: "Collection name is available",
+        ko: "컬렉션 이름이 사용 가능합니다",
+    }
+    add_btn_text:{
+        en: "Add Collection",
+        ko: "추가",
+    }
+    back_btn_text:{
+        en: "Back",
+        ko: "백",
+    }
+
+
+}
+
+translate!{
+    SuccessModalTranslate;
+    title:{
+        en: "Success",
+        ko: "성공",
+    }
+    description:{
+        en: "The collection has been successfully created. Redirecting to the collection screen.",
+        ko: "컬렉션이 성공적으로 생성되었습니다. 컬렉션 화면으로 리디렉션됩니다.",
+    }
+    confirm_btn_text:{
+        en: "Confirm",
+        ko: "확인",
+    }
+}
