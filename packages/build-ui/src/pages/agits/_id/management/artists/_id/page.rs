@@ -53,6 +53,7 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
 
 
                 // Search and view controls
+
                 SearchFilterBar {
                     placeholder: tr.search_by_title,
                     show_filter_btn: true,
@@ -90,7 +91,8 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
                     }
                 }
             }
-        
+
+
         }
     }
 }
@@ -181,8 +183,10 @@ pub fn EditArtistPage(
                                     }
                                 }
                             }
+
                         }
-                    
+
+
 
 
                     }
@@ -295,6 +299,7 @@ pub fn EditArtistPage(
                         oninput: move |evt| {
                             ctrl.update_artist_field("introduction".to_string(), evt.value().clone())
                         },
+
                     }
                 }
 

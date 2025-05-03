@@ -116,6 +116,7 @@ pub fn ArtistTable(
                             validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                         }
                     }
+
                 }
             }
             tbody {
@@ -188,6 +189,7 @@ pub fn ArtistTable(
                                             }
                                         }
                                     }
+
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
                                             span { {asset.volume.to_string()} }
@@ -204,6 +206,7 @@ pub fn ArtistTable(
                                                 },
                                                 validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                                             }
+
                                             div {
                                                 class: "absolute right-0 mt-2 w-48 bg-black border border-green-500 rounded shadow-lg z-10 hidden aria-dropdown-open:block",
                                                 "aria-dropdown-open": is_dropdown_open,
@@ -234,6 +237,7 @@ pub fn ArtistTable(
                                                     }
                                                 }
                                             }
+
                                         }
                                     }
                                 }

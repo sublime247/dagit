@@ -5,15 +5,15 @@ mod agit;
 mod artist;
 mod artwork;
 mod collection;
-mod users;
 mod collector;
+mod users;
 
 use agit::AgitController;
 use artist::ArtistController;
 use artwork::ArtworkController;
-use users::UserController;
-use collector::CollectorController;
 use collection::CollectionController;
+use collector::CollectorController;
+use users::UserController;
 
 pub fn routes(pool: Pool<Postgres>) -> common::Result<by_axum::router::BiyardRouter> {
     Ok((by_axum::router::BiyardRouter::new())

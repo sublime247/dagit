@@ -249,17 +249,15 @@ impl Controller {
                 let mut collection_name = self.collection_name.clone();
 
                 self.popup
-                    .open(rsx!(
-                        CollectionNameModal {
-                            show: true,
-                            on_back: move |_| this.update_modal_state(ModalState::TransferConfirmation),
-                            on_add: move |name: String| {
-                                collection_name.set(name.clone());
-                                tracing::debug!("Collection Name: {}", name);
-                                this.update_modal_state(ModalState::Success);
-                            },
-                        }
-                    ))
+                    .open(rsx!(CollectionNameModal {
+                        show: true,
+                        on_back: move |_| this.update_modal_state(ModalState::TransferConfirmation),
+                        on_add: move |name: String| {
+                            collection_name.set(name.clone());
+                            tracing::debug!("Collection Name: {}", name);
+                            this.update_modal_state(ModalState::Success);
+                        },
+                    }))
                     .with_id("collection-name-modal");
             }
 
@@ -268,15 +266,13 @@ impl Controller {
                 let mut this = self.clone();
 
                 self.popup
-                    .open(rsx!(
-                        SuccessModal {
-                            show: true,
-                            collection_name,
-                            on_confirm: move |_| {
-                                this.update_modal_state(ModalState::None);
-                            },
-                        }
-                    ))
+                    .open(rsx!(SuccessModal {
+                        show: true,
+                        collection_name,
+                        on_confirm: move |_| {
+                            this.update_modal_state(ModalState::None);
+                        },
+                    }))
                     .with_id("success-modal");
             }
         }

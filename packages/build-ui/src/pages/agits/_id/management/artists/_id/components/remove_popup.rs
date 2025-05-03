@@ -47,6 +47,7 @@ pub fn ConfirmRemoveArtistModal(
                     div { class: "px-6 pr-10 py-6",
                         p { class: "text-white", {tr.remove_popup_description_1} }
                         p { class: "text-white pt-1", {tr.remove_popup_description_2} }
+
                     }
                     div { class: "p-6 pt-0 flex items-start",
                         input {
@@ -72,6 +73,7 @@ pub fn ConfirmRemoveArtistModal(
                                 on_remove.call(());
                             },
                             {tr.confirm_btn}
+
                         }
                     }
                 }
@@ -165,6 +167,7 @@ pub fn RemoveArtistModal(
                                 on_remove.call(());
                             },
                             {tr.confirm_btn}
+
                         }
                     }
                 }

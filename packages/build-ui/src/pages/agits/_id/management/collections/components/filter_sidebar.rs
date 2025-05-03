@@ -50,7 +50,8 @@ pub fn FilterSidebar() -> Element {
                     }
                     div { class: "absolute inset-y-0 right-2 flex items-center pointer-events-none",
                         edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
-                    }
+
+                  }
                 }
 
                 // Attribute dropdowns
