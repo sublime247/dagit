@@ -214,15 +214,17 @@ impl Controller {
                 let mut this = self.clone();
 
                 self.popup
-                    .open(rsx!(NewCollectionModal {
-                        show: true,
-                        on_close: move |_| this.update_modal_state(ModalState::None),
-                        artworks: artworks_data,
-                        on_select_artworks: move |selected: Vec<usize>| {
-                            selected_artworks.set(selected.clone());
-                            this.update_modal_state(ModalState::TransferConfirmation);
-                        },
-                    }))
+                    .open(rsx!(
+                        NewCollectionModal {
+                            show: true,
+                            on_close: move |_| this.update_modal_state(ModalState::None),
+                            artworks: artworks_data,
+                            on_select_artworks: move |selected: Vec<usize>| {
+                                selected_artworks.set(selected.clone());
+                                this.update_modal_state(ModalState::TransferConfirmation);
+                            },
+                        }
+                    ))
                     .with_id("new-collection-modal");
             }
 
@@ -231,12 +233,14 @@ impl Controller {
                 let mut this = self.clone();
 
                 self.popup
-                    .open(rsx!(TransferConfirmationModal {
-                        show: true,
-                        selected_count,
-                        on_back: move |_| this.update_modal_state(ModalState::NewCollection),
-                        on_continue: move |_| this.update_modal_state(ModalState::CollectionName),
-                    }))
+                    .open(rsx!(
+                        TransferConfirmationModal {
+                            show: true,
+                            selected_count,
+                            on_back: move |_| this.update_modal_state(ModalState::NewCollection),
+                            on_continue: move |_| this.update_modal_state(ModalState::CollectionName),
+                        }
+                    ))
                     .with_id("transfer-confirmation-modal");
             }
 
@@ -245,16 +249,17 @@ impl Controller {
                 let mut collection_name = self.collection_name.clone();
 
                 self.popup
-                    .open(rsx!(CollectionNameModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::TransferConfirmation),
-                        on_add: move |name: String| {
-                            collection_name.set(name.clone());
-                            tracing::debug!("Collection Name: {}", name);
-                            //    todo:: function to simulate the api to addcollection will be called here before the success modal
-                            this.update_modal_state(ModalState::Success);
-                        },
-                    }))
+                    .open(rsx!(
+                        CollectionNameModal {
+                            show: true,
+                            on_back: move |_| this.update_modal_state(ModalState::TransferConfirmation),
+                            on_add: move |name: String| {
+                                collection_name.set(name.clone());
+                                tracing::debug!("Collection Name: {}", name);
+                                this.update_modal_state(ModalState::Success);
+                            },
+                        }
+                    ))
                     .with_id("collection-name-modal");
             }
 
@@ -263,15 +268,15 @@ impl Controller {
                 let mut this = self.clone();
 
                 self.popup
-                    .open(rsx!(SuccessModal {
-                        show: true,
-                        collection_name,
-                        on_confirm: move |_| {
-                            // Reset state and close modal
-
-                            this.update_modal_state(ModalState::None);
-                        },
-                    }))
+                    .open(rsx!(
+                        SuccessModal {
+                            show: true,
+                            collection_name,
+                            on_confirm: move |_| {
+                                this.update_modal_state(ModalState::None);
+                            },
+                        }
+                    ))
                     .with_id("success-modal");
             }
         }

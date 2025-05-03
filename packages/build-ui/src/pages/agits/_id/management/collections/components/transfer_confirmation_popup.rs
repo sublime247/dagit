@@ -7,7 +7,9 @@ pub fn TransferConfirmationModal(
     on_continue: EventHandler<String>, // Changed to pass the collection name
 ) -> Element {
     if !show {
-        return rsx!(div {});
+        return rsx!(
+            div {}
+        );
     }
 
     rsx! {

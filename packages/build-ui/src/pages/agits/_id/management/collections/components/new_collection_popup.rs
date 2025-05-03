@@ -15,7 +15,9 @@ pub fn NewCollectionModal(
     let mut selected_artworks = use_signal(|| Vec::<usize>::new());
     // let mut popup: PopupService =  use_context();
     if !show {
-        return rsx!(div {});
+        return rsx!(
+            div {}
+        );
     }
 
     rsx! {

@@ -28,18 +28,18 @@ pub fn CollectionDetailPage(
     let activity = ctrl.activity();
 
     rsx! {
-            div{
-                class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
+        div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
 
-                div {
-                    class: "flex flex-col w-full h-full text-white",
+            div { class: "flex flex-col w-full h-full text-white",
 
-                    // Header with back button and collector info
-                    div{ class: "flex flex-col mb-6",
-                    div {
-                        class: "flex items-center",
+                // Header with back button and collector info
+                div { class: "flex flex-col mb-6",
+                    div { class: "flex items-center",
                         Link {
-                            to: Route::CollectionPage { lang, agit_id: agit_id() },
+                            to: Route::CollectionPage {
+                                lang,
+                                agit_id: agit_id(),
+                            },
                             class: "text-gray-400 hover:text-white ",
                             svg {
                                 xmlns: "http://www.w3.org/2000/svg",
@@ -51,109 +51,112 @@ pub fn CollectionDetailPage(
                                     stroke_linecap: "round",
                                     stroke_linejoin: "round",
                                     stroke_width: "2",
-                                    d: "M15 19l-7-7 7-7"
+                                    d: "M15 19l-7-7 7-7",
                                 }
                             }
                         }
 
 
-                        div{
-                            class: "flex items-center",
+                        div { class: "flex items-center",
 
-                             h1 {
-                            class: "text-xl font-bold",
-                            {format!("{{Collection {}}}",collection_id)}
-                          }
+                            h1 { class: "text-xl font-bold",
+                                {format!("{{Collection {}}}", collection_id)}
+                            }
+                        }
+                    }
+                    div { class: "text-sm text-gray-400 m-2",
+                        "Last Activity 2mins ago / Joined Feb 01, 2025"
                     }
                 }
-                div {
-                    class: "text-sm text-gray-400 m-2",
-                    "Last Activity 2mins ago / Joined Feb 01, 2025"
-                }
-        }
 
-    div {
-        class: "mb-10",
-        div {
-            class: "flex space-x-8 text-sm font-medium",
+                div { class: "mb-10",
+                    div { class: "flex space-x-8 text-sm font-medium",
 
-            button {
-                class: format!("pb-2 px-10 flex items-center space-x-1 {}",
-                    if *active_tab.read() == AssetTab::List {
-                        "border-b border-white font-semibold text-white"
-                    } else {
-                        "text-gray-400 hover:text-white"
+                        button {
+                            class: format!(
+                                "pb-2 px-10 flex items-center space-x-1 {}",
+                                if *active_tab.read() == AssetTab::List {
+                                    "border-b border-white font-semibold text-white"
+                                } else {
+                                    "text-gray-400 hover:text-white"
+                                },
+                            ),
+                            onclick: move |_| active_tab.set(AssetTab::List),
+                            span { "List" }
+                        }
+
+                        button {
+                            class: format!(
+                                "pb-2 px-10 flex items-center space-x-1 {}",
+                                if *active_tab.read() == AssetTab::Activity {
+                                    "border-b border-white font-semibold text-white"
+                                } else {
+                                    "text-gray-400 hover:text-white"
+                                },
+                            ),
+                            onclick: move |_| active_tab.set(AssetTab::Activity),
+                            "Activity"
+                        }
                     }
-                ),
-                onclick: move |_| active_tab.set(AssetTab::List),
-                span { "List" }
-            }
-
-            button {
-                class: format!("pb-2 px-10 flex items-center space-x-1 {}",
-                if *active_tab.read() == AssetTab::Activity {
-                    "border-b border-white font-semibold text-white"
-                } else {
-                    "text-gray-400 hover:text-white"
                 }
-            ),
-                onclick: move |_| active_tab.set(AssetTab::Activity),
-                "Activity"
+
+
+                SearchFilterBar {
+                    show_filter_btn: true,
+                    on_filter_click: move |_| {},
+                    placeholder: tr.search_by_title,
+                    on_add_click: move |_| {},
+                    on_remove_click: move |_| {},
+                    on_search_change: move |search_text| {},
+                    on_search: move |search_text| {},
+                    show_art_btn: true,
+                    show_add_btn: true,
+                    show_remove_btn: true,
+                    show_all_filter_field: true,
+                    on_view_mode_click: move |_| {
+                        if *view_mode.read() == "table" {
+                            view_mode.set("nftImages");
+                        } else {
+                            view_mode.set("table");
+                        }
+                    },
+                    add_btn_text: tr.add_artwork,
+                    remove_btn_text: tr.remove_artwork,
+                
+                }
+
+                // Assets table
+                div { class: "overflow-x-auto flex-1",
+
+
+                    {
+                        match active_tab.with(|tab| tab.clone()) {
+                            AssetTab::List => {
+                                if *view_mode.read() == "nftImages" {
+                                    rsx! {
+                                        NftTable { assets: assets.clone(), lang }
+                                    }
+                                } else {
+                                    rsx! {
+                                        OwnedTable { assets: assets.clone(), lang }
+                                    }
+                                }
+                            }
+                            AssetTab::Activity => {
+                                if *view_mode.read() == "nftImages" {
+                                    rsx! {
+                                        NftTable { assets: assets.clone(), lang }
+                                    }
+                                } else {
+                                    rsx! {
+                                        ActivityTable { activity: activity.clone(), lang }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-
-
-              SearchFilterBar {
-                show_filter_btn: true,
-                on_filter_click:move|_|{},
-                placeholder: tr.search_by_title,
-                on_add_click:move|_|{},
-                on_remove_click:move|_|{},
-                on_search_change: move |search_text| {
-                },
-                on_search: move |search_text| {
-                },
-                show_art_btn: true,
-                show_add_btn: true,
-                show_remove_btn: true,
-                show_all_filter_field: true,
-                on_view_mode_click: move |_| {
-                    if *view_mode.read() == "table" {
-                        view_mode.set("nftImages");
-                    } else {
-                        view_mode.set("table");
-                    }
-                },
-                add_btn_text: tr.add_artwork,
-                remove_btn_text: tr.remove_artwork,
-
-
-              }
-
-                    // Assets table
-                    div {
-                        class: "overflow-x-auto flex-1",
-
-
-                            {match active_tab.with(|tab| tab.clone()) {
-                                AssetTab::List=> {
-                                    if *view_mode.read()=="nftImages" {
-                                        rsx!{
-                                            NftTable {assets: assets.clone(), lang}
-                                        }
-                                    }else {
-                                    rsx!{ OwnedTable {assets: assets.clone(), lang}}
-                               }
-                            }
-
-                            AssetTab::Activity => {
-                                // Activity is always shown as a table
-                                rsx!{ ActivityTable { activity: activity.clone(), lang  } }
-                            },
-                        }}
-                    }
-                }
-            }
-        }
 }

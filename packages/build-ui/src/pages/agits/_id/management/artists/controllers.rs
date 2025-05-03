@@ -221,42 +221,47 @@ impl Controller {
                 let mut this = self.clone();
                 let lang = self.lang;
                 self.popup
-                    .open(rsx!(ConfirmRemoveArtistModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::None),
-                        on_remove: move |_| {
-                            // self.remove_artist(self.agit_id.with(|id| *id));
-                            this.update_modal_state(ModalState::ConfirmNameRemoval);
-                        },
-                        lang: lang
-                    }))
+                    .open(rsx!(
+                        ConfirmRemoveArtistModal {
+                            show: true,
+                            on_back: move |_| this.update_modal_state(ModalState::None),
+                            on_remove: move |_| {
+                                this.update_modal_state(ModalState::ConfirmNameRemoval);
+                            },
+                            lang,
+                        }
+                    ))
                     .with_id("remove-artist-modal");
             }
             ModalState::ConfirmNameRemoval => {
                 let mut this = self.clone();
                 let lang = self.lang;
                 self.popup
-                    .open(rsx!(RemoveArtistModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::None),
-                        on_remove: move |_| {
-                            this.remove_artist(this.agit_id.with(|id| *id));
-                            this.update_modal_state(ModalState::Success);
-                        },
-                        lang: lang
-                    }))
+                    .open(rsx!(
+                        RemoveArtistModal {
+                            show: true,
+                            on_back: move |_| this.update_modal_state(ModalState::None),
+                            on_remove: move |_| {
+                                this.remove_artist(this.agit_id.with(|id| *id));
+                                this.update_modal_state(ModalState::Success);
+                            },
+                            lang,
+                        }
+                    ))
                     .with_id("remove-artistName-modal");
             }
             ModalState::Success => {
                 let mut this = self.clone();
                 let lang = self.lang;
                 self.popup
-                    .open(rsx!(SuccessModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::None),
-                        on_confirm: move |_| this.update_modal_state(ModalState::None),
-                        lang: lang
-                    }))
+                    .open(rsx!(
+                        SuccessModal {
+                            show: true,
+                            on_back: move |_| this.update_modal_state(ModalState::None),
+                            on_confirm: move |_| this.update_modal_state(ModalState::None),
+                            lang,
+                        }
+                    ))
                     .with_id("remove-artist-modal-success");
             }
         }

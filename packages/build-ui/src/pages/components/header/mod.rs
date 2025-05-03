@@ -23,7 +23,6 @@ pub fn Header(lang: Language) -> Element {
                             if let Some(profile_url) = user_info.profile_url {
                                 img { src: profile_url }
                             }
-
                         }
                         span { {user_info.nickname} }
                     }
@@ -41,7 +40,6 @@ pub fn Header(lang: Language) -> Element {
             } else {
                 span { {tr.login} }
             }
-
         }
     }
 }

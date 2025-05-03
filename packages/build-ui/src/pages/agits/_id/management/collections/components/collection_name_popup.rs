@@ -9,7 +9,9 @@ pub fn CollectionNameModal(
     let mut collection_name = use_signal(|| String::new());
 
     if !show {
-        return rsx!(div {});
+        return rsx!(
+            div {}
+        );
     }
 
     rsx! {
