@@ -122,7 +122,6 @@ pub fn CollectionDetailPage(
                     },
                     add_btn_text: tr.add_artwork,
                     remove_btn_text: tr.remove_artwork,
-                
                 }
 
                 // Assets table

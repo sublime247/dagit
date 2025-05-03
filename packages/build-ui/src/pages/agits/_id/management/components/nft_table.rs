@@ -28,7 +28,7 @@ pub fn NftTable(assets: Vec<Assets>, lang: Language) -> Element {
                                             class: "w-full h-full object-cover",
                                             src: asset.art_image.clone(),
                                         }
-
+                                    
                                     }
                                 }
                                 // NFT metadata section
@@ -47,12 +47,12 @@ pub fn NftTable(assets: Vec<Assets>, lang: Language) -> Element {
                                             span { class: "font-bold text-white", "${asset.current_price}" }
                                         }
                                         div { class: "flex flex-col",
-
+                            
                                             div { {tr.sales_volume} }
                                             span { class: "font-bold text-white", "${asset.volume}" }
                                         }
                                         div { class: "flex flex-col",
-
+                            
                                             div { {tr.owner} }
                                             span { class: "font-bold text-white", "{asset.owner}" }
                                         }

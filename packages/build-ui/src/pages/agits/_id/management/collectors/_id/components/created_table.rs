@@ -36,14 +36,14 @@ pub fn CreatedTable(assets: Vec<Assets>, lang: Language) -> Element {
                                                             path { d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }
                                                         }
                                                     }
-
+                                                
                                                 }
                                                 span { class: "text-xs text-gray-500", {asset.artist_name.clone()} }
                                             }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-
+                                
                                         div { class: "flex space-x-1",
                                             {
                                                 asset
@@ -60,43 +60,43 @@ pub fn CreatedTable(assets: Vec<Assets>, lang: Language) -> Element {
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.way_to_sell.clone()} }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.owner.to_string()} }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-
+                                
                                         div { class: "flex flex-col",
                                             span { {asset.current_price.to_string()} }
                                             span { class: "text-xs text-gray-500", {asset.current_price_usd.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-
+                                
                                         div { class: "flex flex-col",
                                             span { {asset.average_price.to_string()} }
                                             span { class: "text-xs text-gray-500", {asset.average_price_usd.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-
-
+                                
+                                
                                         div { class: "flex justify-between",
                                             div { class: "flex flex-col",
                                                 span { class: "text-green-500", "+{asset.price_change_24h.to_string()}%" }
                                                 span { class: "pl-4 text-xs", "24h" }
                                             }
                                             div { class: "flex flex-col",
-
+                                
                                                 span { class: "text-red-500", {asset.price_change_7d.to_string()} }
                                                 span { class: "pr-4 text-xs", "7d" }
                                             }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-
+                                
                                         div { class: "flex flex-col",
                                             span { {asset.volume.to_string()} }
                                             span { class: "text-xs text-gray-500", {asset.volume_usd.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-
+                                
                                         div { class: "flex flex-col",
                                             span { {asset.royalty.to_string()} }
                                             span { class: "text-xs text-gray-500", {asset.royalty_usd.to_string()} }
@@ -104,11 +104,11 @@ pub fn CreatedTable(assets: Vec<Assets>, lang: Language) -> Element {
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.status.to_string()} }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-
+                                
                                         button { class: "text-gray-400 hover:text-white",
                                             validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                                         }
-
+                                    
                                     }
                                 }
                             }

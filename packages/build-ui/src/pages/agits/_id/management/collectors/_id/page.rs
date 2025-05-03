@@ -168,7 +168,6 @@ pub fn CollectorDetailPage(
                                     }
                                 }
                             }
-                        
                         }
                     }
                 }
@@ -217,7 +216,6 @@ pub fn CollectorDetailPage(
                         }
                     },
                 
-
 
                 }
 
@@ -274,7 +272,6 @@ pub fn CollectorDetailPage(
                         }
                     }
                 
-
 
                 }
             }
