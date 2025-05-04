@@ -1,6 +1,6 @@
 use bdk::prelude::*;
 
-use crate::pages::agits::_id::management::collections::i18n::SuccessModalTranslate;
+use crate::{components::button::SecondaryButton, pages::agits::_id::management::collections::i18n::SuccessModalTranslate};
 
 #[component]
 pub fn SuccessModal(collection_name: String, on_confirm: EventHandler<()>, lang:Language) -> Element {
@@ -14,10 +14,11 @@ pub fn SuccessModal(collection_name: String, on_confirm: EventHandler<()>, lang:
             }
             // Modal footer
             div { class: "flex  items-center  pt-4 border-border-primary",
-                button {
-                    class: "flex-1 px-6 py-2 bg-white text-sm text-black hover:bg-gray-200 min-w[120px]",
+                SecondaryButton {
+                    label: tr.confirm_btn_text,
                     onclick: move |_| on_confirm.call(()),
-                    {tr.confirm_btn_text}
+                    disabled: false,
+                    class: "flex-1 px-6 py-2 bg-white text-sm text-black hover:bg-gray-200 min-w[120px]",
                 }
             }
         }

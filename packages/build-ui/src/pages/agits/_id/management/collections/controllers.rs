@@ -224,8 +224,6 @@ impl Controller {
                         ctrl.open_transfer_confimation_modal();
                     },
                     artworks: artworks_data,
-                
-
                 }
             }
         ).with_id("new-collection-modal")
@@ -271,7 +269,6 @@ impl Controller {
                     },
                     on_add: move |name: String| {
                         collection_name.set(name.clone());
-                        // I will fix this: calling api here to create collection
                         ctrl.open_success_modal();
                     },
                 }

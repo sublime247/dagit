@@ -1,7 +1,10 @@
 use bdk::prelude::by_components::icons::{arrows, other_devices, settings};
 use bdk::prelude::*;
 
+use crate::components::button::ButtonWithIcon;
+use crate::components::image_upload::FileUpload;
 use crate::components::search_filter_bar::SearchFilterBar;
+use crate::pages::agits::_id::management::artists::_id::i18n::EditArtistPageTranslate;
 use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
 use crate::pages::agits::_id::management::artists::{ArtistTable, InputField};
@@ -91,7 +94,6 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
                     }
                 }
             }
-        
         }
     }
 }
@@ -102,7 +104,7 @@ pub fn EditArtistPage(
     agit_id: ReadOnlySignal<i64>,
     artist_id: ReadOnlySignal<i64>,
 ) -> Element {
-    let tr: ArtistTranslate = translate(&lang);
+    let tr: EditArtistPageTranslate = translate(&lang);
     let mut ctrl = Controller::new(lang, agit_id)?;
     let _profile_picture = use_signal(|| None::<String>);
     let mut is_dropdown_open = use_signal(|| false);
@@ -139,7 +141,7 @@ pub fn EditArtistPage(
                         }
                     }
                     div { class: "flex justify-between w-full",
-                        h1 { class: "text-2xl font-bold", "Edit {artist_id}'s Info" }
+                        h1 { class: "text-2xl font-bold", "{tr.edit} {artist_id}'s {tr.info}" }
 
                         div { class: "relative",
                             button {
@@ -162,7 +164,7 @@ pub fn EditArtistPage(
                                             ctrl.confirm_removal_modal();
                                         },
                                         class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                        "Remove Artist"
+                                        {tr.remove_artist}
                                     }
                                     Link {
                                         to: Route::ArtistPage {
@@ -170,7 +172,7 @@ pub fn EditArtistPage(
                                             agit_id: agit_id(),
                                         },
                                         class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                        "Edit Artist Info"
+                                        {tr.edit_artist_info}
                                     }
                                     Link {
                                         to: Route::ArtistPage {
@@ -178,14 +180,12 @@ pub fn EditArtistPage(
                                             agit_id: agit_id(),
                                         },
                                         class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
-                                        "Delete Artist"
+                                        {tr.delete_artist}
                                     }
                                 }
                             }
                         }
                     
-
-
                     }
                 }
 
@@ -194,7 +194,7 @@ pub fn EditArtistPage(
                 // Artist Info Section
                 div { class: "mb-8",
                     div { class: "flex items-center mb-4",
-                        h2 { class: "text-xl font-semibold", "Artist Info" }
+                        h2 { class: "text-xl font-semibold", {tr.artist_info} }
                         arrows::ChevronDown {
                             class: "ml-2 [&>path]:stroke-white",
                             height: 20,
@@ -206,7 +206,7 @@ pub fn EditArtistPage(
                     div { class: "space-y-4 max-w-4xl",
 
                         InputField {
-                            label: tr.input_artist_name,
+                            label: tr.input_artist_name_label,
                             placeholder: tr.input_artist_name_placeholder,
                             value: ctrl.artist_input_field().display_name.clone(),
                             onInput: move |evt: Event<FormData>| {
@@ -253,25 +253,7 @@ pub fn EditArtistPage(
                     // Profile Picture Upload
                     div { class: "flex flex-col mt-8",
                         label { class: "mb-1 text-sm", "Profile Picture" }
-                        div { class: "border border-dashed border-green-500 flex flex-col items-center justify-center text-center text-center w-[340px] h-[340px]",
-
-                            // You would implement file upload functionality here
-                            svg {
-                                xmlns: "http://www.w3.org/2000/svg",
-                                class: "h-12 w-12 text-gray-400 mb-2",
-                                fill: "none",
-                                view_box: "0 0 24 24",
-                                stroke: "currentColor",
-                                path {
-                                    stroke_linecap: "round",
-                                    stroke_linejoin: "round",
-                                    stroke_width: "1",
-                                    d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z",
-                                }
-                            }
-                            p { class: "text-sm text-gray-400", {tr.upload_img_label_1} }
-                            p { class: "text-xs text-gray-500", {tr.upload_img_label_2} }
-                        }
+                        FileUpload { onclick: move |_| {}, label: tr.upload_img_label }
                         p { class: "text-xs text-gray-500 mt-1", {tr.max_file_size} }
                         p { class: "text-xs text-gray-500", {tr.max_file_size_2} }
                     }
@@ -322,15 +304,13 @@ pub fn EditArtistPage(
 
                 // Action buttons
                 div { class: "flex justify-end space-x-4 mt-8",
-                    button {
-                        class: "border border-white text-white px-6 py-2 flex items-center justify-center",
+                    ButtonWithIcon {
                         onclick: handle_save,
-                        other_devices::Save {
-                            class: "mr-2 [&>path]:stroke-white",
-                            height: 20,
-                            width: 20,
-                        }
-                        "Save"
+                        icon: rsx! {
+                            other_devices::Save { class: "mr-2 [&>path]:stroke-white", height: 20, width: 20 }
+                        },
+                        label: tr.save_btn_txt,
+                        disabled: ctrl.artist_input_field().display_name.is_empty(),
                     }
                 }
             }

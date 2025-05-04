@@ -4,14 +4,13 @@ use bdk::prelude::{
 };
 
 use crate::{
-    pages::agits::_id::management::artists::{
-         controllers::Controller, i18n::ArtistTranslate, InputField,
-    },
-    routes::Route,
+     pages::agits::_id::management::artists::{
+         controllers::Controller, new::i18n::NewArtistPageTranslate, InputField
+    }, routes::Route
 };
 #[component]
 pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
-    let tr: ArtistTranslate = translate(&lang);
+    let tr: NewArtistPageTranslate = translate(&lang);
     let mut ctrl = Controller::new(lang, agit_id)?;
     let _profile_picture = use_signal(|| None::<String>);
     let mut is_dropdown_open = use_signal(|| false);
@@ -47,7 +46,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     }
 
                     div { class: "flex justify-between w-full",
-                        h1 { class: "text-2xl font-bold", "Add Artist" }
+                        h1 { class: "text-2xl font-bold", {tr.title} }
 
                         div { class: "relative",
                             button {
@@ -92,8 +91,6 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                             }
                         }
                     
-
-
                     }
                 }
 
@@ -113,7 +110,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     // Form fields
                     div { class: "space-y-4 max-w-4xl",
                         InputField {
-                            label: tr.input_artist_name,
+                            label: tr.input_artist_name_label,
                             placeholder: tr.input_artist_name_placeholder,
                             value: ctrl.artist_input_field().display_name.clone(),
                             onInput: move |evt: Event<FormData>| {

@@ -49,7 +49,6 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     on_search: move |search_text| {},
                     show_add_btn: true,
                     add_btn_text: tr.new_collection,
-                
                 }
 
                 // Content area (FilterSidebar and Table)

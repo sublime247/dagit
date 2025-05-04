@@ -1,6 +1,6 @@
 use bdk::prelude::*;
 
-use crate::pages::agits::_id::management::collections::i18n::CollectionNameInputModalTranslate;
+use crate::{components::button::{PrimaryButton, SecondaryButton}, pages::agits::_id::management::collections::i18n::CollectionNameInputModalTranslate};
 
 #[component]
 pub fn CollectionNameInputModal(
@@ -51,17 +51,20 @@ pub fn CollectionNameInputModal(
             }
             // Modal footer
             div { class: "flex items-center justify-end gap-4 p-6 border-t border-border-primary",
-                button {
-                    class: "px-5 py-2 text-l text-gray-400 hover:text-white",
-                    onclick: move |_| on_back.call(()),
-                    {tr.back_btn_text}
+                PrimaryButton {
+                    label: tr.back_btn_text,
+                    onclick: move |_| {
+                        on_back.call(());
+                    },
+                    disabled: false,
                 }
-                button {
-                    class: "px-4 py-2 text-l bg-white text-black hover:bg-gray-200",
+
+                SecondaryButton {
+                    label: tr.add_btn_text,
                     onclick: move |_| {
                         on_add.call(collection_name.read().clone());
                     },
-                    {tr.add_btn_text}
+                    disabled: collection_name.read().is_empty(),
                 }
             }
         }

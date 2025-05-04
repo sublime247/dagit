@@ -1,7 +1,7 @@
 use bdk::prelude::{by_components::icons::validations, *};
 
 use crate::{
-    components::{checkbox::Checkbox, search_filter_bar::SearchFilterBar},
+    components::{button::{PrimaryButton, SecondaryButton}, checkbox::Checkbox, search_filter_bar::SearchFilterBar},
     pages::agits::_id::management::collections::i18n::NewCollectionModalTranslate,
 };
 
@@ -26,8 +26,7 @@ pub fn NewCollectionModal(
 
             // Modal header
             div { class: "border-b border-border-primary",
-             p { class: "text-sm text-gray-400 mt-1", {tr.sub_title} }
-            
+                p { class: "text-sm text-gray-400 mt-1", {tr.sub_title} }
             }
 
             // Search and filters
@@ -123,9 +122,6 @@ pub fn NewCollectionModal(
                                                             });
                                                     },
                                                 }
-                                            
-                                        
-                                        
                                             }
                                             td { class: "px-4 py-3",
                                                 div { class: "flex items-center",
@@ -186,22 +182,20 @@ pub fn NewCollectionModal(
                     "{selected_artworks.read().len()} {tr.artwork_selected}"
                 }
                 div { class: "flex gap-4",
-                    button {
-                        class: "px-4 py-2 text-sm text-gray-400 hover:text-white",
+                    PrimaryButton {
+                        label: tr.cancel_btn_txt,
                         onclick: move |_| on_close.call(()),
-                        {tr.cancel_btn_text}
+                        disabled: false,
                     }
-                    button {
-                        class: "px-4 py-2 text-sm bg-white text-black hover:bg-gray-200",
-                        onclick: move |_| {
-                            if !selected_artworks.read().is_empty() {
-                                on_select_artworks.call(selected_artworks.read().clone());
-                            }
-                        },
-                        {tr.confirm_btn_txt}
+
+                    SecondaryButton {
+                        label: tr.confirm_btn_txt,
+                        disabled: selected_artworks.read().is_empty(),
+                        onclick: move |_| on_select_artworks.call(selected_artworks.read().clone()),
                     }
                 }
             }
         }
     }
-}
+    }
+

@@ -37,9 +37,7 @@ pub fn RemoveArtistModal(
                         checked: "{terms_accepted}",
                         oninput: move |evt| terms_accepted.set(evt.value().parse().unwrap_or(false)),
                     }
-                    label { class: "text-sm text-popup-label mb-2",
-                        {tr.popup_confirm_text}
-                    }
+                    label { class: "text-sm text-popup-label mb-2", {tr.popup_confirm_text} }
                 }
             }
 

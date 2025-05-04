@@ -1,6 +1,6 @@
 use bdk::prelude::*;
 
-use crate::pages::agits::_id::management::collections::i18n::TransferConfirmationModalTranslate;
+use crate::{components::button::{PrimaryButton, SecondaryButton}, pages::agits::_id::management::collections::i18n::TransferConfirmationModalTranslate};
 #[component]
 pub fn TransferConfirmationModal(
     selected_count: usize,
@@ -17,19 +17,29 @@ pub fn TransferConfirmationModal(
             }
             // Modal footer
             div { class: "flex items-center justify-between gap-4 pt-6 pb-4 border-border-primary",
-                button {
-                    class: "px-10 py-3 text-l text-popup-text hover:text-white border border-white",
-                    onclick: move |_| on_back.call(()),
-                    {tr.back_btn_text}
+                PrimaryButton {
+                    label: tr.back_btn_text,
+                    onclick: move |_| {
+                        on_back.call(());
+                    },
+                    disabled: false,
                 }
-                button {
-                    class: "px-10 py-3 text-l bg-white  text-black hover:bg-gray-200",
+                SecondaryButton {
+                    label: tr.continue_btn_text,
                     onclick: move |_| {
                         on_continue.call(String::new());
                     },
-                    {tr.continue_btn_text}
+                    disabled: false,
+                    class: "text-black bg-white",
                 }
             }
+                // button {
+        //     class: "px-10 py-3 text-l bg-white  text-black hover:bg-gray-200",
+        //     onclick: move |_| {
+        //         on_continue.call(String::new());
+        //     },
+        //     {tr.continue_btn_text}
+        // }
         }
     }
 }

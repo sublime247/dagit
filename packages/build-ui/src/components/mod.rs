@@ -13,4 +13,4 @@ pub mod option_list;
 pub mod search_filter_bar;
 pub mod tab_button;
 pub mod table;
-
+pub mod image_upload;

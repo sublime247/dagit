@@ -215,7 +215,6 @@ pub fn CollectorDetailPage(
                             view_mode.set("table");
                         }
                     },
-                
                 }
 
                 // Assets table
@@ -270,7 +269,6 @@ pub fn CollectorDetailPage(
                             }
                         }
                     }
-                
                 }
             }
         }

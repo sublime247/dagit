@@ -138,6 +138,7 @@ translate! {
 }
 
 
+
 translate!{
     NewCollectionModalTranslate;
     title:{
@@ -152,7 +153,7 @@ translate!{
         en: "Search by title",
         ko: "제목으로 검색",
     }
-    cancel_btn_text:{
+    cancel_btn_txt:{
         en: "Cancel",
         ko: "취소",
     }

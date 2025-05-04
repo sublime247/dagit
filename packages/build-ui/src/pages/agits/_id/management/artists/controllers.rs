@@ -237,14 +237,10 @@ impl Controller {
         popup.open(rsx!(
             RemoveArtistModal {
                 on_back: move |_| {
-                   popup.close();
+                    popup.close();
                 },
                 on_remove: move |_| {
-                    // ctrl.remove_artist(ctrl.agit_id.with(|id| *id));
-                    // calling the remove artist function api here
-                    // if successfull we call the success modal
                     ctrl.success_modal();
-           
                 },
                 lang: self.lang,
             }
@@ -258,12 +254,8 @@ impl Controller {
         let mut ctrl = self.clone();
         popup.open(rsx!(
             RemovalSuccessModal {
-                on_back: move |_| {
-                   
-                },
-                on_confirm: move |_| {
-                   
-                },
+                on_back: move |_| {},
+                on_confirm: move |_| {},
                 lang: self.lang,
             }
         )).with_id("remove-artist-modal-success")
