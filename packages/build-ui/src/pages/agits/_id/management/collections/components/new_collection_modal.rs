@@ -25,11 +25,9 @@ pub fn NewCollectionModal(
         div { class: " flex flex-col",
 
             // Modal header
-            div { class: "px-6 border-b border-border-primary",
-                div { class: "flex flex-col",
-                    h2 { class: "text-xl font-semibold text-white", {tr.title} }
-                    p { class: "text-sm text-gray-400 mt-1", {tr.sub_title} }
-                }
+            div { class: "border-b border-border-primary",
+             p { class: "text-sm text-gray-400 mt-1", {tr.sub_title} }
+            
             }
 
             // Search and filters

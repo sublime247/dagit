@@ -5,7 +5,7 @@ use bdk::prelude::{
 
 use crate::{
     pages::agits::_id::management::artists::{
-        _id::InputField, controllers::Controller, i18n::ArtistTranslate,
+         controllers::Controller, i18n::ArtistTranslate, InputField,
     },
     routes::Route,
 };

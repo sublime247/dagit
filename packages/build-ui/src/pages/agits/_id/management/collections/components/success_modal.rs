@@ -9,11 +9,11 @@ pub fn SuccessModal(collection_name: String, on_confirm: EventHandler<()>, lang:
     rsx! {
         div { class: "max-w-md flex flex-col w-full",
             // Modal body
-            div { class: "py-2",
+            div { class: "py-2 pb-4",
                 p { class: "text-white", {tr.description} }
             }
             // Modal footer
-            div { class: "flex  items-center p-6 border-border-primary",
+            div { class: "flex  items-center  pt-4 border-border-primary",
                 button {
                     class: "flex-1 px-6 py-2 bg-white text-sm text-black hover:bg-gray-200 min-w[120px]",
                     onclick: move |_| on_confirm.call(()),

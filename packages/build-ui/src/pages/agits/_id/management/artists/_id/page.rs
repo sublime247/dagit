@@ -2,9 +2,9 @@ use bdk::prelude::by_components::icons::{arrows, other_devices, settings};
 use bdk::prelude::*;
 
 use crate::components::search_filter_bar::SearchFilterBar;
-use crate::pages::agits::_id::management::artists::_id::components::{ArtistTable, InputField};
 use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
+use crate::pages::agits::_id::management::artists::{ArtistTable, InputField};
 use crate::pages::agits::_id::management::components::NftTable;
 use crate::routes::Route;
 #[component]
@@ -159,7 +159,7 @@ pub fn EditArtistPage(
                                     a {
                                         // to:Route::ArtistPage { lang, agit_id: agit_id() },
                                         onclick: move |_| {
-                                            ctrl.remove_artist_popup();
+                                            ctrl.confirm_removal_modal();
                                         },
                                         class: "block px-4 py-2 text-sm text-white hover:bg-gray-700 hover:text-white",
                                         "Remove Artist"

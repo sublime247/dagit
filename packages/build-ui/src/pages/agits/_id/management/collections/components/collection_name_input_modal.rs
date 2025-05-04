@@ -4,7 +4,6 @@ use crate::pages::agits::_id::management::collections::i18n::CollectionNameInput
 
 #[component]
 pub fn CollectionNameInputModal(
-
     on_back: EventHandler<()>,
     on_add: EventHandler<String>, // Changed to pass the collection name
     lang: Language,

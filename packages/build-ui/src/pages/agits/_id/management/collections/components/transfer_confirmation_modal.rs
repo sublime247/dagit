@@ -12,13 +12,13 @@ pub fn TransferConfirmationModal(
 
     rsx! {
         div { class: "flex flex-col w-full max-w-md",
-            div { class: "pr-10",
-                p { class: "text-white", "The {selected_count} {tr.description} " }
+            div { class: "",
+                p { class: "text-white", "The {selected_count} {tr.description}" }
             }
             // Modal footer
-            div { class: "flex items-center justify-between gap-4 p-6 border-border-primary",
+            div { class: "flex items-center justify-between gap-4 pt-6 pb-4 border-border-primary",
                 button {
-                    class: "px-4 py-2 text-l text-popup-text hover:text-white",
+                    class: "px-10 py-3 text-l text-popup-text hover:text-white border border-white",
                     onclick: move |_| on_back.call(()),
                     {tr.back_btn_text}
                 }
