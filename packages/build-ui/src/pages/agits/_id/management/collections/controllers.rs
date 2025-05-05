@@ -34,7 +34,7 @@ enum ModalState {
 pub struct Controller {
     lang: Language,
     agit_id: ReadOnlySignal<i64>,
-    collections: Signal<Vec<Collection>>,
+    collections: Signal<Vec<CollectionModel>>,
     artworks: Signal<Vec<Artwork>>,
     asset: Signal<Vec<Assets>>,
     activity: Signal<Vec<Activity>>,
@@ -61,20 +61,31 @@ impl Controller {
 
         let collections = use_signal(|| {
             (1..15)
-                .map(|id| Collection {
+                .map(|id| CollectionModel {
                     id,
-                    name: "(Collection Name)".to_string(),
+                    created_at: chrono::Utc::now().timestamp(),
+                    updated_at: chrono::Utc::now().timestamp(),
+                    agit_id: 1,
+                    title: "(Collection Name)".to_string(),
+                    description: "Description".to_string(),
+                    external_link: None,
+                    banner_url: "".to_string(),
+                    logo_url:"".to_string(),
+                    authorized: true,
+                    artworks: vec![],
+                    likes: 0,
+                    followers: 0,
+                    liked: false,
+                    followed: false,
+                    holder: true,
+                    custodian:true,
                     verified: true,
                     floor_price_eth: 2.370,
-                    floor_price_usd: 8147.63,
-                    floor_change_eth: 2.370,
-                    floor_change_usd: 8147.63,
+                    floor_change_eth: 2.370,               
                     volume_change_24h: 12.0,
                     volume_change_7d: -8.0,
-                    volume_eth: 2.370,
-                    volume_usd: 8147.63,
-                    owners: "Num".to_string(),
-                    stock: "Num".to_string(),
+                    volume_eth: 2.370,            
+                    owners: "Num".to_string(), 
                     status: "Active".to_string(),
                 })
                 .collect::<Vec<_>>()
@@ -167,6 +178,14 @@ impl Controller {
                         external_link: None,
                         banner_url: "".to_string(),
                         logo_url: "".to_string(),
+                        verified: false,
+                        floor_price_eth: 0.0,
+                        floor_change_eth: 0.0,
+                        volume_eth: 0.0,
+                        volume_change_24h: 0.0,
+                        volume_change_7d: 0.0,
+                        owners: "".to_string(),
+                        status: "".to_string(),
                     },
                 ))
                 .await;

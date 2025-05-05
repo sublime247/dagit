@@ -195,7 +195,7 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { class: "flex items-center",
                                                             div { class: "w-6 h-6 sm:w-8 sm:h-8 bg-border-primary mr-2" }
-                                                            span { "{collection.name}" }
+                                                            span { "{collection.title}" }
                                                             // Verified icon
                                                             svg {
                                                                 view_box: "0 0 24 24",
@@ -209,11 +209,11 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                     }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { "{collection.floor_price_eth} ETH" }
-                                                        div { class: "text-xs text-gray-400", "$ {collection.floor_price_usd}" }
+                                                        div { class: "text-xs text-gray-400", "$ {collection.floor_price_eth}" }
                                                     }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { "{collection.floor_change_eth} ETH" }
-                                                        div { class: "text-xs text-gray-400", "$ {collection.floor_change_usd}" }
+                                                        div { class: "text-xs text-gray-400", "$ {collection.floor_change_eth}" }
                                                     }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { class: "flex items-center space-x-4 p-l-4",
@@ -229,10 +229,10 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                     }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { "{collection.volume_eth} ETH" }
-                                                        div { class: "text-xs text-gray-400", "$ {collection.volume_usd}" }
+                                                        div { class: "text-xs text-gray-400", "$ {collection.volume_eth}" }
                                                     }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.owners}" }
-                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.stock}" }
+                                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.owners}" }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "{collection.status}" }
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         button { class: "text-gray-400 hover:text-white",

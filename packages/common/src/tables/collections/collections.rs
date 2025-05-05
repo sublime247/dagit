@@ -30,6 +30,23 @@ pub struct Collection {
     pub logo_url: String,
     #[api_model(summary, action_by_id = update)]
     pub authorized: bool,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub verified: bool,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub floor_price_eth: f64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub floor_change_eth: f64,
+    #[api_model(summary,action = create, action_by_id = update)]
+    pub volume_change_24h: f64,
+    #[api_model(summary,action = create, action_by_id = update)]
+    pub volume_change_7d: f64,
+    #[api_model(summary,action = create, action_by_id = update)]
+    pub volume_eth: f64,
+    #[api_model(summary,action = create, action_by_id = update)]
+    pub owners: String,
+    #[api_model(summary, action = create,action_by_id = update)]
+    pub status: String,
+
 
     #[api_model(summary, one_to_many = artworks, foreign_key = collection_id)]
     pub artworks: Vec<Artwork>,
@@ -48,4 +65,6 @@ pub struct Collection {
     pub holder: bool,
     #[api_model(summary, many_to_many = collection_custodians, table_name = users, foreign_primary_key = user_id, foreign_reference_key = collection_id, aggregator = exist)]
     pub custodian: bool,
+
+
 }
