@@ -1,6 +1,6 @@
 use bdk::prelude::*;
 
-use crate::{components::button::{PrimaryButton, SecondaryButton}, pages::agits::_id::management::collections::i18n::CollectionNameInputModalTranslate};
+use crate::{components::{button::{PrimaryButton, SecondaryButton}, input::Input}, pages::agits::_id::management::collections::i18n::CollectionNameInputModalTranslate};
 
 #[component]
 pub fn CollectionNameInputModal(
@@ -18,35 +18,28 @@ pub fn CollectionNameInputModal(
                 p { class: "text-sm text-white mb-4", {tr.sub_title} }
                 // Collection name input
                 div { class: "mb-4",
-                    label { class: "block text-sm font-medium text-popup-label mb-2",
-                        {tr.collection_name}
-                    }
-                    input {
-                        class: "w-full bg-transparent border border-popup-border text-white text-sm rounded-none p-2",
+                    Input{
+                        label: tr.collection_name,
                         placeholder: tr.collection_name_placeholder,
                         value: "{collection_name}",
-                        oninput: move |evt| collection_name.set(evt.value().clone()),
-                    }
+                        on_change: move |v| collection_name.set(v),
+                    },
                 }
                 // Short URL input
                 div {
-                    label { class: "block text-sm font-medium text-popup-label mb-2",
-                        {tr.short_url}
-                    }
-                    div { class: "flex",
-                        span { class: "inline-flex items-center px-3 text-sm text-gray-400 border-popup-border border border-r-0",
-                            "dagit.com/"
-                        }
-                        input {
-                            class: "flex-1 bg-transparent border border-popup-border text-popup-border text-sm rounded-none p-2",
-                            placeholder: "(collection)",
-                            readonly: true,
-                            value: {
-                                let name = collection_name.read();
-                                name.to_lowercase().replace(" ", "-")
-                            },
-                        }
-                    }
+                Input{
+                    url_input: "dagit_url".to_string(),
+                    label:tr.short_url,
+                    placeholder: "(collection)",
+                    value: {
+                        let name = collection_name.read();
+                        name.to_lowercase().replace(" ", "-")
+                    },
+                    on_change: move |v| collection_name.set(v),
+                    readonly: true,
+
+                }
+                 
                 }
             }
             // Modal footer

@@ -42,7 +42,7 @@ translate!{
       en: "Medium",
       ko: "매체",
   }
-  upload_img_label_1:{
+  upload_img_label:{
     en: "Please drag and drop your file here.",
     ko: "여기에 파일을 드래그 앤 드롭하세요.",
 }
@@ -82,5 +82,9 @@ introduction_placeholder:{
 save_btn_txt:{
     en: "Save",
     ko: "저장",
+}
+add_btn_txt:{
+    en: "Add Art",
+    ko: ""
 }
 }

@@ -9,8 +9,6 @@ mod components;
 pub use _id::{
     ArtistDetailPage, EditArtistPage,
 };
-pub use components::{
-    ArtistTable, InputField
-};
+pub use components::ArtistTable;
 pub use new::NewArtistPage;
 pub use page::ArtistPage;

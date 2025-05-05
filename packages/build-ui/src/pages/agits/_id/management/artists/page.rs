@@ -30,8 +30,15 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     show_all_filter_field: true,
                     placeholder: tr.search_by_title,
                     show_add_btn: true,
-                    on_add_click: move |_| {},
-
+                    on_add_click: Some(
+                        Callback::new(move |_| {
+                            use_navigator()
+                                .push(Route::NewArtistPage {
+                                    lang: lang,
+                                    agit_id: agit_id(),
+                                });
+                        }),
+                    ),
                     add_btn_text: tr.new_artist,
                     remove_btn_text: tr.remove_artist,
                 }

@@ -66,10 +66,11 @@ pub fn ButtonWithIcon(
     #[props(default = true)] disabled: bool,                                   
     onclick: EventHandler<MouseEvent>,              
 ) -> Element {
+
     rsx! {
         button {
             class: format!(
-                "border border-white bg-black text-white px-6 py-2 flex items-center justify-center bg-black active:bg-primary/25 active:border-primary hover:bg-primary/25 hover:border-primary disabled:border-neutral-80 disabled:text-neutral-80 disabled:bg-btn-disable{}",
+                "border border-white text-white px-6 py-2 flex items-center justify-center bg-black active:bg-primary/25 active:border-primary hover:bg-primary/25 hover:border-primary disabled:border-neutral-80 disabled:text-neutral-80 disabled:bg-btn-disable{}",
                 class,
             ),
             onclick: move |e| {
@@ -80,6 +81,23 @@ pub fn ButtonWithIcon(
             disabled,
             {icon}
             span { class: "ml-2", "{label}" } // Render the label with spacing
+        }
+    }
+}
+
+#[component]
+pub fn IconButton(
+    #[props(default = "".to_string())] class: String,
+    icon: Element,
+    onclick: EventHandler<MouseEvent>,
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+)->Element{
+    rsx!{
+        button {
+            onclick: move |e| {
+                onclick.call(e);
+            },
+            {icon}
         }
     }
 }

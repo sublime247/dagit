@@ -1,13 +1,14 @@
 use bdk::prelude::by_components::icons::{arrows, other_devices, settings};
 use bdk::prelude::*;
 
-use crate::components::button::ButtonWithIcon;
+use crate::components::button::{ButtonWithIcon, IconButton};
 use crate::components::image_upload::FileUpload;
+use crate::components::input::{Input2, TextArea};
 use crate::components::search_filter_bar::SearchFilterBar;
 use crate::pages::agits::_id::management::artists::_id::i18n::EditArtistPageTranslate;
 use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
-use crate::pages::agits::_id::management::artists::{ArtistTable, InputField};
+use crate::pages::agits::_id::management::artists::ArtistTable;
 use crate::pages::agits::_id::management::components::NftTable;
 use crate::routes::Route;
 #[component]
@@ -144,15 +145,11 @@ pub fn EditArtistPage(
                         h1 { class: "text-2xl font-bold", "{tr.edit} {artist_id}'s {tr.info}" }
 
                         div { class: "relative",
-                            button {
-                                onclick: move |_| {
-                                    is_dropdown_open.toggle();
+                            IconButton {
+                                onclick: move |_| is_dropdown_open.toggle(),
+                                icon: rsx! {
+                                    settings::Settings2 { class: "ml-2 [&>path]:stroke-white", height: 20, width: 20 }
                                 },
-                                settings::Settings2 {
-                                    class: "ml-2 [&>path]:stroke-white",
-                                    height: 20,
-                                    width: 20,
-                                }
                             }
                             div {
                                 class: "absolute right-0 mt-2 w-48 bg-background border border-border-primary rounded-md shadow-lg z-1 hidden aria-dropdown-open:block",
@@ -185,7 +182,6 @@ pub fn EditArtistPage(
                                 }
                             }
                         }
-                    
                     }
                 }
 
@@ -204,49 +200,44 @@ pub fn EditArtistPage(
 
                     // Form fields
                     div { class: "space-y-4 max-w-4xl",
-
-                        InputField {
+                        Input2 {
                             label: tr.input_artist_name_label,
                             placeholder: tr.input_artist_name_placeholder,
                             value: ctrl.artist_input_field().display_name.clone(),
-                            onInput: move |evt: Event<FormData>| {
-                                ctrl.update_artist_field("display_name".to_string(), evt.value().clone())
+                            on_change: move |evt: String| {
+                                ctrl.update_artist_field("display_name".to_string(), evt.clone())
                             },
                         }
 
-                        InputField {
+                        Input2 {
                             label: tr.social_media_label,
                             placeholder: tr.social_media_label,
                             value: ctrl.artist_input_field().social_media.clone(),
-                            onInput: move |evt: Event<FormData>| {
-                                ctrl.update_artist_field("social_media".to_string(), evt.value().clone())
+                            on_change: move |evt: String| {
+                                ctrl.update_artist_field("social_media".to_string(), evt.clone())
                             },
                         }
 
-                        InputField {
+                        Input2 {
                             label: tr.medium,
                             placeholder: tr.medium,
                             value: ctrl.artist_input_field().medium.clone(),
-                            onInput: move |evt: Event<FormData>| {
-                                ctrl.update_artist_field("medium".to_string(), evt.value().clone())
-                            },
+                            on_change: move |evt: String| { ctrl.update_artist_field("medium".to_string(), evt.clone()) },
                         }
 
-                        InputField {
+                        Input2 {
                             label: tr.theme,
                             placeholder: tr.theme,
                             value: ctrl.artist_input_field().theme.clone(),
-                            onInput: move |evt: Event<FormData>| {
-                                ctrl.update_artist_field("theme".to_string(), evt.value().clone())
-                            },
+                            on_change: move |evt: String| { ctrl.update_artist_field("theme".to_string(), evt.clone()) },
                         }
 
-                        InputField {
+                        Input2 {
                             label: tr.art_style,
                             placeholder: tr.art_style,
                             value: ctrl.artist_input_field().art_style.clone(),
-                            onInput: move |evt: Event<FormData>| {
-                                ctrl.update_artist_field("art_style".to_string(), evt.value().clone())
+                            on_change: move |evt: String| {
+                                ctrl.update_artist_field("art_style".to_string(), evt.clone())
                             },
                         }
                     }
@@ -261,43 +252,23 @@ pub fn EditArtistPage(
 
                 // Introduction Section
                 div { class: "mb-8 mt-8 max-w-4xl",
-                    div { class: "flex items-center mb-4",
-                        h2 { class: "text-xl font-semibold", {tr.introduction_label} }
-                        arrows::ChevronDown {
-                            class: "ml-2 [&>path]:stroke-white",
-                            height: 20,
-                            width: 20,
-                        }
-                    }
-
-                    textarea {
-                        class: "bg-border-background border border-border-primary text-white p-4 w-full h-32",
+                    TextArea {
+                        label: tr.introduction_label,
                         placeholder: tr.introduction_placeholder,
-                        value: "{ctrl.artist_input_field().introduction.clone()}",
-
-                        oninput: move |evt| {
-                            ctrl.update_artist_field("introduction".to_string(), evt.value().clone())
+                        value: ctrl.artist_input_field().introduction.clone(),
+                        on_change: move |evt: String| {
+                            ctrl.update_artist_field("introduction".to_string(), evt.clone())
                         },
                     }
                 }
-
                 // Biography Section
                 div { class: "mt-8 max-w-4xl",
-                    div { class: "flex items-center mb-4",
-                        h2 { class: "text-xl font-semibold", {tr.biography_label} }
-                        arrows::ChevronDown {
-                            class: "ml-2 [&>path]:stroke-white",
-                            height: 20,
-                            width: 20,
-                        }
-                    }
-
-                    textarea {
-                        class: "bg-border-background border border-border-primary text-white p-4 w-full h-32",
+                    TextArea {
+                        label: tr.biography_label,
                         placeholder: tr.biography_placeholder,
-                        value: "{ctrl.artist_input_field().biography.clone()}",
-                        oninput: move |evt| {
-                            ctrl.update_artist_field("biography".to_string(), evt.value().clone())
+                        value: ctrl.artist_input_field().biography.clone(),
+                        on_change: move |evt: String| {
+                            ctrl.update_artist_field("biography".to_string(), evt.clone())
                         },
                     }
                 }

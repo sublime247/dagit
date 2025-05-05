@@ -24,7 +24,6 @@ pub fn RemovalSuccessModal(
                     {tr.confirm_btn}
                 }
             }
-        
         }
     }
 }
