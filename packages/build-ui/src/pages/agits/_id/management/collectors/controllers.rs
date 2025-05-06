@@ -2,7 +2,7 @@
 use std::io::Read;
 
 use super::models::*;
-use crate::pages::agits::_id::management::{Activity, Assets};
+use crate::pages::agits::_id::management::Activity;
 use bdk::prelude::{dioxus_popup::PopupService, *};
 use common::tables::{
     collectors::Collector as CollectorModel,
@@ -16,7 +16,7 @@ use wasm_bindgen_futures::spawn_local;
 pub struct Controller {
     lang: Language,
     collector: Signal<Vec<Collector>>,
-    asset: Signal<Vec<Assets>>,
+    // asset: Signal<Vec<Assets>>,
     activity: Signal<Vec<Activity>>,
     popup: PopupService,
 }
@@ -50,32 +50,32 @@ impl Controller {
                 .collect::<Vec<_>>()
         });
 
-        let asset = use_signal(|| {
-            (0..8).map(|id| Assets{
-        id : id.to_string(),
-        title: "Asset Title".to_string(),
-        artist_name: "Artist Name".to_string(),
-        attributes: vec!["Pixel".to_string(), "Animation".to_string()],
-        way_to_sell: "Offer".to_string(),
-        owner: "247".to_string(),
-        current_price: 2.370,
-        current_price_usd: 8147.63,
-        average_price: 2.370,
-        average_price_usd: 8147.63,
-        price_change_24h: 12.0,
-        price_change_7d: -8.0,
-        volume: 2.370,
-        volume_usd: 8147.63,
-        royalty: 2.370,
-        royalty_usd: 8147.63,
-        status: "Active".to_string(),
-        verified: true,
-        art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
-        medium: "Digital".to_string(),
-        rarity: "Rare".to_string(),
+    //     let asset = use_signal(|| {
+    //         (0..8).map(|id| Assets{
+    //     id : id.to_string(),
+    //     title: "Asset Title".to_string(),
+    //     artist_name: "Artist Name".to_string(),
+    //     attributes: vec!["Pixel".to_string(), "Animation".to_string()],
+    //     way_to_sell: "Offer".to_string(),
+    //     owner: "247".to_string(),
+    //     current_price: 2.370,
+    //     current_price_usd: 8147.63,
+    //     average_price: 2.370,
+    //     average_price_usd: 8147.63,
+    //     price_change_24h: 12.0,
+    //     price_change_7d: -8.0,
+    //     volume: 2.370,
+    //     volume_usd: 8147.63,
+    //     royalty: 2.370,
+    //     royalty_usd: 8147.63,
+    //     status: "Active".to_string(),
+    //     verified: true,
+    //     art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
+    //     medium: "Digital".to_string(),
+    //     rarity: "Rare".to_string(),
 
-    }).collect::<Vec<_>>()
-        });
+    // }).collect::<Vec<_>>()
+    //     });
 
         let activity = use_signal(|| {
             (0..6)
@@ -93,7 +93,7 @@ impl Controller {
             lang,
             collector,
             popup,
-            asset,
+            // asset,
             activity,
         };
         use_context_provider(|| ctrl);

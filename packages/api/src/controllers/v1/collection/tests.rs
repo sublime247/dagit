@@ -26,6 +26,7 @@ async fn create_collection() -> Collection {
             100.29,
             "Biyard".to_string(),
             "Progress".to_string(),
+            "Stock".to_string()
 
 
         )
@@ -59,6 +60,8 @@ async fn test_create_collection() {
             100.29,
             "Biyard".to_string(),
             "Progress".to_string(),
+            "Stock".to_string()
+
 
         )
         .await;
@@ -128,6 +131,7 @@ async fn test_update_collection() {
             collection.volume_change_7d,
             collection.owners,
             collection.status, 
+            collection.stock
         )
         .await;
 

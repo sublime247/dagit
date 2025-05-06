@@ -3,7 +3,7 @@ use super::i18n::{CollectionNameInputModalTranslate, NewCollectionModalTranslate
 use super::models::*;
 use crate::config::Config;
 use crate::pages::agits::_id::management::{
-    Activity, Assets,
+    Activity,
     collections::components::{
         NewCollectionModal, SuccessModal, TransferConfirmationModal,CollectionNameInputModal
     },
@@ -12,6 +12,7 @@ use bdk::prelude::{dioxus_popup::PopupService, *};
 use common::tables::artworks;
 use common::tables::{
     artists::Artist as ArtistModel,
+    artworks::Artwork as ArtworkModel,
     collections::Collection as CollectionModel,
     prelude::{
         ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery,
@@ -35,9 +36,7 @@ pub struct Controller {
     lang: Language,
     agit_id: ReadOnlySignal<i64>,
     collections: Signal<Vec<CollectionModel>>,
-    artworks: Signal<Vec<Artwork>>,
-    asset: Signal<Vec<Assets>>,
-    activity: Signal<Vec<Activity>>,
+    artworks: Signal<Vec<ArtworkModel>>,
     selected_artworks: Signal<Vec<usize>>,
     modal_state: Signal<ModalState>,
     collection_name: Signal<String>,
@@ -87,63 +86,57 @@ impl Controller {
                     volume_eth: 2.370,            
                     owners: "Num".to_string(), 
                     status: "Active".to_string(),
+                    stock: "Num".to_string(),
+                    
                 })
                 .collect::<Vec<_>>()
         });
 
         let artworks = use_signal(|| {
             (0..4)
-                .map(|id| Artwork {
+                .map(|id| ArtworkModel {
                     id,
                     title: "(Art Title)".to_string(),
-                    artist_name: "Artist Name".to_string(),
+                    name: "Artist Name".to_string(),
                     verified: true,
-                    collection: Some("Happy".to_string()),
-                    attributes: vec!["Paid".to_string(), "Verified".to_string()],
+                    collection_type: Some("Happy".to_string()),
+                    attributes_type: vec!["Paid".to_string(), "Verified".to_string()],
                     ways_to_sell: "Bid".to_string(),
                     volume_eth: 2.370,
                     volume_usd: 8147.63,
+                    current_price: 2.370,
+                    average_price: 2.370,
+                    royalty: 2.370,
+                    price_change: 12.0,
+                    owners: 145, 
                     status: "Active".to_string(),
+                    created_at: chrono::Utc::now().timestamp(),
+                    updated_at: chrono::Utc::now().timestamp(),
+                    external_link: None,
+                    description: "Description".to_string(),
+                    agit_id: 1,
+                    collection_id: Some((1)),
+                    artist_id:1,
+                    owner_id:1,
+                    likes: 0,
+                    liked: false,
+                    art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
+                    last_price:100,
+                    medium: "Digital".to_string(),
+                    rarity: "Rare".to_string(),
+                    activity_id: "1".to_string(),
+                    activity_from: "20114FWO".to_string(),
+                    activity_to: "20114FWO".to_string(),
+                    activity_time: "30 mins ago".to_string(),
+                    activity_title: "Art Title".to_string(),
+
+
+
                 })
                 .collect::<Vec<_>>()
-        });
-        let asset = use_signal(|| {
-            (0..8).map(|id| Assets{
-                id : id.to_string(),
-                title: "Asset Title".to_string(),
-                artist_name: "Artist Name".to_string(),
-                attributes: vec!["Pixel".to_string(), "Animation".to_string()],
-                way_to_sell: "Offer".to_string(),
-                owner: "247".to_string(),
-                current_price: 2.370,
-                current_price_usd: 8147.63,
-                average_price: 2.370,
-                average_price_usd: 8147.63,
-                price_change_24h: 12.0,
-                price_change_7d: -8.0,
-                volume: 2.370,
-                volume_usd: 8147.63,
-                royalty: 2.370,
-                royalty_usd: 8147.63,
-                status: "Active".to_string(),
-                verified: true,
-                art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
-                medium: "Digital".to_string(),
-                rarity: "Rare".to_string(),
-            }).collect::<Vec<_>>()
         });
 
-        let activity = use_signal(|| {
-            (0..6)
-                .map(|id| Activity {
-                    id: id.to_string(),
-                    from: "20114FWO".to_string(),
-                    to: "20114FWO".to_string(),
-                    time: "30 mins ago".to_string(),
-                    title: "Art Title".to_string(),
-                })
-                .collect::<Vec<_>>()
-        });
+
 
         let selected_artworks = use_signal(|| Vec::<usize>::new());
         let modal_state = use_signal(|| ModalState::None);
@@ -158,8 +151,6 @@ impl Controller {
             selected_artworks,
             modal_state,
             collection_name,
-            asset,
-            activity,
         };
 
         use_context_provider(|| ctrl);
@@ -186,6 +177,7 @@ impl Controller {
                         volume_change_7d: 0.0,
                         owners: "".to_string(),
                         status: "".to_string(),
+                        stock: "".to_string(),
                     },
                 ))
                 .await;

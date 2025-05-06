@@ -22,8 +22,45 @@ pub struct Artwork {
     pub title: String,
     #[api_model(summary, action = create, action_by_id = update)]
     pub verified: bool,
-    
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub collection_type: Option<String>,
+    #[api_model(summary, action = create, action_by_id = update, type=JSONB)]
+    pub attributes_type: Vec<String>,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub ways_to_sell: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub volume_eth: f64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub volume_usd: f64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub status: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub current_price: f64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub average_price: f64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub royalty: f64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub price_change: f64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub owners: i64,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub art_image: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub medium: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub rarity: String,
 
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub activity_id: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub activity_from: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub activity_to: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub activity_time: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub activity_title: String,
 
     #[api_model(summary, action = create, action_by_id = update, nullable)]
     pub external_link: Option<String>,

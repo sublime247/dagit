@@ -1,8 +1,7 @@
 use crate::{
     components::{search_filter_bar::SearchFilterBar, tab_button::TabButton},
     pages::agits::_id::management::{
-        collectors::{controllers::Controller, i18n::CollectorsTranslate},
-        components::{ActivityTable, NftTable, OwnedTable},
+        collections::Controller, collectors:: i18n::CollectorsTranslate, components::{ActivityTable, NftTable, OwnedTable}
     },
     routes::Route,
 };
@@ -27,8 +26,7 @@ pub fn CollectorDetailPage(
     let filter = use_signal(|| "All");
     let tr: CollectorsTranslate = translate(&lang);
     let ctrl = Controller::new(lang, agit_id)?;
-    let assets = ctrl.asset();
-    let activities = ctrl.activity();
+    let assets = ctrl.artworks();
     let mut active_tab = use_signal(|| AssetTab::Owned);
 
     rsx! {
@@ -226,44 +224,44 @@ pub fn CollectorDetailPage(
                             AssetTab::Owned => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable { assets: assets.clone(), lang }
+                                        NftTable { artworks: assets.clone(), lang }
                                     }
                                 } else {
                                     rsx! {
-                                        OwnedTable { assets: assets.clone(), lang }
+                                        OwnedTable { artworks: assets.clone(), lang }
                                     }
                                 }
                             }
                             AssetTab::Created => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable { assets: assets.clone(), lang }
+                                        NftTable { artworks: assets.clone(), lang }
                                     }
                                 } else {
                                     rsx! {
-                                        OwnedTable { assets: assets.clone(), lang }
+                                        OwnedTable { artworks: assets.clone(), lang }
                                     }
                                 }
                             }
                             AssetTab::Trade => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable { assets: assets.clone(), lang }
+                                        NftTable { artworks: assets.clone(), lang }
                                     }
                                 } else {
                                     rsx! {
-                                        OwnedTable { assets: assets.clone(), lang }
+                                        OwnedTable { artworks: assets.clone(), lang }
                                     }
                                 }
                             }
                             AssetTab::Activity => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable { assets: assets.clone(), lang }
+                                        NftTable { artworks: assets.clone(), lang }
                                     }
                                 } else {
                                     rsx! {
-                                        ActivityTable { activity: activities.clone(), lang }
+                                        ActivityTable { activity: assets.clone(), lang }
                                     }
                                 }
                             }

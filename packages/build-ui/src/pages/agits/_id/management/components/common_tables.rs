@@ -1,8 +1,8 @@
-use crate::pages::agits::_id::management::model::{Assets, Activity};
 use crate::pages::agits::_id::management::{components::TableHeader, collections::CollectionTranslate};
 use bdk::prelude::{by_components::icons::validations, *};
+use common::tables::artworks::Artwork as ArtworkModel;
 #[component]
-pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
+pub fn OwnedTable(artworks: Vec<ArtworkModel>     ,lang: Language) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
 
     rsx! {
@@ -10,10 +10,10 @@ pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
             TableHeader { lang }
             tbody {
                 {
-                    assets
+                    artworks
                         .iter()
                         .enumerate()
-                        .map(|(index, asset)| {
+                        .map(|(index, artwork)| {
                             let is_dropdown_open = active_dropdown
                                 .with(|active| active == &Some(index));
                             rsx! {
@@ -27,7 +27,7 @@ pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
                                             }
                                             div { class: "flex flex-col",
                                                 div { class: "flex items-center",
-                                                    span { {asset.title.clone()} }
+                                                    span { {artwork.title.clone()} }
                                                     span { class: "ml-1 text-green-500",
                                                         svg {
                                                             view_box: "0 0 24 24",
@@ -39,15 +39,15 @@ pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
                                                         }
                                                     }
                                                 }
-                                                span { class: "text-xs text-gray-500", {asset.artist_name.clone()} }
+                                                span { class: "text-xs text-gray-500", {artwork.name.clone()} }
                                             }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex space-x-1",
                                             {
-                                                asset
-                                                    .attributes
+                                                artwork
+                                                    .attributes_type
                                                     .iter()
                                                     .map(|attr| {
                                                         rsx! {
@@ -57,45 +57,45 @@ pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
                                             }
                                         }
                                     }
-                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.way_to_sell.clone()} }
-                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.owner.to_string()} }
+                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artwork.ways_to_sell.clone()} }
+                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artwork.owners.to_string()} }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
-                                            span { {asset.current_price.to_string()} }
-                                            span { class: "text-xs text-gray-500", {asset.current_price_usd.to_string()} }
+                                            span { {artwork.current_price.to_string()} }
+                                            span { class: "text-xs text-gray-500", {artwork.current_price.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
-                                            span { {asset.average_price.to_string()} }
-                                            span { class: "text-xs text-gray-500", {asset.average_price_usd.to_string()} }
+                                            span { {artwork.average_price.to_string()} }
+                                            span { class: "text-xs text-gray-500", {artwork.average_price.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex justify-between",
                                             div { class: "flex flex-col",
-                                                span { class: "text-green-500", "+{asset.price_change_24h.to_string()}%" }
+                                                span { class: "text-green-500", "+{artwork.price_change.to_string()}%" }
                                                 span { class: "pl-4 text-xs", "24h" }
                                             }
                                             div { class: "flex flex-col",
-                                                span { class: "text-red-500", {asset.price_change_7d.to_string()} }
+                                                span { class: "text-red-500", {artwork.price_change.to_string()} }
                                                 span { class: "pr-4 text-xs", "7d" }
                                             }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
-                                            span { {asset.volume.to_string()} }
-                                            span { class: "text-xs text-gray-500", {asset.volume_usd.to_string()} }
+                                            span { {artwork.volume_eth.to_string()} }
+                                            span { class: "text-xs text-gray-500", {artwork.volume_usd.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
-                                            span { {asset.royalty.to_string()} }
-                                            span { class: "text-xs text-gray-500", {asset.royalty_usd.to_string()} }
+                                            span { {artwork.royalty.to_string()} }
+                                            span { class: "text-xs text-gray-500", {artwork.royalty.to_string()} }
                                         }
                                     }
-                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.status.to_string()} }
+                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artwork.status.to_string()} }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "relative",
                                             button {
@@ -148,7 +148,7 @@ pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
 
 #[component]
 #[allow(unused_variables)]
-pub fn ActivityTable(activity: Vec<Activity>, lang: Language) -> Element {
+pub fn ActivityTable(activity: Vec<ArtworkModel>, lang: Language) -> Element {
     let tr: CollectionTranslate = translate(&lang);
     rsx! {
         {

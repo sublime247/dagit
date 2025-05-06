@@ -24,8 +24,7 @@ pub fn CollectionDetailPage(
     let mut view_mode = use_signal(|| "table");
     let tr: CollectionTranslate = translate(&lang);
     let ctrl = Controller::new(lang, agit_id)?;
-    let assets = ctrl.asset();
-    let activity = ctrl.activity();
+    let artworks = ctrl.artworks();
 
     rsx! {
         div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
@@ -133,22 +132,22 @@ pub fn CollectionDetailPage(
                             AssetTab::List => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable { assets: assets.clone(), lang }
+                                        NftTable {artworks: artworks.clone(), lang }
                                     }
                                 } else {
                                     rsx! {
-                                        OwnedTable { assets: assets.clone(), lang }
+                                        OwnedTable { artworks: artworks.clone(), lang }
                                     }
                                 }
                             }
                             AssetTab::Activity => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable { assets: assets.clone(), lang }
+                                        NftTable {artworks: artworks.clone(), lang }
                                     }
                                 } else {
                                     rsx! {
-                                        ActivityTable { activity: activity.clone(), lang }
+                                        ActivityTable { activity: artworks.clone(), lang }
                                     }
                                 }
                             }

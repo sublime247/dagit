@@ -1,6 +1,6 @@
 mod _id;
 mod components;
-mod controllers;
+pub mod controllers;
 mod i18n;
 mod models;
 mod page;
@@ -8,3 +8,4 @@ mod page;
 pub use _id::CollectionDetailPage;
 pub use i18n::CollectionTranslate;
 pub use page::CollectionPage;
+pub use controllers::Controller;

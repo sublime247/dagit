@@ -11,7 +11,7 @@ use bdk::prelude::{dioxus_popup::PopupService, *};
 use crate::{
     config::Config,
     pages::agits::_id::management::{artists::components::{ConfirmRemoveArtistModal, RemovalSuccessModal, RemoveArtistModal}, 
-        Assets},
+       },
     routes::Route,
 };
 #[derive(Debug, Clone, PartialEq)]
@@ -27,7 +27,7 @@ pub struct Controller {
     agit_id: ReadOnlySignal<i64>,
     artist: Signal<Vec<Artist>>,
     artist_input_field: Signal<ArtistInputField>,
-    artist_asset: Signal<Vec<Assets>>,
+    // artist_asset: Signal<Vec<Assets>>,
     modal_state: Signal<ModalState>,
     popup: PopupService,
 }
@@ -75,31 +75,31 @@ impl Controller {
                 .collect::<Vec<_>>()
         });
 
-        let artist_asset = use_signal(|| {
-            (0..8).map(|id| Assets{
-              id : id.to_string(),
-              title: "Asset Title".to_string(),
-              artist_name: "Artist Name".to_string(),
-              attributes: vec!["Pixel".to_string(), "Animation".to_string()],
-              way_to_sell: "Offer".to_string(),
-              owner: "247".to_string(),
-              current_price: 2.370,
-              current_price_usd: 8147.63,
-              average_price: 2.370,
-              average_price_usd: 8147.63,
-              price_change_24h: 12.0,
-              price_change_7d: -8.0,
-              volume: 2.370,
-              volume_usd: 8147.63,
-              royalty: 2.370,
-              royalty_usd: 8147.63,
-              status: "Active".to_string(),
-              verified: true,
-              art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
-              medium: "Digital".to_string(),
-              rarity: "Rare".to_string(),
-          }).collect::<Vec<_>>()
-        });
+        // let artist_asset = use_signal(|| {
+        //     (0..8).map(|id| Assets{
+        //       id : id.to_string(),
+        //       title: "Asset Title".to_string(),
+        //       artist_name: "Artist Name".to_string(),
+        //       attributes: vec!["Pixel".to_string(), "Animation".to_string()],
+        //       way_to_sell: "Offer".to_string(),
+        //       owner: "247".to_string(),
+        //       current_price: 2.370,
+        //       current_price_usd: 8147.63,
+        //       average_price: 2.370,
+        //       average_price_usd: 8147.63,
+        //       price_change_24h: 12.0,
+        //       price_change_7d: -8.0,
+        //       volume: 2.370,
+        //       volume_usd: 8147.63,
+        //       royalty: 2.370,
+        //       royalty_usd: 8147.63,
+        //       status: "Active".to_string(),
+        //       verified: true,
+        //       art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
+        //       medium: "Digital".to_string(),
+        //       rarity: "Rare".to_string(),
+        //   }).collect::<Vec<_>>()
+        // });
         let modal_state = use_signal(|| ModalState::None);
 
         let ctrl = Self {
@@ -107,7 +107,7 @@ impl Controller {
             agit_id,
             artist,
             artist_input_field,
-            artist_asset,
+            // artist_asset,
             modal_state,
             popup,
         };

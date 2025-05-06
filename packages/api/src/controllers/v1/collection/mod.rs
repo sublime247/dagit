@@ -104,7 +104,8 @@ impl CollectionController {
             volume_change_24h,
             volume_change_7d,
             owners,
-            status
+            status,
+            stock
         }: CollectionCreateRequest,
     ) -> Result<Json<Collection>> {
         if auth.is_none() {
@@ -128,7 +129,8 @@ impl CollectionController {
                 volume_change_24h,
                 volume_change_7d,
                 owners,
-                status
+                status,
+                stock
             )
             .await?;
         Ok(Json(collection))

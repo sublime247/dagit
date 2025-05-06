@@ -9,5 +9,5 @@ pub use artists::{ArtistDetailPage, ArtistPage, EditArtistPage, NewArtistPage};
 pub use artworks::ArtworkPage;
 pub use collections::{CollectionDetailPage, CollectionPage};
 pub use collectors::{CollectorDetailPage, CollectorsPage};
-pub use model::{Activity, Assets};
+pub use model::Activity;
 
