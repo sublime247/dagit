@@ -2,9 +2,9 @@ use bdk::prelude::*;
 
 #[component]
 pub fn FileUpload(
-    #[props(default = "".to_string())] class: String, // Additional classes for styling
-    label: String,                                   // Label for the upload area
-    onclick: EventHandler<MouseEvent>,              // Click handler for file upload
+    #[props(default = "".to_string())] class: String,
+    label: String,                                  
+    onclick: EventHandler<MouseEvent>,              
 ) -> Element {
     rsx! {
         div {

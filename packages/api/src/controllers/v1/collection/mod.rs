@@ -97,6 +97,14 @@ impl CollectionController {
             external_link,
             banner_url,
             logo_url,
+            verified,
+            floor_price_eth,
+            floor_change_eth,
+            volume_eth,
+            volume_change_24h,
+            volume_change_7d,
+            owners,
+            status
         }: CollectionCreateRequest,
     ) -> Result<Json<Collection>> {
         if auth.is_none() {
@@ -113,6 +121,14 @@ impl CollectionController {
                 banner_url,
                 logo_url,
                 false,
+                verified,
+                floor_price_eth,
+                floor_change_eth,
+                volume_eth,
+                volume_change_24h,
+                volume_change_7d,
+                owners,
+                status
             )
             .await?;
         Ok(Json(collection))

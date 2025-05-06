@@ -18,6 +18,13 @@ pub struct Artwork {
     pub name: String,
     #[api_model(summary, action = create, action_by_id = update)]
     pub description: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub title: String,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub verified: bool,
+    
+
+
     #[api_model(summary, action = create, action_by_id = update, nullable)]
     pub external_link: Option<String>,
 

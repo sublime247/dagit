@@ -18,6 +18,16 @@ async fn create_collection() -> Collection {
             None,
             IMAGE_URL.to_string(),
             IMAGE_URL.to_string(),
+            false,
+            1024.4,
+            100.5,
+            5.4,
+            25.5,
+            100.29,
+            "Biyard".to_string(),
+            "Progress".to_string(),
+
+
         )
         .await;
 
@@ -41,6 +51,15 @@ async fn test_create_collection() {
             None,
             IMAGE_URL.to_string(),
             IMAGE_URL.to_string(),
+            false,
+            1024.4,
+            100.5,
+            5.4,
+            25.5,
+            100.29,
+            "Biyard".to_string(),
+            "Progress".to_string(),
+
         )
         .await;
 
@@ -101,6 +120,14 @@ async fn test_update_collection() {
             collection.banner_url,
             collection.logo_url,
             true,
+            collection.verified,
+            collection.floor_price_eth,
+            collection.floor_change_eth,
+            collection.volume_eth,
+            collection.volume_change_24h,
+            collection.volume_change_7d,
+            collection.owners,
+            collection.status, 
         )
         .await;
 

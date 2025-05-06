@@ -1,21 +1,3 @@
-#[derive(Clone, Debug)]
-#[allow(dead_code)]
-pub struct Collection {
-    pub id: usize,
-    pub name: String,
-    pub verified: bool,
-    pub floor_price_eth: f64,
-    pub floor_price_usd: f64,
-    pub floor_change_eth: f64,
-    pub floor_change_usd: f64,
-    pub volume_change_24h: f64,
-    pub volume_change_7d: f64,
-    pub volume_eth: f64,
-    pub volume_usd: f64,
-    pub owners: String,
-    pub stock: String,
-    pub status: String,
-}
 
 #[derive(Clone, Debug)]
 #[allow(dead_code)]
