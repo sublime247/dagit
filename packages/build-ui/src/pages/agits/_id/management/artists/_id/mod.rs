@@ -1,6 +1,3 @@
-mod components;
 mod page;
-
+mod i18n;
 pub use page::{ArtistDetailPage, EditArtistPage};
-
-pub use components::{ConfirmRemoveArtistModal, InputField, RemoveArtistModal, SuccessModal};

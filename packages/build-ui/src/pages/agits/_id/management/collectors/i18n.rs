@@ -96,5 +96,9 @@ translate! {
         en: "Search by title",
         ko: "제목으로 검색",
     }
+    activity:{
+        en: "Activity",
+        ko: "활동",
+    }
 
 }

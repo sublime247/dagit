@@ -96,7 +96,6 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                             height: 18,
                                         }
                                     }
-
                                 }
                             }
                         }
@@ -166,7 +165,6 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                     button { class: "text-gray-400 hover:text-white",
                                                         validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
-
                                                     }
                                                 }
                                             }

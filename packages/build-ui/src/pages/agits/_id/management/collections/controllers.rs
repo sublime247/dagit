@@ -1,13 +1,15 @@
 #![allow(unused)]
+use super::i18n::{CollectionNameInputModalTranslate, NewCollectionModalTranslate, SuccessModalTranslate, TransferConfirmationModalTranslate};
 use super::models::*;
 use crate::config::Config;
 use crate::pages::agits::_id::management::{
     Activity, Assets,
     collections::components::{
-        CollectionNameModal, NewCollectionModal, SuccessModal, TransferConfirmationModal,
+        NewCollectionModal, SuccessModal, TransferConfirmationModal,CollectionNameInputModal
     },
 };
 use bdk::prelude::{dioxus_popup::PopupService, *};
+use common::tables::artworks;
 use common::tables::{
     artists::Artist as ArtistModel,
     collections::Collection as CollectionModel,
@@ -200,82 +202,99 @@ impl Controller {
         });
     }
 
-    // Method to update the modal state and open the appropriate modal using popup_service
-    fn update_modal_state(&mut self, state: ModalState) {
-        self.modal_state.set(state.clone());
-        self.popup.close();
 
-        // Open the appropriate modal based on state
-        match state {
-            ModalState::None => {}
-            ModalState::NewCollection => {
-                let artworks_data = self.artworks.read().clone();
-                let mut selected_artworks = self.selected_artworks.clone();
-                let mut this = self.clone();
 
-                self.popup
-                    .open(rsx!(NewCollectionModal {
-                        show: true,
-                        on_close: move |_| this.update_modal_state(ModalState::None),
-                        artworks: artworks_data,
-                        on_select_artworks: move |selected: Vec<usize>| {
-                            selected_artworks.set(selected.clone());
-                            this.update_modal_state(ModalState::TransferConfirmation);
-                        },
-                    }))
-                    .with_id("new-collection-modal");
+
+    #[allow(dead_code)]
+    pub fn open_new_collection_modal(&self){
+        let mut popup = self.popup.clone();
+        let tr: NewCollectionModalTranslate = translate(&self.lang);
+        let mut ctrl = self.clone();
+        let artworks_data = self.artworks.read().clone();
+        let mut selected_artworks = self.selected_artworks.clone();
+        popup.open(
+            rsx!{
+                NewCollectionModal {
+                    lang: self.lang,
+                    on_close: move |_| {
+                        popup.close();
+                    },
+                    on_select_artworks: move |selected: Vec<usize>| {
+                        selected_artworks.set(selected.clone());
+                        ctrl.open_transfer_confimation_modal();
+                    },
+                    artworks: artworks_data,
+                }
             }
+        ).with_id("new-collection-modal")
+        .with_title(tr.title);
 
-            ModalState::TransferConfirmation => {
-                let selected_count = self.selected_artworks.read().len();
-                let mut this = self.clone();
+    }
 
-                self.popup
-                    .open(rsx!(TransferConfirmationModal {
-                        show: true,
-                        selected_count,
-                        on_back: move |_| this.update_modal_state(ModalState::NewCollection),
-                        on_continue: move |_| this.update_modal_state(ModalState::CollectionName),
-                    }))
-                    .with_id("transfer-confirmation-modal");
+    #[allow(dead_code)]
+    pub fn open_transfer_confimation_modal(&self){
+        let mut popup = self.popup.clone();
+        let tr: TransferConfirmationModalTranslate = translate(&self.lang);
+        let mut ctrl = self.clone();
+        let selected_count = self.selected_artworks.read().len();
+        popup.open(
+            rsx!{
+                TransferConfirmationModal {
+                    lang: self.lang,
+                    selected_count,
+                    on_back: move |_| {
+                        popup.close();
+                    },
+                    on_continue: move |_| {
+                        ctrl.open_collection_name_input_modal();
+                    },
+                }
             }
+        ).with_id("transfer-confirmation-modal")
+        .with_title(tr.title);
+    }
 
-            ModalState::CollectionName => {
-                let mut this = self.clone();
-                let mut collection_name = self.collection_name.clone();
-
-                self.popup
-                    .open(rsx!(CollectionNameModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::TransferConfirmation),
-                        on_add: move |name: String| {
-                            collection_name.set(name.clone());
-                            tracing::debug!("Collection Name: {}", name);
-                            this.update_modal_state(ModalState::Success);
-                        },
-                    }))
-                    .with_id("collection-name-modal");
+    #[allow(dead_code)]
+    pub fn open_collection_name_input_modal(&self){
+        let mut popup = self.popup.clone();
+        let mut collection_name = self.collection_name.clone();
+        let ctrl = self.clone();
+        let tr: CollectionNameInputModalTranslate = translate(&self.lang);
+        popup.open(
+            rsx!{
+                CollectionNameInputModal {
+                    lang: self.lang,
+                    on_back: move |_| {
+                        popup.close();
+                    },
+                    on_add: move |name: String| {
+                        collection_name.set(name.clone());
+                        ctrl.open_success_modal();
+                    },
+                }
             }
+        ).with_id("collection-name-modal")
+        .with_title(tr.title);
+    }
 
-            ModalState::Success => {
-                let collection_name = self.collection_name.read().clone();
-                let mut this = self.clone();
-
-                self.popup
-                    .open(rsx!(SuccessModal {
-                        show: true,
-                        collection_name,
-                        on_confirm: move |_| {
-                            this.update_modal_state(ModalState::None);
-                        },
-                    }))
-                    .with_id("success-modal");
+#[allow(dead_code)]
+pub fn open_success_modal(&self){
+    let mut popup = self.popup.clone();
+    let tr: SuccessModalTranslate = translate(&self.lang);
+    let collection_name = self.collection_name.read().clone();
+    popup.open(
+        rsx!{
+            SuccessModal {
+                lang: self.lang,
+                collection_name,
+                on_confirm: move |_| {
+                    popup.close();
+                },
             }
         }
-    }
+    ).with_id("success-modal")
+    .with_title(tr.title);
 
-    // Public method to start the modal flow
-    pub fn open_new_collection_popup(&mut self) {
-        self.update_modal_state(ModalState::NewCollection);
-    }
+}
+
 }

@@ -1,5 +1,5 @@
 #![allow(unused)]
-use super::models::*;
+use super::{i18n::{ConfirmRemoveArtistModalTranslate, RemovalSuccessModalTranslate, RemoveArtistNameModalTranslate}, models::*};
 use common::tables::{
     artists::Artist as ArtistModel,
     prelude::{ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery},
@@ -10,10 +10,8 @@ use bdk::prelude::{dioxus_popup::PopupService, *};
 
 use crate::{
     config::Config,
-    pages::agits::_id::management::{
-        Assets,
-        artists::{ConfirmRemoveArtistModal, RemoveArtistModal, SuccessModal},
-    },
+    pages::agits::_id::management::{artists::components::{ConfirmRemoveArtistModal, RemovalSuccessModal, RemoveArtistModal}, 
+        Assets},
     routes::Route,
 };
 #[derive(Debug, Clone, PartialEq)]
@@ -211,57 +209,56 @@ impl Controller {
         });
     }
 
-    fn update_modal_state(&mut self, state: ModalState) {
-        self.modal_state.set(state.clone());
-        self.popup.close();
+    #[allow(dead_code)]
+    pub fn confirm_removal_modal(&self){
+        let mut popup = self.popup.clone();
+        let tr: ConfirmRemoveArtistModalTranslate = translate(&self.lang);
+        let ctrl = self.clone();
 
-        match state {
-            ModalState::None => {}
-            ModalState::ConfirmRemoval => {
-                let mut this = self.clone();
-                let lang = self.lang;
-                self.popup
-                    .open(rsx!(ConfirmRemoveArtistModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::None),
-                        on_remove: move |_| {
-                            this.update_modal_state(ModalState::ConfirmNameRemoval);
-                        },
-                        lang,
-                    }))
-                    .with_id("remove-artist-modal");
+        popup.open(rsx!(
+            ConfirmRemoveArtistModal {
+                on_back: move |_| {
+                    popup.close();
+                },
+                on_remove: move |_| {
+                    ctrl.confirm_name_removal_modal();
+                },
+                lang: self.lang,
             }
-            ModalState::ConfirmNameRemoval => {
-                let mut this = self.clone();
-                let lang = self.lang;
-                self.popup
-                    .open(rsx!(RemoveArtistModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::None),
-                        on_remove: move |_| {
-                            this.remove_artist(this.agit_id.with(|id| *id));
-                            this.update_modal_state(ModalState::Success);
-                        },
-                        lang,
-                    }))
-                    .with_id("remove-artistName-modal");
-            }
-            ModalState::Success => {
-                let mut this = self.clone();
-                let lang = self.lang;
-                self.popup
-                    .open(rsx!(SuccessModal {
-                        show: true,
-                        on_back: move |_| this.update_modal_state(ModalState::None),
-                        on_confirm: move |_| this.update_modal_state(ModalState::None),
-                        lang,
-                    }))
-                    .with_id("remove-artist-modal-success");
-            }
-        }
+        )).with_id("remove-artist-modal")
+        .with_title(tr.title);
+
     }
-
-    pub fn remove_artist_popup(&mut self) {
-        self.update_modal_state(ModalState::ConfirmRemoval);
+    #[allow(dead_code)]
+    pub fn confirm_name_removal_modal(&self){
+        let mut popup = self.popup.clone();
+        let tr: RemoveArtistNameModalTranslate = translate(&self.lang);
+        let mut ctrl = self.clone();
+        popup.open(rsx!(
+            RemoveArtistModal {
+                on_back: move |_| {
+                    popup.close();
+                },
+                on_remove: move |_| {
+                    ctrl.success_modal();
+                },
+                lang: self.lang,
+            }
+        )).with_id("remove-artistName-modal")
+        .with_title(tr.title);
+    }
+    #[allow(dead_code)]
+    pub fn success_modal(&self){
+        let mut popup = self.popup.clone();
+        let tr: RemovalSuccessModalTranslate = translate(&self.lang);
+        let mut ctrl = self.clone();
+        popup.open(rsx!(
+            RemovalSuccessModal {
+                on_back: move |_| {},
+                on_confirm: move |_| {},
+                lang: self.lang,
+            }
+        )).with_id("remove-artist-modal-success")
+        .with_title(tr.title);
     }
 }

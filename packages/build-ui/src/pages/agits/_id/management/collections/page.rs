@@ -1,17 +1,21 @@
-use crate::routes::Route;
+#[allow(unused_imports)]
+use crate::{
+    components::{search_filter_bar::SearchFilterBar, table::Table},
+    routes::Route,
+};
 
 use super::components::FilterSidebar;
 use super::i18n::CollectionTranslate;
 //FIXME: Use Collection in "packages/models/table/collection.rs"
 use super::controllers::Controller;
 use bdk::prelude::*;
-use by_components::icons::{arrows, edit, folder, settings, validations};
+use by_components::icons::{arrows, validations};
 #[allow(unused_variables)]
 #[component]
 pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let tr: CollectionTranslate = translate(&lang);
     //FIXME: Logics Should be implemented in Controller
-    let mut ctrl = Controller::new(lang, agit_id)?;
+    let  ctrl = Controller::new(lang, agit_id)?;
 
     //FIXME: Use PopupService(ex. popup.open)
     let mut show_filters = use_signal(|| false);
@@ -30,32 +34,23 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     }
                     p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
                 }
-                // Search and filters
-                div { class: "p-4 flex flex-col sm:flex-row sm:items-center gap-4",
-                    button {
-                        class: "p-2 border border-border-primary text-white w-full sm:w-auto",
-                        onclick: move |_| show_filters.toggle(),
-                        settings::Sliders { class: "[&>path]:stroke-white" }
-                    }
-                    div { class: "relative flex-1 mr-4",
-                        div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                            edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
-                        }
-                        input {
-                            class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
-                            placeholder: tr.search_by_title,
-                            r#type: "text",
-                        }
-                    }
-                    button {
-                        class: "bg-border-background border border-border-primary text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
-                        onclick: move |_| {
-                            ctrl.open_new_collection_popup();
-                        },
-                        folder::UploadFolder { class: "mr-3 [&>path]:stroke-white [&>circle]:stroke-white" }
-                        {tr.new_collection}
-                    }
+                // Search and Filter Bar
+                SearchFilterBar {
+                    show_filter_btn: true,
+                    on_filter_click: move |_| {
+                        show_filters.toggle();
+                    },
+                    placeholder: tr.search_by_title,
+                    on_add_click: move |_| {
+                        ctrl.open_new_collection_modal();
+                    },
+                    // Fixme:
+                    on_search_change: move |search_text| {},
+                    on_search: move |search_text| {},
+                    show_add_btn: true,
+                    add_btn_text: tr.new_collection,
                 }
+
                 // Content area (FilterSidebar and Table)
                 div { class: "flex flex-col md:flex-row flex-1 w-full",
                     // FilterSidebar (hidden on small screens unless toggled)

@@ -1,8 +1,8 @@
-use crate::pages::agits::_id::management::model::{Activity, Assets};
-use crate::pages::agits::_id::management::{TableHeader, collections::CollectionTranslate};
+use crate::pages::agits::_id::management::model::{Assets, Activity};
+use crate::pages::agits::_id::management::{components::TableHeader, collections::CollectionTranslate};
 use bdk::prelude::{by_components::icons::validations, *};
 #[component]
-pub fn OwnedTable(assets: Vec<Assets>, lang: Language) -> Element {
+pub fn OwnedTable(assets: Vec<Assets>     ,lang: Language) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
 
     rsx! {
@@ -158,7 +158,6 @@ pub fn ActivityTable(activity: Vec<Activity>, lang: Language) -> Element {
                 .map(|(index, activity)| {
                     rsx! {
                         div { class: "flex items-center p-4 mb-2.5 rounded bg-table-bg hover:bg-hover-activity transition-colors duration-200 group",
-
                             // Art thumbnail
                             div { class: "w-16 h-16 bg-[#f0c14b] mr-4 rounded flex justify-center items-center" }
                             // Content
@@ -166,7 +165,6 @@ pub fn ActivityTable(activity: Vec<Activity>, lang: Language) -> Element {
                                 // Title row
                                 div { class: "flex items-center mb-1",
                                     span { class: "font-bold text-base mr-1", "Art Title" }
-
                                     // Verified icon
                                     svg {
                                         view_box: "0 0 24 24",
@@ -182,21 +180,15 @@ pub fn ActivityTable(activity: Vec<Activity>, lang: Language) -> Element {
                                     span { "Purchased by " }
                                     // User avatar
                                     div { class: "w-4 h-4 bg-white rounded-full mx-1 inline-block" }
-
                                     span { class: "mr-1 text-white", "20114FWO" }
-
                                     span { class: "text-gray-400", "from" }
-
                                     // User avatar
                                     div { class: "w-4 h-4 bg-white rounded-full mx-1 inline-block" }
-
                                     span { class: "text-white", "20114FWO" }
                                 }
-
                                 // Timestamp
                                 div { class: "text-sm text-gray-400 flex items-center",
                                     span { "30 mins ago" }
-
                                     // External link icon
                                     span { class: "ml-1 text-xs", "↗" }
                                 }

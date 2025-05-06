@@ -1,5 +1,6 @@
+use crate::components::search_filter_bar::SearchFilterBar;
 use crate::routes::Route;
-use bdk::prelude::by_components::icons::{arrows, edit, settings, validations};
+use bdk::prelude::by_components::icons::{arrows, validations};
 use bdk::prelude::*;
 
 use super::i18n::ArtistTranslate;
@@ -21,55 +22,25 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     p { class: "text-sm text-gray-400", "1,201 Total Artists" }
                 }
 
-                div { class: "flex flex-col md:flex-row justify-between mb-6 gap-4",
-
-                    // View mode buttons
-                    div { class: "flex space-x-2",
-
-
-
-                        // Filter dropdown
-                        button { class: "p-2 border border-border-primary text-white w-full sm:w-auto",
-                            // onclick: move |_| show_filters.toggle(),
-                            settings::Sliders { class: "[&>path]:stroke-white" }
-                        }
-                        // All dropdown
-                        div { class: "relative",
-                            div { class: "absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none",
-                                arrows::ChevronDown {
-                                    class: "[&>path]:stroke-white",
-                                    height: 20,
-                                    width: 20,
-                                }
-                            }
-                            input {
-                                class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-3 p-2.5",
-                                placeholder: "All",
-                                r#type: "text",
-                            }
-                        }
-
-                    }
-
-                    // Search
-                    div { class: "relative flex-1 mr-4",
-                        div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                            edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
-                        }
-                        input {
-                            class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
-                            placeholder: "Search",
-                            r#type: "text",
-                        }
-                    }
-                    button {
-                        class: "bg-border-background border border-border-primary text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
-                        onclick: move |_| {
-                            ctrl.open_new_artist_form();
-                        },
-                        validations::Add { class: "mr-3 [&>path]:stroke-white [&>circle]:stroke-white" }
-                        {tr.new_artist}
-                    }
+                SearchFilterBar {
+                    show_filter_btn: true,
+                    on_filter_click: move |_| {},
+                    on_search_change: move |search_text| {},
+                    on_search: move |search_text| {},
+                    show_all_filter_field: true,
+                    placeholder: tr.search_by_title,
+                    show_add_btn: true,
+                    on_add_click: Some(
+                        Callback::new(move |_| {
+                            use_navigator()
+                                .push(Route::NewArtistPage {
+                                    lang: lang,
+                                    agit_id: agit_id(),
+                                });
+                        }),
+                    ),
+                    add_btn_text: tr.new_artist,
+                    remove_btn_text: tr.remove_artist,
                 }
 
 
@@ -141,6 +112,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
+
                                 th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                     div { class: "flex items-end",
                                         span { "" }
@@ -149,7 +121,6 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                             height: 18,
                                         }
                                     }
-
                                 }
                             }
                         }
@@ -179,7 +150,6 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                             div { class: "flex flex-col",
                                                                 span { {artist.name.clone()} }
                                                                 span { {artist.mail.clone()} }
-
                                                             }
                                                         }
                                                     }
@@ -211,7 +181,6 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                     button { class: "text-gray-400 hover:text-white",
                                                         validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
-
                                                     }
                                                 }
                                             }

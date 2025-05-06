@@ -1,6 +1,6 @@
-use bdk::prelude::by_components::icons::{arrows, edit, layouts, settings, validations};
 use bdk::prelude::*;
 
+use crate::components::search_filter_bar::SearchFilterBar;
 use crate::pages::agits::_id::management::collections::controllers::Controller;
 use crate::pages::agits::_id::management::collections::i18n::CollectionTranslate;
 
@@ -101,83 +101,27 @@ pub fn CollectionDetailPage(
                 }
 
 
-                // Search and view controls
-                div { class: "flex flex-col md:flex-row justify-between mb-6 gap-4",
-
-                    // View mode buttons
-                    div { class: "flex space-x-2",
-
-
-
-                        // Filter dropdown
-                        button { class: "p-2 border border-border-primary text-white w-full sm:w-auto",
-                            // onclick: move |_| show_filters.toggle(),
-                            settings::Sliders { class: "[&>path]:stroke-white" }
+                SearchFilterBar {
+                    show_filter_btn: true,
+                    on_filter_click: move |_| {},
+                    placeholder: tr.search_by_title,
+                    on_add_click: move |_| {},
+                    on_remove_click: move |_| {},
+                    on_search_change: move |search_text| {},
+                    on_search: move |search_text| {},
+                    show_art_btn: true,
+                    show_add_btn: true,
+                    show_remove_btn: true,
+                    show_all_filter_field: true,
+                    on_view_mode_click: move |_| {
+                        if *view_mode.read() == "table" {
+                            view_mode.set("nftImages");
+                        } else {
+                            view_mode.set("table");
                         }
-
-                        button {
-                            class: format!(
-                                "p-2 border {} text-white w-full sm:w-auto",
-                                if *view_mode.read() == "nftImages" {
-                                    "border-white"
-                                } else {
-                                    "border-border-primary"
-                                },
-                            ),
-                            onclick: move |_| {
-                                if *view_mode.read() == "table" {
-                                    view_mode.set("nftImages");
-                                } else {
-                                    view_mode.set("table");
-                                }
-                            },
-                            layouts::Window { class: "[&>path]:stroke-white" }
-                        }
-
-
-
-
-                        // All dropdown
-                        div { class: "relative",
-                            div { class: "absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none",
-                                arrows::ChevronDown {
-                                    class: "[&>path]:stroke-white",
-                                    height: 20,
-                                    width: 20,
-                                }
-                            }
-                            input {
-                                class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-3 p-2.5",
-                                placeholder: "All",
-                                r#type: "text",
-                            }
-                        }
-
-                    }
-
-                    // Search
-                    div { class: "relative flex-1",
-                        div { class: "absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none",
-                            edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
-                        }
-                        input {
-                            class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
-                            placeholder: "Search",
-                            r#type: "text",
-                        }
-                    }
-                    button {
-                        class: "bg-border-background border border-white text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
-                        onclick: move |_| {},
-                        validations::Add { class: "mr-3 [&>path]:stroke-white [&>circle]:stroke-white" }
-                        {tr.add_artwork}
-                    }
-                    button {
-                        class: "bg-border-background border border-white text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
-                        onclick: move |_| {},
-                        validations::Remove { class: "mr-3 [&>path]:stroke-white [&>circle]:stroke-white" }
-                        {tr.remove_artwork}
-                    }
+                    },
+                    add_btn_text: tr.add_artwork,
+                    remove_btn_text: tr.remove_artwork,
                 }
 
                 // Assets table
@@ -198,8 +142,14 @@ pub fn CollectionDetailPage(
                                 }
                             }
                             AssetTab::Activity => {
-                                rsx! {
-                                    ActivityTable { activity: activity.clone(), lang }
+                                if *view_mode.read() == "nftImages" {
+                                    rsx! {
+                                        NftTable { assets: assets.clone(), lang }
+                                    }
+                                } else {
+                                    rsx! {
+                                        ActivityTable { activity: activity.clone(), lang }
+                                    }
                                 }
                             }
                         }
