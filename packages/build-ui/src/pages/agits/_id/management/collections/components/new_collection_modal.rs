@@ -1,12 +1,16 @@
 use bdk::prelude::{by_components::icons::validations, *};
 
 use crate::{
-    components::{button::{PrimaryButton, SecondaryButton}, checkbox::Checkbox, search_filter_bar::SearchFilterBar},
+    components::{
+        button::{PrimaryButton, SecondaryButton},
+        checkbox::Checkbox,
+        search_filter_bar::SearchFilterBar,
+    },
     pages::agits::_id::management::collections::i18n::NewCollectionModalTranslate,
 };
 
-use common::tables::prelude::Artwork as ArtworkModel;
 use by_components::icons::arrows;
+use common::tables::prelude::Artwork as ArtworkModel;
 
 #[component]
 #[allow(unused_variables)]
@@ -142,7 +146,9 @@ pub fn NewCollectionModal(
                                                     }
                                                 }
                                             }
-                                            td { class: "px-4 py-3 text-popup-text", "{artwork.collection_type.as_ref().unwrap_or(&String::new())}" }
+                                            td { class: "px-4 py-3 text-popup-text",
+                                                "{artwork.collection_type.as_ref().unwrap_or(&String::new())}"
+                                            }
                                             td { class: "px-4 py-3",
                                                 div { class: "flex gap-2",
                                                     {
@@ -197,5 +203,4 @@ pub fn NewCollectionModal(
             }
         }
     }
-    }
-
+}

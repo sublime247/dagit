@@ -1,5 +1,3 @@
-
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct Activity {
     pub id: String,

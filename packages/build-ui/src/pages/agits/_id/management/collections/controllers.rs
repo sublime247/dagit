@@ -1,11 +1,14 @@
 #![allow(unused)]
-use super::i18n::{CollectionNameInputModalTranslate, NewCollectionModalTranslate, SuccessModalTranslate, TransferConfirmationModalTranslate};
+use super::i18n::{
+    CollectionNameInputModalTranslate, NewCollectionModalTranslate, SuccessModalTranslate,
+    TransferConfirmationModalTranslate,
+};
 use super::models::*;
 use crate::config::Config;
 use crate::pages::agits::_id::management::{
     Activity,
     collections::components::{
-        NewCollectionModal, SuccessModal, TransferConfirmationModal,CollectionNameInputModal
+        CollectionNameInputModal, NewCollectionModal, SuccessModal, TransferConfirmationModal,
     },
 };
 use bdk::prelude::{dioxus_popup::PopupService, *};
@@ -69,7 +72,7 @@ impl Controller {
                     description: "Description".to_string(),
                     external_link: None,
                     banner_url: "".to_string(),
-                    logo_url:"".to_string(),
+                    logo_url: "".to_string(),
                     authorized: true,
                     artworks: vec![],
                     likes: 0,
@@ -77,17 +80,16 @@ impl Controller {
                     liked: false,
                     followed: false,
                     holder: true,
-                    custodian:true,
+                    custodian: true,
                     verified: true,
                     floor_price_eth: 2.370,
-                    floor_change_eth: 2.370,               
+                    floor_change_eth: 2.370,
                     volume_change_24h: 12.0,
                     volume_change_7d: -8.0,
-                    volume_eth: 2.370,            
-                    owners: "Num".to_string(), 
+                    volume_eth: 2.370,
+                    owners: "Num".to_string(),
                     status: "Active".to_string(),
                     stock: "Num".to_string(),
-                    
                 })
                 .collect::<Vec<_>>()
         });
@@ -108,7 +110,7 @@ impl Controller {
                     average_price: 2.370,
                     royalty: 2.370,
                     price_change: 12.0,
-                    owners: 145, 
+                    owners: 145,
                     status: "Active".to_string(),
                     created_at: chrono::Utc::now().timestamp(),
                     updated_at: chrono::Utc::now().timestamp(),
@@ -129,14 +131,9 @@ impl Controller {
                     activity_to: "20114FWO".to_string(),
                     activity_time: "30 mins ago".to_string(),
                     activity_title: "Art Title".to_string(),
-
-
-
                 })
                 .collect::<Vec<_>>()
         });
-
-
 
         let selected_artworks = use_signal(|| Vec::<usize>::new());
         let modal_state = use_signal(|| ModalState::None);
@@ -213,18 +210,15 @@ impl Controller {
         });
     }
 
-
-
-
     #[allow(dead_code)]
-    pub fn open_new_collection_modal(&self){
+    pub fn open_new_collection_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: NewCollectionModalTranslate = translate(&self.lang);
         let mut ctrl = self.clone();
         let artworks_data = self.artworks.read().clone();
         let mut selected_artworks = self.selected_artworks.clone();
-        popup.open(
-            rsx!{
+        popup
+            .open(rsx! {
                 NewCollectionModal {
                     lang: self.lang,
                     on_close: move |_| {
@@ -236,20 +230,19 @@ impl Controller {
                     },
                     artworks: artworks_data,
                 }
-            }
-        ).with_id("new-collection-modal")
-        .with_title(tr.title);
-
+            })
+            .with_id("new-collection-modal")
+            .with_title(tr.title);
     }
 
     #[allow(dead_code)]
-    pub fn open_transfer_confimation_modal(&self){
+    pub fn open_transfer_confimation_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: TransferConfirmationModalTranslate = translate(&self.lang);
         let mut ctrl = self.clone();
         let selected_count = self.selected_artworks.read().len();
-        popup.open(
-            rsx!{
+        popup
+            .open(rsx! {
                 TransferConfirmationModal {
                     lang: self.lang,
                     selected_count,
@@ -260,19 +253,19 @@ impl Controller {
                         ctrl.open_collection_name_input_modal();
                     },
                 }
-            }
-        ).with_id("transfer-confirmation-modal")
-        .with_title(tr.title);
+            })
+            .with_id("transfer-confirmation-modal")
+            .with_title(tr.title);
     }
 
     #[allow(dead_code)]
-    pub fn open_collection_name_input_modal(&self){
+    pub fn open_collection_name_input_modal(&self) {
         let mut popup = self.popup.clone();
         let mut collection_name = self.collection_name.clone();
         let ctrl = self.clone();
         let tr: CollectionNameInputModalTranslate = translate(&self.lang);
-        popup.open(
-            rsx!{
+        popup
+            .open(rsx! {
                 CollectionNameInputModal {
                     lang: self.lang,
                     on_back: move |_| {
@@ -283,29 +276,27 @@ impl Controller {
                         ctrl.open_success_modal();
                     },
                 }
-            }
-        ).with_id("collection-name-modal")
-        .with_title(tr.title);
+            })
+            .with_id("collection-name-modal")
+            .with_title(tr.title);
     }
 
-#[allow(dead_code)]
-pub fn open_success_modal(&self){
-    let mut popup = self.popup.clone();
-    let tr: SuccessModalTranslate = translate(&self.lang);
-    let collection_name = self.collection_name.read().clone();
-    popup.open(
-        rsx!{
-            SuccessModal {
-                lang: self.lang,
-                collection_name,
-                on_confirm: move |_| {
-                    popup.close();
-                },
-            }
-        }
-    ).with_id("success-modal")
-    .with_title(tr.title);
-
-}
-
+    #[allow(dead_code)]
+    pub fn open_success_modal(&self) {
+        let mut popup = self.popup.clone();
+        let tr: SuccessModalTranslate = translate(&self.lang);
+        let collection_name = self.collection_name.read().clone();
+        popup
+            .open(rsx! {
+                SuccessModal {
+                    lang: self.lang,
+                    collection_name,
+                    on_confirm: move |_| {
+                        popup.close();
+                    },
+                }
+            })
+            .with_id("success-modal")
+            .with_title(tr.title);
+    }
 }

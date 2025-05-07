@@ -28,6 +28,18 @@ pub struct Collector {
     pub logo_url: String,
     #[api_model(summary, action_by_id = update)]
     pub authorized: bool,
+    #[api_model(summary, action=create, action_by_id = update)]
+    pub verified: bool,
+    #[api_model(summary, action=create action_by_id = update)]
+    pub owned: i32,
+    #[api_model(summary, action = create, action_by_id = update, type=JSONB)]
+    pub token_ids: Vec<String>,
+    #[api_model(summary, action = create, action_by_id = update)]
+    pub wallet_address: String,
+    #[api_model(summary, action=create, action_by_id = update)]
+    pub total_volume: f64,
+    #[api_model(summary, action=create, action_by_id = update)]
+    pub last_activity: String,
 
     #[api_model(summary, one_to_many = artworks, foreign_key = collector_id)]
     pub artworks: Vec<Artwork>,

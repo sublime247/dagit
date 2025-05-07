@@ -140,7 +140,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                         .push(Route::ArtistDetailPage {
                                                             lang: lang,
                                                             agit_id: agit_id(),
-                                                            artist_id: artist_id.parse::<i64>().unwrap(),
+                                                            artist_id,
                                                         });
                                                 },
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
@@ -157,16 +157,16 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                     div { class: "flex flex-col",
                                                         span { "{artist.revenue} ETH" }
-                                                        span { class: "text-xs text-gray-500", "${artist.revenue_usd}" }
+                                                        span { class: "text-xs text-gray-500", "${artist.revenue}" }
                                                     }
                                                 }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.artwork.clone()} }
+                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.artworks.to_string()} }
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.featured_work.to_string()} }
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                     div { class: "flex space-x-1",
                                                         {
                                                             artist
-                                                                .attributes
+                                                                .attributes_type
                                                                 .iter()
                                                                 .map(|attribute| {
                                                                     rsx! {

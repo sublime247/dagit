@@ -88,13 +88,9 @@ translate! {
     }
 }
 
-
-
-
-
-translate!{
+translate! {
     ConfirmRemoveArtistModalTranslate;
-    
+
     title:{
         en: "Artist Removal Confirmation",
         ko: "작가 제거 확인",
@@ -119,11 +115,11 @@ translate!{
         en: "Cancel",
         ko: "취소",
     }
- 
+
 
 }
 
-translate!{
+translate! {
     RemovalSuccessModalTranslate;
         title:{
         en: "Success",
@@ -139,7 +135,7 @@ translate!{
     }
 }
 
-translate!{
+translate! {
     RemoveArtistNameModalTranslate;
     confirm_btn:{
         en: "Confirm",

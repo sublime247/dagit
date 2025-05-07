@@ -1,5 +1,11 @@
 #![allow(unused)]
-use super::{i18n::{ConfirmRemoveArtistModalTranslate, RemovalSuccessModalTranslate, RemoveArtistNameModalTranslate}, models::*};
+use super::{
+    i18n::{
+        ConfirmRemoveArtistModalTranslate, RemovalSuccessModalTranslate,
+        RemoveArtistNameModalTranslate,
+    },
+    models::*,
+};
 use common::tables::{
     artists::Artist as ArtistModel,
     prelude::{ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery},
@@ -10,8 +16,9 @@ use bdk::prelude::{dioxus_popup::PopupService, *};
 
 use crate::{
     config::Config,
-    pages::agits::_id::management::{artists::components::{ConfirmRemoveArtistModal, RemovalSuccessModal, RemoveArtistModal}, 
-       },
+    pages::agits::_id::management::artists::components::{
+        ConfirmRemoveArtistModal, RemovalSuccessModal, RemoveArtistModal,
+    },
     routes::Route,
 };
 #[derive(Debug, Clone, PartialEq)]
@@ -25,7 +32,7 @@ enum ModalState {
 pub struct Controller {
     lang: Language,
     agit_id: ReadOnlySignal<i64>,
-    artist: Signal<Vec<Artist>>,
+    artist: Signal<Vec<ArtistModel>>,
     artist_input_field: Signal<ArtistInputField>,
     // artist_asset: Signal<Vec<Assets>>,
     modal_state: Signal<ModalState>,
@@ -54,13 +61,12 @@ impl Controller {
         });
         let artist = use_signal(|| {
             (1..10)
-                .map(|id| Artist {
-                    id: id.to_string(),
+                .map(|id| ArtistModel {
+                    id,
                     name: "Artist Name".to_string(),
                     mail: "email@email.com".to_string(),
                     revenue: 2.370,
-                    revenue_usd: 8147.63,
-                    attributes: vec![
+                    attributes_type: vec![
                         "Pixel".to_string(),
                         "Animation".to_string(),
                         "Sci-fi".to_string(),
@@ -70,36 +76,16 @@ impl Controller {
                     status: "true".to_string(),
                     social_media: "@social_media".to_string(),
                     featured_work: "Artwork_title".to_string(),
-                    artwork: "Num".to_string(),
+                    created_at: chrono::Utc::now().timestamp(),
+                    updated_at: chrono::Utc::now().timestamp(),
+                    title: "Artist Title".to_string(),
+                    intro: "".to_string(),
+                    biography: "".to_string(),
+                    artworks: 247,
                 })
                 .collect::<Vec<_>>()
         });
 
-        // let artist_asset = use_signal(|| {
-        //     (0..8).map(|id| Assets{
-        //       id : id.to_string(),
-        //       title: "Asset Title".to_string(),
-        //       artist_name: "Artist Name".to_string(),
-        //       attributes: vec!["Pixel".to_string(), "Animation".to_string()],
-        //       way_to_sell: "Offer".to_string(),
-        //       owner: "247".to_string(),
-        //       current_price: 2.370,
-        //       current_price_usd: 8147.63,
-        //       average_price: 2.370,
-        //       average_price_usd: 8147.63,
-        //       price_change_24h: 12.0,
-        //       price_change_7d: -8.0,
-        //       volume: 2.370,
-        //       volume_usd: 8147.63,
-        //       royalty: 2.370,
-        //       royalty_usd: 8147.63,
-        //       status: "Active".to_string(),
-        //       verified: true,
-        //       art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
-        //       medium: "Digital".to_string(),
-        //       rarity: "Rare".to_string(),
-        //   }).collect::<Vec<_>>()
-        // });
         let modal_state = use_signal(|| ModalState::None);
 
         let ctrl = Self {
@@ -130,6 +116,12 @@ impl Controller {
                         social_media: artist_inputs.medium.clone(),
                         intro: artist_inputs.theme,
                         biography: artist_inputs.art_style,
+                        revenue: todo!(),
+                        attributes_type: todo!(),
+                        featured_work: todo!(),
+                        artworks: todo!(),
+                        name: todo!(),
+                        status: todo!(),
                     },
                 ))
                 .await;
@@ -210,55 +202,60 @@ impl Controller {
     }
 
     #[allow(dead_code)]
-    pub fn confirm_removal_modal(&self){
+    pub fn confirm_removal_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: ConfirmRemoveArtistModalTranslate = translate(&self.lang);
         let ctrl = self.clone();
 
-        popup.open(rsx!(
-            ConfirmRemoveArtistModal {
-                on_back: move |_| {
-                    popup.close();
-                },
-                on_remove: move |_| {
-                    ctrl.confirm_name_removal_modal();
-                },
-                lang: self.lang,
-            }
-        )).with_id("remove-artist-modal")
-        .with_title(tr.title);
-
+        popup
+            .open(rsx!(
+                ConfirmRemoveArtistModal {
+                    on_back: move |_| {
+                        popup.close();
+                    },
+                    on_remove: move |_| {
+                        ctrl.confirm_name_removal_modal();
+                    },
+                    lang: self.lang,
+                }
+            ))
+            .with_id("remove-artist-modal")
+            .with_title(tr.title);
     }
     #[allow(dead_code)]
-    pub fn confirm_name_removal_modal(&self){
+    pub fn confirm_name_removal_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: RemoveArtistNameModalTranslate = translate(&self.lang);
         let mut ctrl = self.clone();
-        popup.open(rsx!(
-            RemoveArtistModal {
-                on_back: move |_| {
-                    popup.close();
-                },
-                on_remove: move |_| {
-                    ctrl.success_modal();
-                },
-                lang: self.lang,
-            }
-        )).with_id("remove-artistName-modal")
-        .with_title(tr.title);
+        popup
+            .open(rsx!(
+                RemoveArtistModal {
+                    on_back: move |_| {
+                        popup.close();
+                    },
+                    on_remove: move |_| {
+                        ctrl.success_modal();
+                    },
+                    lang: self.lang,
+                }
+            ))
+            .with_id("remove-artistName-modal")
+            .with_title(tr.title);
     }
     #[allow(dead_code)]
-    pub fn success_modal(&self){
+    pub fn success_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: RemovalSuccessModalTranslate = translate(&self.lang);
         let mut ctrl = self.clone();
-        popup.open(rsx!(
-            RemovalSuccessModal {
-                on_back: move |_| {},
-                on_confirm: move |_| {},
-                lang: self.lang,
-            }
-        )).with_id("remove-artist-modal-success")
-        .with_title(tr.title);
+        popup
+            .open(rsx!(
+                RemovalSuccessModal {
+                    on_back: move |_| {},
+                    on_confirm: move |_| {},
+                    lang: self.lang,
+                }
+            ))
+            .with_id("remove-artist-modal-success")
+            .with_title(tr.title);
     }
 }

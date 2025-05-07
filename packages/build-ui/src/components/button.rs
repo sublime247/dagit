@@ -56,17 +56,14 @@ pub fn PrimaryButton(
     }
 }
 
-
-
 #[component]
 pub fn ButtonWithIcon(
     #[props(default = "".to_string())] class: String,
-    label: String,                                   
+    label: String,
     icon: Element,
-    #[props(default = true)] disabled: bool,                                   
-    onclick: EventHandler<MouseEvent>,              
+    #[props(default = true)] disabled: bool,
+    onclick: EventHandler<MouseEvent>,
 ) -> Element {
-
     rsx! {
         button {
             class: format!(
@@ -91,8 +88,8 @@ pub fn IconButton(
     icon: Element,
     onclick: EventHandler<MouseEvent>,
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
-)->Element{
-    rsx!{
+) -> Element {
+    rsx! {
         button {
             onclick: move |e| {
                 onclick.call(e);

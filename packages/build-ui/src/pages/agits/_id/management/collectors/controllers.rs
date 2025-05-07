@@ -15,9 +15,7 @@ use wasm_bindgen_futures::spawn_local;
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
     lang: Language,
-    collector: Signal<Vec<Collector>>,
-    // asset: Signal<Vec<Assets>>,
-    activity: Signal<Vec<Activity>>,
+    collector: Signal<Vec<CollectorModel>>,
     popup: PopupService,
 }
 impl Controller {
@@ -36,55 +34,25 @@ impl Controller {
 
         let collector = use_signal(|| {
             (1..15)
-                .map(|id| Collector {
-                    id: id.to_string(),
+                .map(|id| CollectorModel {
+                    id,
                     total_volume: 2.370,
-                    total_volume_usd: 8147.63,
-                    collector_id: "10FEO!20".to_string(),
                     owned: 2,
                     token_ids: vec!["1234567890".to_string(), "1234567890".to_string()],
                     wallet_address: "0x1234567890abcdef".to_string(),
                     last_activity: "2023-10-01".to_string(),
                     verified: true,
-                })
-                .collect::<Vec<_>>()
-        });
-
-    //     let asset = use_signal(|| {
-    //         (0..8).map(|id| Assets{
-    //     id : id.to_string(),
-    //     title: "Asset Title".to_string(),
-    //     artist_name: "Artist Name".to_string(),
-    //     attributes: vec!["Pixel".to_string(), "Animation".to_string()],
-    //     way_to_sell: "Offer".to_string(),
-    //     owner: "247".to_string(),
-    //     current_price: 2.370,
-    //     current_price_usd: 8147.63,
-    //     average_price: 2.370,
-    //     average_price_usd: 8147.63,
-    //     price_change_24h: 12.0,
-    //     price_change_7d: -8.0,
-    //     volume: 2.370,
-    //     volume_usd: 8147.63,
-    //     royalty: 2.370,
-    //     royalty_usd: 8147.63,
-    //     status: "Active".to_string(),
-    //     verified: true,
-    //     art_image: "https://res.cloudinary.com/dgesrup3u/image/upload/v1744880242/Screenshot_2025-04-17_at_9.56.47_AM_ll2cwy.png".to_string(),
-    //     medium: "Digital".to_string(),
-    //     rarity: "Rare".to_string(),
-
-    // }).collect::<Vec<_>>()
-    //     });
-
-        let activity = use_signal(|| {
-            (0..6)
-                .map(|id| Activity {
-                    id: id.to_string(),
-                    from: "20114FWO".to_string(),
-                    to: "20114FWO".to_string(),
-                    time: "30 mins ago".to_string(),
-                    title: "Art Title".to_string(),
+                    created_at: chrono::Utc::now().timestamp(),
+                    updated_at: chrono::Utc::now().timestamp(),
+                    agit_id: id,
+                    title: "".to_string(),
+                    description: "".to_string(),
+                    external_link: None,
+                    banner_url: "".to_string(),
+                    logo_url: "".to_string(),
+                    authorized: false,
+                    artworks: vec![],
+                    holder: false,
                 })
                 .collect::<Vec<_>>()
         });
@@ -93,8 +61,6 @@ impl Controller {
             lang,
             collector,
             popup,
-            // asset,
-            activity,
         };
         use_context_provider(|| ctrl);
         Ok(ctrl)
@@ -111,6 +77,12 @@ impl Controller {
                         external_link: None,
                         banner_url: "".to_string(),
                         logo_url: "".to_string(),
+                        verified: todo!(),
+                        owned: todo!(),
+                        token_ids: todo!(),
+                        wallet_address: todo!(),
+                        total_volume: todo!(),
+                        last_activity: todo!(),
                     },
                 ))
                 .await;

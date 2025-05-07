@@ -132,22 +132,22 @@ pub fn CollectionDetailPage(
                             AssetTab::List => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable {artworks: artworks.clone(), lang }
+                                        NftTable { artworks, lang }
                                     }
                                 } else {
                                     rsx! {
-                                        OwnedTable { artworks: artworks.clone(), lang }
+                                        OwnedTable { artworks, lang }
                                     }
                                 }
                             }
                             AssetTab::Activity => {
                                 if *view_mode.read() == "nftImages" {
                                     rsx! {
-                                        NftTable {artworks: artworks.clone(), lang }
+                                        NftTable { artworks, lang }
                                     }
                                 } else {
                                     rsx! {
-                                        ActivityTable { activity: artworks.clone(), lang }
+                                        ActivityTable { activity: artworks, lang }
                                     }
                                 }
                             }

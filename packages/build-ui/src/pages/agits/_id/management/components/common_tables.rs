@@ -1,8 +1,10 @@
-use crate::pages::agits::_id::management::{components::TableHeader, collections::CollectionTranslate};
+use crate::pages::agits::_id::management::{
+    collections::CollectionTranslate, components::TableHeader,
+};
 use bdk::prelude::{by_components::icons::validations, *};
 use common::tables::artworks::Artwork as ArtworkModel;
 #[component]
-pub fn OwnedTable(artworks: Vec<ArtworkModel>     ,lang: Language) -> Element {
+pub fn OwnedTable(artworks: Vec<ArtworkModel>, lang: Language) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
 
     rsx! {

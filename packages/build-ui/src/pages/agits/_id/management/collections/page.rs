@@ -15,7 +15,7 @@ use by_components::icons::{arrows, validations};
 pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let tr: CollectionTranslate = translate(&lang);
     //FIXME: Logics Should be implemented in Controller
-    let  ctrl = Controller::new(lang, agit_id)?;
+    let ctrl = Controller::new(lang, agit_id)?;
 
     //FIXME: Use PopupService(ex. popup.open)
     let mut show_filters = use_signal(|| false);

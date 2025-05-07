@@ -1,7 +1,9 @@
 use crate::{
     components::{search_filter_bar::SearchFilterBar, tab_button::TabButton},
     pages::agits::_id::management::{
-        collections::Controller, collectors:: i18n::CollectorsTranslate, components::{ActivityTable, NftTable, OwnedTable}
+        collections::Controller,
+        collectors::i18n::CollectorsTranslate,
+        components::{ActivityTable, NftTable, OwnedTable},
     },
     routes::Route,
 };

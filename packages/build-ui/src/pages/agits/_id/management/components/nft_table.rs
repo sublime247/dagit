@@ -1,6 +1,6 @@
 use crate::pages::agits::_id::management::collections::CollectionTranslate;
-use common::tables::artworks::Artwork as ArtworkModel;
 use bdk::prelude::*;
+use common::tables::artworks::Artwork as ArtworkModel;
 #[component]
 pub fn NftTable(artworks: Vec<ArtworkModel>, lang: Language) -> Element {
     let tr: CollectionTranslate = translate(&lang);

@@ -137,9 +137,7 @@ translate! {
 
 }
 
-
-
-translate!{
+translate! {
     NewCollectionModalTranslate;
     title:{
         en: "Please select the artwork to include in the collection",
@@ -168,9 +166,9 @@ translate!{
 
 }
 
-translate!{
+translate! {
     TransferConfirmationModalTranslate;
- 
+
     title:{
         en: "Transfer Artwork",
         ko: "작품 전송",
@@ -182,7 +180,7 @@ translate!{
     back_btn_text:{
         en: "Back",
         ko: "백",
-    
+
     }
     continue_btn_text:{
         en: "Continue",
@@ -191,7 +189,7 @@ translate!{
 
 }
 
-translate!{
+translate! {
     CollectionNameInputModalTranslate;
     title:{
         en: "What is the name of collection?",
@@ -257,7 +255,7 @@ translate!{
 
 }
 
-translate!{
+translate! {
     SuccessModalTranslate;
     title:{
         en: "Success",

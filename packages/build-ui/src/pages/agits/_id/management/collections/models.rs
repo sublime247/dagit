@@ -1,4 +1,3 @@
-
 #[derive(Clone, Debug)]
 #[allow(dead_code)]
 pub struct FilterState {
@@ -9,4 +8,3 @@ pub struct FilterState {
     pub artist_search: String,
     pub attributes_search: String,
 }
-

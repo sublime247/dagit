@@ -96,12 +96,21 @@ impl CollectorController {
         &self,
         auth: Option<Authorization>,
         agit_id: i64,
+         
         CollectorCreateRequest {
             title,
             description,
             external_link,
             banner_url,
             logo_url,
+            verified,
+            owned ,
+            token_ids,
+            wallet_address ,
+            total_volume ,
+            last_activity ,
+            
+            
         }: CollectorCreateRequest,
     ) -> Result<Json<Collector>> {
         if auth.is_none() {
@@ -118,6 +127,12 @@ impl CollectorController {
                 banner_url,
                 logo_url,
                 false,
+                verified,
+                owned,
+                token_ids,
+                wallet_address,
+                total_volume,
+                last_activity
             )
             .await?;
         Ok(Json(collector))

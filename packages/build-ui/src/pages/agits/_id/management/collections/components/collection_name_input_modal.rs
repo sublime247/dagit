@@ -1,6 +1,12 @@
 use bdk::prelude::*;
 
-use crate::{components::{button::{PrimaryButton, SecondaryButton}, input::Input}, pages::agits::_id::management::collections::i18n::CollectionNameInputModalTranslate};
+use crate::{
+    components::{
+        button::{PrimaryButton, SecondaryButton},
+        input::Input,
+    },
+    pages::agits::_id::management::collections::i18n::CollectionNameInputModalTranslate,
+};
 
 #[component]
 pub fn CollectionNameInputModal(
@@ -18,28 +24,26 @@ pub fn CollectionNameInputModal(
                 p { class: "text-sm text-white mb-4", {tr.sub_title} }
                 // Collection name input
                 div { class: "mb-4",
-                    Input{
+                    Input {
                         label: tr.collection_name,
                         placeholder: tr.collection_name_placeholder,
                         value: "{collection_name}",
                         on_change: move |v| collection_name.set(v),
-                    },
+                    }
                 }
                 // Short URL input
                 div {
-                Input{
-                    url_input: "dagit_url".to_string(),
-                    label:tr.short_url,
-                    placeholder: "(collection)",
-                    value: {
-                        let name = collection_name.read();
-                        name.to_lowercase().replace(" ", "-")
-                    },
-                    on_change: move |v| collection_name.set(v),
-                    readonly: true,
-
-                }
-                 
+                    Input {
+                        url_input: "dagit_url".to_string(),
+                        label: tr.short_url,
+                        placeholder: "(collection)",
+                        value: {
+                            let name = collection_name.read();
+                            name.to_lowercase().replace(" ", "-")
+                        },
+                        on_change: move |v| collection_name.set(v),
+                        readonly: true,
+                    }
                 }
             }
             // Modal footer
@@ -62,4 +66,4 @@ pub fn CollectionNameInputModal(
             }
         }
     }
-    }
+}

@@ -48,6 +48,3 @@ pub fn ConfirmRemoveArtistModal(
         }
     }
 }
-
-
-

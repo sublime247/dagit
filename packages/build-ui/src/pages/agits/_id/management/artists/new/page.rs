@@ -4,9 +4,15 @@ use bdk::prelude::{
 };
 
 use crate::{
-     components::{button::{ButtonWithIcon, IconButton}, image_upload::FileUpload, input::{Input2, TextArea}}, pages::agits::_id::management::artists::{
-         controllers::Controller, new::i18n::NewArtistPageTranslate
-    }, routes::Route
+    components::{
+        button::{ButtonWithIcon, IconButton},
+        image_upload::FileUpload,
+        input::{Input2, TextArea},
+    },
+    pages::agits::_id::management::artists::{
+        controllers::Controller, new::i18n::NewArtistPageTranslate,
+    },
+    routes::Route,
 };
 #[component]
 pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
@@ -164,7 +170,6 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         on_change: move |evt: String| {
                             ctrl.update_artist_field("introduction".to_string(), evt.clone())
                         },
-                    
                     }
                 }
 
@@ -177,7 +182,6 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         on_change: move |evt: String| {
                             ctrl.update_artist_field("biography".to_string(), evt.clone())
                         },
-                    
                     }
                 }
 
