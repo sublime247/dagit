@@ -2,7 +2,7 @@ pub mod config;
 pub mod controllers;
 
 use bdk::prelude::*;
-
+use by_axum::cors::{AllowOrigin, CorsLayer};
 use by_axum::{
     auth::{authorization_middleware, set_auth_config},
     axum::{Router, middleware},
@@ -19,6 +19,8 @@ use common::tables::{
     users::{User, UserCredit},
 };
 use common::{Result, tables::user_terms::UserTerms};
+use reqwest::Method;
+use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, COOKIE};
 use sqlx::{migrate, postgres::PgPoolOptions};
 use tokio::net::TcpListener;
 mod utils;
@@ -75,12 +77,18 @@ async fn make_app() -> Result<Router> {
 #[tokio::main]
 async fn main() -> Result<()> {
     let app = make_app().await?;
-    let port = option_env!("PORT").unwrap_or("3000");
+    let port = config::get().port;
     let listener = TcpListener::bind(format!("0.0.0.0:{}", port))
         .await
         .unwrap();
     tracing::info!("listening on {}", listener.local_addr().unwrap());
-    by_axum::serve(listener, app).await.unwrap();
+    let cors_layer = CorsLayer::new()
+        .allow_origin(AllowOrigin::exact(config::get().origin.parse().unwrap()))
+        .allow_credentials(true)
+        .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
+        .allow_headers(vec![CONTENT_TYPE, AUTHORIZATION, COOKIE]);
+    let app = app.layer(cors_layer);
+    by_axum::serve_wo_cors_layer(listener, app).await.unwrap();
 
     Ok(())
 }
