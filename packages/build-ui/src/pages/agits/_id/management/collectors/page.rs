@@ -105,9 +105,10 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                     .into_iter()
                                     .enumerate()
                                     .map(|(_index, collector)| {
+                                        let collector_id = collector.id.clone();
                                         rsx! {
                                             tr {
-                                                key: "{collector.id}",
+                                                key: "{collector_id}",
                                                 class: "hover:bg-gray-900 cursor-pointer",
                                                 onclick: move |_| {
                                                     let collector_id = collector.id.clone();
