@@ -24,15 +24,6 @@ use common::tables::{
 };
 use wasm_bindgen_futures::spawn_local;
 
-// Define modal states to track which modal is currently shown
-#[derive(Debug, Clone, PartialEq)]
-enum ModalState {
-    None,
-    NewCollection,
-    TransferConfirmation,
-    CollectionName,
-    Success,
-}
 
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
@@ -41,7 +32,6 @@ pub struct Controller {
     collections: Signal<Vec<CollectionModel>>,
     artworks: Signal<Vec<ArtworkModel>>,
     selected_artworks: Signal<Vec<usize>>,
-    modal_state: Signal<ModalState>,
     collection_name: Signal<String>,
 
     popup: PopupService,
@@ -136,7 +126,6 @@ impl Controller {
         });
 
         let selected_artworks = use_signal(|| Vec::<usize>::new());
-        let modal_state = use_signal(|| ModalState::None);
         let collection_name = use_signal(|| String::new());
 
         let ctrl = Self {
@@ -146,7 +135,6 @@ impl Controller {
             artworks,
             collections,
             selected_artworks,
-            modal_state,
             collection_name,
         };
 

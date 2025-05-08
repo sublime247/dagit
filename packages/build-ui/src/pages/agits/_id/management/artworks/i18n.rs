@@ -38,4 +38,24 @@ translate!{
      en:"Volume",
      ko:"거래량",
     }
+    royalty:{
+     en:"Royalty",
+     ko:"로야리티",
+    }
+    new_artwork:{
+     en:"New Artwork",
+     ko:"작품 생성",
+    }
+    search_placeholder:{
+     en:"Search by title",
+     ko:"제목으로 검색",
+    }
+    remove_artwork:{
+     en:"Remove Artwork",
+     ko:"작품 제거",
+    }
+    status:{
+     en:"Status",
+     ko:"상태",
+    }
 }
