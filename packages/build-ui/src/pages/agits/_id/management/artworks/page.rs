@@ -43,7 +43,6 @@ pub fn ArtworkPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     remove_btn_text: tr.remove_artwork,
                     show_all_filter_field: true,
                     show_art_btn: true,
-                
                 }
 
                 // Content area (FilterSidebar and Table)
@@ -225,7 +224,6 @@ pub fn ArtworkPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { "{artwork.ways_to_sell}" }
                                                     }
-                                                  
                                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                         div { "{artwork.owners}" }
                                                     }

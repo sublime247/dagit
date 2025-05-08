@@ -27,13 +27,10 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
         div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
             // Main content
             div { class: "flex flex-col w-full h-full",
-                // Header
-              
-                    h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard",
-                        "{tr.collections} {agit_id}"
-                    }
-                    p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
-            
+                h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard",
+                    "{tr.collections} {agit_id}"
+                }
+                p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
                 // Search and Filter Bar
                 SearchFilterBar {
                     show_filter_btn: true,
