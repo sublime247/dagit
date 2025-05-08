@@ -56,19 +56,17 @@ impl CollectionController {
         auth: Option<Authorization>,
         param: CollectionQuery,
     ) -> Result<by_types::QueryResponse<CollectionSummary>> {
+        // FIXME: REPLACE TO AppClaims
         let user_id = match auth {
-            Some(Authorization::Bearer { claims }) => claims
-                .custom
-                .get("id")
-                .ok_or(ServiceError::Unauthorized)?
-                .parse()
-                .map_err(|e| {
-                    tracing::error!("failed to parse id {e}");
-                    ServiceError::Unauthorized
-                })?,
-            _ => {
-                return Err(ServiceError::Unauthorized);
+            Some(Authorization::Bearer { claims }) => {
+                let res = claims.custom.get("id");
+                let mut id = 0;
+                if let Some(res) = res {
+                    id = res.parse().unwrap_or_default();
+                }
+                id
             }
+            _ => 0,
         };
 
         let mut total_count = 0;
@@ -105,7 +103,7 @@ impl CollectionController {
             volume_change_7d,
             owners,
             status,
-            stock
+            stock,
         }: CollectionCreateRequest,
     ) -> Result<Json<Collection>> {
         if auth.is_none() {
@@ -133,6 +131,7 @@ impl CollectionController {
                 stock
             )
             .await?;
+        tracing::debug!("create collection {:?}", collection);
         Ok(Json(collection))
     }
 

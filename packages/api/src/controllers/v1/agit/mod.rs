@@ -137,20 +137,17 @@ impl AgitController {
         auth: Option<Authorization>,
         param: AgitQuery,
     ) -> Result<by_types::QueryResponse<AgitSummary>> {
-        tracing::debug!("{param}");
+        // FIXME: REPLACE TO AppClaims
         let user_id = match auth {
-            Some(Authorization::Bearer { claims }) => claims
-                .custom
-                .get("id")
-                .ok_or(ServiceError::Unauthorized)?
-                .parse()
-                .map_err(|e| {
-                    tracing::error!("failed to parse id {e}");
-                    ServiceError::Unauthorized
-                })?,
-            _ => {
-                return Err(ServiceError::Unauthorized);
+            Some(Authorization::Bearer { claims }) => {
+                let res = claims.custom.get("id");
+                let mut id = 0;
+                if let Some(res) = res {
+                    id = res.parse().unwrap_or_default();
+                }
+                id
             }
+            _ => 0,
         };
 
         let mut total_count = 0;

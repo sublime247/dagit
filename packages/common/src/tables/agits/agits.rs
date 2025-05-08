@@ -11,6 +11,7 @@ use validator::Validate;
 //TODO(api): Implement admin api "m1/agit/:id" for managing admins.
 #[derive(Validate)]
 #[api_model(base = "/v1/agits", table = agits, action_by_id = [delete], iter_type = by_types::QueryResponse)]
+#[serde(default)]
 pub struct Agit {
     #[api_model(summary, primary_key)]
     pub id: i64,
@@ -36,9 +37,13 @@ pub struct Agit {
     pub authorized: bool,
 
     #[api_model(summary, one_to_many = collections, foreign_key = agit_id)]
+    #[serde(default)]
     pub collections: Vec<Collection>,
+
     #[api_model(summary, one_to_many = artworks, foreign_key = agit_id)]
+    #[serde(default)]
     pub artworks: Vec<Artwork>,
+
     #[api_model(summary, one_to_many = agit_user_likes, foreign_key = agit_id, aggregator = count)]
     pub likes: i64,
     #[api_model(summary, many_to_many = agit_user_likes, table_name = users, foreign_primary_key = user_id, foreign_reference_key = agit_id, aggregator = exist)]
