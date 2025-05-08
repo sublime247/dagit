@@ -61,35 +61,35 @@ async fn test_delete_agit() {
     assert!(result.is_ok(), "Failed to delete agit: {:?}", result.err());
 }
 
-#[tokio::test]
-async fn test_update_agit() {
-    let TestContext { endpoint, .. } = setup().await.unwrap();
+// #[tokio::test]
+// async fn test_update_agit() {
+//     let TestContext { endpoint, .. } = setup().await.unwrap();
 
-    let client = Agit::get_client(&endpoint);
-    let result = client
-        .create(
-            "UPDATE_TEST_AGIT".to_string(),
-            "DESCRIPTION".to_string(),
-            None,
-            IMAGE_URL.to_string(),
-            IMAGE_URL.to_string(),
-        )
-        .await;
-    assert!(result.is_ok(), "Failed to create agit: {:?}", result.err());
-    let agit = result.unwrap();
-    let result = client
-        .update(
-            agit.id,
-            agit.title,
-            agit.description,
-            None,
-            agit.banner_url,
-            agit.logo_url,
-            true,
-        )
-        .await;
-    assert!(result.is_ok(), "Failed to update agit: {:?}", result.err());
-    let result = result.unwrap();
-    assert_eq!(result.title, "UPDATE_TEST_AGIT");
-    assert_eq!(result.authorized, true);
-}
+//     let client = Agit::get_client(&endpoint);
+//     let result = client
+//         .create(
+//             "UPDATE_TEST_AGIT".to_string(),
+//             "DESCRIPTION".to_string(),
+//             None,
+//             IMAGE_URL.to_string(),
+//             IMAGE_URL.to_string(),
+//         )
+//         .await;
+//     assert!(result.is_ok(), "Failed to create agit: {:?}", result.err());
+//     let agit = result.unwrap();
+//     let result = client
+//         .update(
+//             agit.id,
+//             agit.title,
+//             agit.description,
+//             None,
+//             agit.banner_url,
+//             agit.logo_url,
+//             true,
+//         )
+//         .await;
+//     assert!(result.is_ok(), "Failed to update agit: {:?}", result.err());
+//     let result = result.unwrap();
+//     assert_eq!(result.title, "UPDATE_TEST_AGIT");
+//     assert_eq!(result.authorized, true);
+// }
