@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests;
 
-use bdk::prelude::*;
+use bdk::prelude::{by_types::TokenScheme, *};
 use by_axum::{
     auth::Authorization,
     axum::{
@@ -92,24 +92,8 @@ impl UserController {
             .fetch_one(&self.pool)
             .await?;
         let jwt = AppClaims::generate_token(&user)?;
-        Ok(JsonWithHeaders::new(user).with_auth_cookie("Bearer", &jwt))
+        Ok(JsonWithHeaders::new(user).with_auth_cookie(TokenScheme::Bearer, &jwt))
     }
-
-    // fn generate_token(&self, user: &User) -> Result<String> {
-    //     let mut claims = Claims {
-    //         sub: user.address.clone(),
-    //         exp: 0,
-    //         role: by_types::Role::User,
-    //         custom: HashMap::from([
-    //             ("email".to_string(), user.email.to_string()),
-    //             ("id".to_string(), user.id.to_string()),
-    //         ]),
-    //     };
-    //     Ok(generate_jwt(&mut claims).map_err(|e| {
-    //         tracing::error!("jwt generation error: {:?}", e);
-    //         ServiceError::JwtGenerationFailed(e.to_string())
-    //     })?)
-    // }
 
     async fn get_user_by_address(
         &self,
@@ -152,7 +136,7 @@ impl UserController {
         tx.commit().await?;
 
         let jwt = AppClaims::generate_token(&user)?;
-        Ok(JsonWithHeaders::new(user).with_auth_cookie("Bearer", &jwt))
+        Ok(JsonWithHeaders::new(user).with_auth_cookie(TokenScheme::Bearer, &jwt))
     }
 
     async fn login(
@@ -168,7 +152,7 @@ impl UserController {
             .await?;
 
         let jwt = AppClaims::generate_token(&user)?;
-        Ok(JsonWithHeaders::new(user).with_auth_cookie("Bearer", &jwt))
+        Ok(JsonWithHeaders::new(user).with_auth_cookie(TokenScheme::Bearer, &jwt))
     }
 
     async fn update_profile(

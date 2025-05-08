@@ -88,48 +88,14 @@ pub struct UserService {
     pub user_info: Signal<Option<UserInfo>>,
 }
 
-macro_rules! with_token_scope {
-    ($body:block) => {{
-        #[cfg(feature = "server")]
-        {
-            use bdk::prelude::rest_api::TOKEN;
-            let ctx = server_context();
-            let headers: by_axum::axum::http::HeaderMap = ctx.extract().await.unwrap();
-            let auth_token_value = headers
-                .get(by_axum::axum::http::header::COOKIE)
-                .and_then(|cookie_header_value| cookie_header_value.to_str().ok())
-                .and_then(|cookie_str| {
-                    cookie_str.split(';').find_map(|cookie_pair| {
-                        let mut parts = cookie_pair.trim().splitn(2, '=');
-                        let key = parts.next()?;
-                        let value = parts.next()?;
-                        if key == "auth_token" {
-                            Some(value.to_string())
-                        } else {
-                            None
-                        }
-                    })
-                });
-
-            TOKEN.scope(auth_token_value, async move $body).await
-        }
-        #[cfg(not(feature = "server"))]
-        {
-            async move $body.await
-        }
-    }};
-}
-
 impl UserService {
     pub fn init() -> std::result::Result<(), RenderError> {
         let default = use_server_future(move || async move {
-            with_token_scope!({
-                let client = User::get_client(config::get().api_url);
-                match client.refresh().await {
-                    Ok(user) => Some(UserInfo::from(user)),
-                    _ => None,
-                }
-            })
+            let client = User::get_client(config::get().api_url);
+            match client.refresh().await {
+                Ok(user) => Some(UserInfo::from(user)),
+                _ => None,
+            }
         })?;
 
         let user = UserService {
