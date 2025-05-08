@@ -170,6 +170,7 @@ jobs:
           SERVICE: api
           DATABASE_TYPE: postgres
           DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
+          ORIGIN: dev.dagit.club
 
         run: |
           npm i -g aws-cdk
