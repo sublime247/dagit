@@ -150,7 +150,14 @@ pub mod dagit_tests {
             )
             .await?
             .ok_or(ServiceError::Unknown("Create Agit Failed".to_string()))?;
-        let _ = agit_admins.insert(agit.id, user.id);
+
+        agit_admins
+            .insert_with_tx(&mut *tx, agit.id, user.id)
+            .await
+            .map_err(|e| {
+                tracing::error!("Failed to insert agit admin: {:?}", e);
+                ServiceError::Unknown("Create Agit Admin Failed".to_string())
+            })?;
 
         let user = User::query_builder()
             .id_equals(user.id)
@@ -229,6 +236,7 @@ pub mod dagit_tests {
         let id = uuid::Uuid::new_v4().to_string();
         tracing::debug!("id: {id}");
         let user = setup_test_user(&id, &pool).await?;
+        tracing::debug!("user: {:?}", user);
 
         let (claims, user_token) = setup_jwt_token(user.clone());
 
