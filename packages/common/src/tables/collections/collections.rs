@@ -6,6 +6,7 @@ use crate::tables::artworks::Artwork;
 //TODO(api): Implement admin api "m1/collections/:id" for managing custodian.
 #[derive(validator::Validate)]
 #[api_model(base = "/v1/collections", table = collections, action_by_id = [delete])]
+#[serde(default)]
 pub struct Collection {
     #[api_model(summary, primary_key)]
     pub id: i64,
@@ -47,8 +48,8 @@ pub struct Collection {
     #[api_model(summary, action = create,action_by_id = update)]
     pub status: String,
 
-
     #[api_model(summary, one_to_many = artworks, foreign_key = collection_id)]
+    #[serde(default)]
     pub artworks: Vec<Artwork>,
 
     #[api_model(summary, one_to_many = collection_user_likes, foreign_key = collection_id, aggregator = count)]
@@ -65,6 +66,4 @@ pub struct Collection {
     pub holder: bool,
     #[api_model(summary, many_to_many = collection_custodians, table_name = users, foreign_primary_key = user_id, foreign_reference_key = collection_id, aggregator = exist)]
     pub custodian: bool,
-
-
 }
