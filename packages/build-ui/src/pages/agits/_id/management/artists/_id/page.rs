@@ -6,9 +6,9 @@ use crate::components::image_upload::FileUpload;
 use crate::components::input::{Input2, TextArea};
 use crate::components::search_filter_bar::SearchFilterBar;
 use crate::pages::agits::_id::management::artists::_id::i18n::EditArtistPageTranslate;
+use crate::pages::agits::_id::management::artists::ArtistTable;
 use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
-use crate::pages::agits::_id::management::artists::ArtistTable;
 use crate::pages::agits::_id::management::components::NftTable;
 use crate::routes::Route;
 #[component]
@@ -17,7 +17,7 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
     let tr: ArtistTranslate = translate(&lang);
     let mut view_mode = use_signal(|| "table");
     let ctrl = Controller::new(lang, agit_id)?;
-    let artist_assets = ctrl.artist_asset();
+    let artist_assets = ctrl.artworks();
     rsx! {
         div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
             div { class: "flex flex-col w-full h-full text-white",
@@ -80,7 +80,7 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
                     {
                         if *view_mode.read() == "nftImages" {
                             rsx! {
-                                NftTable { assets: artist_assets.clone(), lang }
+                                NftTable { artworks: artist_assets.clone(), lang }
                             }
                         } else {
                             rsx! {

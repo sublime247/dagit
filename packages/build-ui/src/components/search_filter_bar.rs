@@ -2,6 +2,8 @@ use bdk::prelude::{
     by_components::icons::{arrows, edit, folder, layouts, settings, validations},
     *,
 };
+
+
 #[component]
 pub fn SearchFilterBar(
     #[props(default = false)] show_filter_btn: bool, // Controls whether the filter button is shown
@@ -24,7 +26,7 @@ pub fn SearchFilterBar(
         div { class: "p-4 flex flex-col sm:flex-row sm:items-center gap-4",
             if show_filter_btn {
                 button {
-                    class: "p-2 border border-border-primary text-white w-full sm:w-auto",
+                    class: "p-2 border border-neutral-80 outline-none text-white hover:border-primary w-full sm:w-auto",
                     onclick: move |_| {
                         if let Some(on_filter_click) = &on_filter_click {
                             on_filter_click(());
@@ -35,7 +37,7 @@ pub fn SearchFilterBar(
             }
             if show_art_btn {
                 button {
-                    class: "p-2 border border-border-primary text-white w-full sm:w-auto",
+                    class: "p-2 border border-neutral-80 outline-none text-white hover:border-primary w-full sm:w-auto",
                     onclick: move |_| {
                         if let Some(on_view_mode_click) = &on_view_mode_click {
                             on_view_mode_click(());
@@ -55,7 +57,7 @@ pub fn SearchFilterBar(
                         }
                     }
                     input {
-                        class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-3 p-2.5",
+                        class: "text-[15px]/[23px]  border border-neutral-80 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pl-3 p-2.5",
                         placeholder: "All",
                         r#type: "text",
                     }
@@ -67,7 +69,7 @@ pub fn SearchFilterBar(
                     edit::Search { class: "[&>path]:stroke-white [&>circle]:stroke-white" }
                 }
                 input {
-                    class: "bg-border-background border border-border-primary text-white text-sm rounded-none block w-full pl-10 p-2.5",
+                    class: "text-[15px]/[23px]  border border-neutral-80 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pl-10 p-2.5 w-full",
                     placeholder: "{placeholder}",
                     r#type: "text",
                     oninput: move |e| on_search_change(e.value().clone()),
@@ -75,7 +77,7 @@ pub fn SearchFilterBar(
             }
             if show_add_btn {
                 button {
-                    class: "bg-border-background border border-border-primary text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
+                    class: "bg-black border border-white text-white p-2.5 flex items-center justify-center w-full sm:w-auto hover:border-primary focus:border-primary",
                     onclick: move |_| {
                         if let Some(on_add_click) = &on_add_click {
                             on_add_click(());
@@ -91,7 +93,7 @@ pub fn SearchFilterBar(
             }
             if show_remove_btn {
                 button {
-                    class: "bg-border-background border border-border-primary text-white px-4 py-2 flex items-center justify-center w-full sm:w-auto",
+                    class: "bg-border-background border border-border-primary text-white p-2.5 flex items-center justify-center w-full sm:w-auto hover:border-primary focus:border-primary",
                     onclick: move |_| {
                         if let Some(on_remove_click) = &on_remove_click {
                             on_remove_click(());

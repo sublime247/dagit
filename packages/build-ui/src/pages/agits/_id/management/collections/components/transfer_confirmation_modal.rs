@@ -1,6 +1,9 @@
 use bdk::prelude::*;
 
-use crate::{components::button::{PrimaryButton, SecondaryButton}, pages::agits::_id::management::collections::i18n::TransferConfirmationModalTranslate};
+use crate::{
+    components::button::{PrimaryButton, SecondaryButton},
+    pages::agits::_id::management::collections::i18n::TransferConfirmationModalTranslate,
+};
 #[component]
 pub fn TransferConfirmationModal(
     selected_count: usize,

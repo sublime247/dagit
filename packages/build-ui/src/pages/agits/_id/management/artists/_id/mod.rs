@@ -1,3 +1,3 @@
-mod page;
 mod i18n;
+mod page;
 pub use page::{ArtistDetailPage, EditArtistPage};

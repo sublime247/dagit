@@ -116,14 +116,14 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                         .push(Route::CollectorDetailPage {
                                                             lang: lang,
                                                             agit_id: agit_id(),
-                                                            collector_id: collector_id.parse::<i64>().unwrap(),
+                                                            collector_id,
                                                         });
                                                 },
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                     div { class: "flex items-center",
                                                         div { class: "w-8 h-8 bg-white rounded-full mr-2 flex items-center justify-center" }
                                                         div { class: "flex items-center",
-                                                            span { {collector.collector_id.clone()} }
+                                                            span { "10FEO!20" }
                                                             span {
                                                                 class: "ml-1 text-green-500 hidden aria-verified:block",
                                                                 "aria-verified": collector.verified,
@@ -143,7 +143,7 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                                     div { class: "flex flex-col",
                                                         span { "{collector.total_volume} ETH" }
-                                                        span { class: "text-xs text-gray-500", "$ {collector.total_volume_usd}" }
+                                                        span { class: "text-xs text-gray-500", "$ {collector.total_volume}" }
                                                     }
                                                 }
                                                 td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {collector.owned.to_string()} }

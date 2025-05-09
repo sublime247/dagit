@@ -1,5 +1,5 @@
 use bdk::prelude::*;
-translate!{
+translate! {
     NewArtistPageTranslate;
     title:{
         en: "New Artist",
@@ -16,7 +16,7 @@ translate!{
     }
     delete_artist:{
         en: "Delete Artist",
-        ko: "작가 삭제",    
+        ko: "작가 삭제",
     }
     social_media_label:{
         en: "Social Media",

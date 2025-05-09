@@ -1,11 +1,11 @@
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
-use crate::pages::agits::_id::management::model::Assets;
 use crate::routes::Route;
 use bdk::prelude::by_components::icons::arrows;
 use bdk::prelude::{by_components::icons::validations, *};
+use common::tables::artworks::Artwork as ArtworkModel;
 #[component]
 pub fn ArtistTable(
-    assets: Vec<Assets>,
+    assets: Vec<ArtworkModel>,
     lang: Language,
     agit_id: ReadOnlySignal<i64>,
     artist_id: i64,
@@ -157,40 +157,40 @@ pub fn ArtistTable(
                                                         }
                                                     }
                                                 }
-                                                span { class: "text-xs text-gray-500", {asset.artist_name.clone()} }
+                                                span { class: "text-xs text-gray-500", {asset.name.clone()} }
                                             }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.medium.clone()} }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.rarity.clone()} }
-                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.owner.to_string()} }
+                                    td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {asset.owners.to_string()} }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
                                             span { {asset.current_price.to_string()} }
-                                            span { class: "text-xs text-gray-500", {asset.current_price_usd.to_string()} }
+                                            span { class: "text-xs text-gray-500", {asset.current_price.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
                                             span { {asset.average_price.to_string()} }
-                                            span { class: "text-xs text-gray-500", {asset.average_price_usd.to_string()} }
+                                            span { class: "text-xs text-gray-500", {asset.average_price.to_string()} }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex justify-between",
                                             div { class: "flex flex-col",
-                                                span { class: "", "+{asset.price_change_24h.to_string()}%" }
+                                                span { class: "", "+{asset.price_change.to_string()}%" }
                                                 span { class: "pl-4 text-xs", "24h" }
                                             }
                                             div { class: "flex flex-col",
-                                                span { class: "", {asset.price_change_7d.to_string()} }
+                                                span { class: "", {asset.price_change.to_string()} }
                                                 span { class: "pr-4 text-xs", "7d" }
                                             }
                                         }
                                     }
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex flex-col",
-                                            span { {asset.volume.to_string()} }
+                                            span { {asset.volume_eth.to_string()} }
                                             span { class: "text-xs text-gray-500", {asset.volume_usd.to_string()} }
                                         }
                                     }

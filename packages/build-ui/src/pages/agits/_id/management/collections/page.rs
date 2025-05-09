@@ -1,10 +1,10 @@
 #[allow(unused_imports)]
 use crate::{
-    components::{search_filter_bar::SearchFilterBar, table::Table},
+    components::{search_filter_bar::SearchFilterBar, filter_sidebar::FilterSidebar},
     routes::Route,
 };
 
-use super::components::FilterSidebar;
+
 use super::i18n::CollectionTranslate;
 //FIXME: Use Collection in "packages/models/table/collection.rs"
 use super::controllers::Controller;
@@ -15,7 +15,7 @@ use by_components::icons::{arrows, validations};
 pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let tr: CollectionTranslate = translate(&lang);
     //FIXME: Logics Should be implemented in Controller
-    let  ctrl = Controller::new(lang, agit_id)?;
+    let ctrl = Controller::new(lang, agit_id)?;
 
     //FIXME: Use PopupService(ex. popup.open)
     let mut show_filters = use_signal(|| false);
@@ -27,13 +27,10 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
         div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
             // Main content
             div { class: "flex flex-col w-full h-full",
-                // Header
-                div { class: "",
-                    h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard",
-                        "{tr.collections} {agit_id}"
-                    }
-                    p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
+                h1 { class: "text-2xl sm:text-2xl font-bold font-Pretendard",
+                    "{tr.collections} {agit_id}"
                 }
+                p { class: "text-sm  sm:text-sm text-gray-400", "1,120 Total Collections" }
                 // Search and Filter Bar
                 SearchFilterBar {
                     show_filter_btn: true,
@@ -60,7 +57,11 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                 "w-64 bg-background border-r border-border-primary fixed inset-y-0 left-0 z-40 transform {} md:relative md:z-auto md:translate-x-0 transition-transform duration-300",
                                 if *show_filters.read() { "translate-x-0" } else { "-translate-x-full" },
                             ),
-                            FilterSidebar {}
+                            FilterSidebar {
+                                on_artist_change: move |artist| {},
+                                value: "".to_string(),
+                                attribute_value: "".to_string(),
+                            }
                         }
                     }
                     // Table body

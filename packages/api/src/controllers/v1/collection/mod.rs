@@ -103,6 +103,7 @@ impl CollectionController {
             volume_change_7d,
             owners,
             status,
+            stock,
         }: CollectionCreateRequest,
     ) -> Result<Json<Collection>> {
         if auth.is_none() {
@@ -127,6 +128,7 @@ impl CollectionController {
                 volume_change_7d,
                 owners,
                 status,
+                stock
             )
             .await?;
         tracing::debug!("create collection {:?}", collection);

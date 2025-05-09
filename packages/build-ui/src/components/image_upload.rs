@@ -3,8 +3,8 @@ use bdk::prelude::*;
 #[component]
 pub fn FileUpload(
     #[props(default = "".to_string())] class: String,
-    label: String,                                  
-    onclick: EventHandler<MouseEvent>,              
+    label: String,
+    onclick: EventHandler<MouseEvent>,
 ) -> Element {
     rsx! {
         div {

@@ -1,18 +1,22 @@
 use bdk::prelude::{by_components::icons::validations, *};
 
 use crate::{
-    components::{button::{PrimaryButton, SecondaryButton}, checkbox::Checkbox, search_filter_bar::SearchFilterBar},
+    components::{
+        button::{PrimaryButton, SecondaryButton},
+        checkbox::Checkbox,
+        search_filter_bar::SearchFilterBar,
+    },
     pages::agits::_id::management::collections::i18n::NewCollectionModalTranslate,
 };
 
-use super::super::models::Artwork;
 use by_components::icons::arrows;
+use common::tables::prelude::Artwork as ArtworkModel;
 
 #[component]
 #[allow(unused_variables)]
 pub fn NewCollectionModal(
     on_close: EventHandler<()>,
-    artworks: Vec<Artwork>,
+    artworks: Vec<ArtworkModel>,
     on_select_artworks: EventHandler<Vec<usize>>,
     lang: Language,
 ) -> Element {
@@ -110,14 +114,14 @@ pub fn NewCollectionModal(
                                             td { class: "px-4 py-3",
                                                 Checkbox {
                                                     id: format!("checkbox_{}", artwork.id),
-                                                    checked: selected_artworks.read().contains(&artwork.id),
+                                                    checked: selected_artworks.read().contains(&(artwork.id as usize)),
                                                     onchange: move |checked| {
                                                         selected_artworks
                                                             .with_mut(|vec| {
                                                                 if checked {
-                                                                    vec.push(artwork.id);
+                                                                    vec.push(artwork.id as usize);
                                                                 } else {
-                                                                    vec.retain(|&x| x != artwork.id);
+                                                                    vec.retain(|&x| x != (artwork.id as usize));
                                                                 }
                                                             });
                                                     },
@@ -138,16 +142,18 @@ pub fn NewCollectionModal(
                                                                 path { d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }
                                                             }
                                                         }
-                                                        div { class: "text-sm text-gray-400", "{artwork.artist_name}" }
+                                                        div { class: "text-sm text-gray-400", "{artwork.name}" }
                                                     }
                                                 }
                                             }
-                                            td { class: "px-4 py-3 text-popup-text", "{artwork.collection.as_ref().unwrap_or(&String::new())}" }
+                                            td { class: "px-4 py-3 text-popup-text",
+                                                "{artwork.collection_type.as_ref().unwrap_or(&String::new())}"
+                                            }
                                             td { class: "px-4 py-3",
                                                 div { class: "flex gap-2",
                                                     {
                                                         artwork
-                                                            .attributes
+                                                            .attributes_type
                                                             .iter()
                                                             .map(|attr| {
                                                                 rsx! {
@@ -197,5 +203,4 @@ pub fn NewCollectionModal(
             }
         }
     }
-    }
-
+}

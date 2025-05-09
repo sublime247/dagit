@@ -1,4 +1,4 @@
-mod controllers;
+pub mod controllers;
 mod i18n;
 mod page;
 

@@ -12,7 +12,6 @@ pub fn RemoveArtistModal(
     let tr: RemoveArtistNameModalTranslate = translate(&lang);
     let mut terms_accepted = use_signal(|| false);
 
-
     rsx! {
 
         div { class: "flex flex-col w-full max-w-md",
