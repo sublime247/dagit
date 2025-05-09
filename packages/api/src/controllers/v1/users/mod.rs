@@ -1,9 +1,7 @@
 #[cfg(test)]
 mod tests;
 
-use std::collections::HashMap;
-
-use bdk::prelude::{by_axum::auth::generate_jwt, *};
+use bdk::prelude::{by_types::TokenScheme, *};
 use by_axum::{
     auth::Authorization,
     axum::{
@@ -12,11 +10,13 @@ use by_axum::{
         routing::post,
     },
 };
-use by_types::{Claims, JsonWithHeaders};
+use by_types::JsonWithHeaders;
 use common::error::ServiceError;
 use common::tables::prelude::*;
 use common::{Result, tables::user_terms::UserTerms};
 use sqlx::postgres::PgRow;
+
+use crate::utils::app_claims::AppClaims;
 
 #[derive(Clone, Debug)]
 pub struct UserController {
@@ -51,9 +51,9 @@ impl UserController {
 
     pub async fn get(
         State(ctrl): State<UserController>,
-        Extension(_auth): Extension<Option<Authorization>>,
+        Extension(auth): Extension<Option<Authorization>>,
         Query(q): Query<UserParam>,
-    ) -> Result<Json<User>> {
+    ) -> Result<JsonWithHeaders<User>> {
         tracing::debug!("act {:?}", q);
 
         match q {
@@ -61,30 +61,38 @@ impl UserController {
                 if param.action == Some(UserReadActionType::GetUserByAddress) =>
             {
                 let user = ctrl.get_user_by_address(param).await?;
-                Ok(Json(user))
+                Ok(JsonWithHeaders::new(user))
             }
+            UserParam::Read(action) => match action.action.unwrap() {
+                UserReadActionType::Refresh => {
+                    if auth.is_none() {
+                        return Err(ServiceError::Unauthorized);
+                    }
+                    ctrl.refresh_user(auth.unwrap()).await
+                }
+                _ => Err(ServiceError::BadRequest("Invalid action".to_string())),
+            },
             _ => {
-                todo!()
+                unimplemented!()
             }
         }
     }
 }
 
 impl UserController {
-    fn generate_token(&self, user: &User) -> Result<String> {
-        let mut claims = Claims {
-            sub: user.address.clone(),
-            exp: 0,
-            role: by_types::Role::User,
-            custom: HashMap::from([
-                ("email".to_string(), user.email.to_string()),
-                ("id".to_string(), user.id.to_string()),
-            ]),
+    async fn refresh_user(&self, auth: Authorization) -> Result<JsonWithHeaders<User>> {
+        let user_address = match auth {
+            Authorization::Bearer { ref claims } => AppClaims(claims).get_address(),
+            _ => return Err(ServiceError::Unauthorized),
         };
-        Ok(generate_jwt(&mut claims).map_err(|e| {
-            tracing::error!("jwt generation error: {:?}", e);
-            ServiceError::JwtGenerationFailed(e.to_string())
-        })?)
+        let user = User::query_builder()
+            .address_equals(user_address)
+            .query()
+            .map(|r: PgRow| r.into())
+            .fetch_one(&self.pool)
+            .await?;
+        let jwt = AppClaims::generate_token(&user)?;
+        Ok(JsonWithHeaders::new(user).with_auth_cookie(TokenScheme::Bearer, &jwt))
     }
 
     async fn get_user_by_address(
@@ -127,8 +135,8 @@ impl UserController {
             .await?;
         tx.commit().await?;
 
-        let jwt = self.generate_token(&user)?;
-        Ok(JsonWithHeaders::new(user).with_bearer_token(&jwt))
+        let jwt = AppClaims::generate_token(&user)?;
+        Ok(JsonWithHeaders::new(user).with_auth_cookie(TokenScheme::Bearer, &jwt))
     }
 
     async fn login(
@@ -143,11 +151,11 @@ impl UserController {
             .fetch_one(&self.pool)
             .await?;
 
-        let jwt = self.generate_token(&user)?;
-        Ok(JsonWithHeaders::new(user).with_bearer_token(&jwt))
+        let jwt = AppClaims::generate_token(&user)?;
+        Ok(JsonWithHeaders::new(user).with_auth_cookie(TokenScheme::Bearer, &jwt))
     }
 
-    pub async fn update_profile(
+    async fn update_profile(
         &self,
         req: UserUpdateProfileRequest,
         auth: Option<Authorization>,

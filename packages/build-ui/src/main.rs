@@ -24,7 +24,7 @@ fn main() {
 #[component]
 fn App() -> Element {
     PopupService::init();
-    UserService::init();
+    UserService::init()?;
     let css = include_str!("../public/theme.css");
     let conf = config::get();
     rsx! {

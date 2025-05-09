@@ -5,6 +5,7 @@ use common::tables::agits::Agit;
 use common::tables::users::AuthProvider;
 use common::{Result, tables::users::User};
 use google_wallet::{FirebaseWallet, WalletEvent};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum Status {
@@ -59,7 +60,7 @@ pub fn get_firebase_wallet() -> google_wallet::FirebaseWallet {
     firebase
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserInfo {
     pub provider: AuthProvider,
     pub principal: String,
@@ -69,6 +70,18 @@ pub struct UserInfo {
     pub agits: Vec<Agit>,
 }
 
+impl From<User> for UserInfo {
+    fn from(user: User) -> Self {
+        Self {
+            provider: user.provider,
+            principal: user.address,
+            email: user.email,
+            nickname: user.name,
+            profile_url: user.profile_url,
+            agits: user.agits,
+        }
+    }
+}
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct UserService {
     pub signer: Signal<Option<WalletSigner>>,
@@ -76,13 +89,21 @@ pub struct UserService {
 }
 
 impl UserService {
-    pub fn init() {
-        // let firebase = get_firebase_wallet();
+    pub fn init() -> std::result::Result<(), RenderError> {
+        let default = use_server_future(move || async move {
+            let client = User::get_client(config::get().api_url);
+            match client.refresh().await {
+                Ok(user) => Some(UserInfo::from(user)),
+                _ => None,
+            }
+        })?;
+
         let user = UserService {
             signer: use_signal(|| None),
-            user_info: use_signal(|| None),
+            user_info: use_signal(|| default.value()().unwrap_or_default()),
         };
         use_context_provider(move || user);
+        Ok(())
     }
 
     pub fn update_email(&mut self, email: String) {

@@ -176,6 +176,7 @@ jobs:
           SERVICE: api
           DATABASE_TYPE: postgres
           DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
+          ORIGIN: https://dev.dagit.club
 
           JWT_SECRET_KEY: ${{ secrets.DEV_JWT_SECRET_KEY }}
 

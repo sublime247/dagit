@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use bdk::prelude::*;
 
-#[derive(Debug, Serialize, PartialEq, Eq, Deserialize, Translate)]
+#[derive(Debug, Clone, Serialize, PartialEq, Eq, Deserialize, Translate)]
 #[cfg_attr(feature = "server", derive(JsonSchema, aide::OperationIo))]
 pub enum ServiceError {
     //Common
@@ -36,6 +36,12 @@ impl std::error::Error for ServiceError {}
 
 impl From<reqwest::Error> for ServiceError {
     fn from(e: reqwest::Error) -> Self {
+        ServiceError::ReqwestError(e.to_string())
+    }
+}
+
+impl From<gloo_net::Error> for ServiceError {
+    fn from(e: gloo_net::Error) -> Self {
         ServiceError::ReqwestError(e.to_string())
     }
 }

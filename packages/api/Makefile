@@ -11,7 +11,6 @@ AWS_SECRET_ACCESS_KEY ?= $(shell aws configure get aws_secret_access_key $(AWS_F
 AWS_REGION ?= $(shell aws configure get region)
 JWT_SECRET_KEY ?= "JWT_SECRET"
 
-
 BASE_DOMAIN ?= dagit.club
 BUCKET_EXPIRE ?= 3600
 ASSET_DIR ?= assets
