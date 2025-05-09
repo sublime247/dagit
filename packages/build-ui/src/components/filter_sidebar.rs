@@ -10,8 +10,8 @@ pub fn FilterSidebar(
    #[props(default = EventHandler::default())] on_price_change: EventHandler<String>,
    #[props(default = EventHandler::default())] on_attribute_change: EventHandler<String>,
    #[props(default = false)] invalid: bool,
-   #[props(default = "".to_string())] placeholder: String,
-   #[props(default = "".to_string())] placeholder2: String,
+   #[props(default = "".to_string())] artist_input_placeholder: String,
+   #[props(default = "".to_string())] attribute_input_placeholder: String,
    #[props(default = false)] disabled: bool,
    value: String,
    attribute_value: String,
@@ -26,7 +26,7 @@ pub fn FilterSidebar(
                     input {
                         "aria-invalid": invalid,
                         class: "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pr-10", // Added padding-right to make space for the icon
-                        placeholder,
+                        placeholder:artist_input_placeholder,
                         value,
                         disabled,
                         oninput: move |e| on_artist_change(e.value().clone()),
@@ -65,7 +65,7 @@ pub fn FilterSidebar(
                     input {
                         "aria-invalid": invalid,
                         class: "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pr-10", // Added padding-right to make space for the icon
-                        placeholder: placeholder2,
+                        placeholder: attribute_input_placeholder,
                         value: attribute_value,
                         disabled,
                         oninput: move |e| on_attribute_change(e.value().clone()),
