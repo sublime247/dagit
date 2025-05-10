@@ -1,21 +1,19 @@
 use bdk::prelude::*;
-use by_components::icons::{edit,arrows};
+use by_components::icons::{arrows, edit};
 
 use crate::components::checkbox::CheckBoxWithLabel;
 
-
 #[component]
 pub fn FilterSidebar(
-   #[props(default = EventHandler::default())] on_artist_change: EventHandler<String>,
-   #[props(default = EventHandler::default())] on_price_change: EventHandler<String>,
-   #[props(default = EventHandler::default())] on_attribute_change: EventHandler<String>,
-   #[props(default = false)] invalid: bool,
-   #[props(default = "".to_string())] artist_input_placeholder: String,
-   #[props(default = "".to_string())] attribute_input_placeholder: String,
-   #[props(default = false)] disabled: bool,
-   value: String,
-   attribute_value: String,
-
+    #[props(default = EventHandler::default())] on_artist_change: EventHandler<String>,
+    #[props(default = EventHandler::default())] on_price_change: EventHandler<String>,
+    #[props(default = EventHandler::default())] on_attribute_change: EventHandler<String>,
+    #[props(default = false)] invalid: bool,
+    #[props(default = "".to_string())] artist_input_placeholder: String,
+    #[props(default = "".to_string())] attribute_input_placeholder: String,
+    #[props(default = false)] disabled: bool,
+    value: String,
+    attribute_value: String,
 ) -> Element {
     rsx! {
         div { class: "w-64 bg-black border-neutral-80 border p-4 flex flex-col gap-6",
@@ -26,7 +24,7 @@ pub fn FilterSidebar(
                     input {
                         "aria-invalid": invalid,
                         class: "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pr-10", // Added padding-right to make space for the icon
-                        placeholder:artist_input_placeholder,
+                        placeholder: artist_input_placeholder,
                         value,
                         disabled,
                         oninput: move |e| on_artist_change(e.value().clone()),
@@ -131,14 +129,10 @@ pub fn FilterSidebar(
     }
 }
 
-
-
-
-
 #[component]
 pub fn FilterDropdown(label: String, options: Vec<String>) -> Element {
     let mut is_open = use_signal(|| false);
-    
+
     rsx! {
         div {
             class: "flex flex-col border-b-1 border-border-primary py-2 text-sm cursor-pointer hover:bg-border-bg",

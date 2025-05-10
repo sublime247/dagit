@@ -1,9 +1,8 @@
 #[allow(unused_imports)]
 use crate::{
-    components::{search_filter_bar::SearchFilterBar, filter_sidebar::FilterSidebar},
+    components::{filter_sidebar::FilterSidebar, search_filter_bar::SearchFilterBar},
     routes::Route,
 };
-
 
 use super::i18n::CollectionTranslate;
 //FIXME: Use Collection in "packages/models/table/collection.rs"

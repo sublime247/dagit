@@ -10,6 +10,10 @@ translate! {
         en: "Remove Artist",
         ko: "작가 제거",
     }
+    artist_info:{
+        en:"Artist Info",
+        ko: ""
+    }
     edit_artist_info:{
         en: "Edit Artist Info",
         ko: "작가 정보 수정",

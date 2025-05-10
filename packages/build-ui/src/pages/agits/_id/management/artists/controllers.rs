@@ -231,6 +231,14 @@ impl Controller {
             agit_id: self.agit_id.with(|id| *id),
         });
     }
+    pub fn open_edit_artist_form(&self, artist_id: i64) {
+        let navigate = use_navigator();
+        navigate.push(Route::EditArtistPage {
+            lang: self.lang,
+            agit_id: self.agit_id.with(|id| *id),
+            artist_id,
+        });
+    }
 
     #[allow(dead_code)]
     pub fn confirm_removal_modal(&self) {
@@ -288,5 +296,11 @@ impl Controller {
             ))
             .with_id("remove-artist-modal-success")
             .with_title(tr.title);
+    }
+
+
+
+    pub fn go_back(&self) {
+        use_navigator().go_back();
     }
 }

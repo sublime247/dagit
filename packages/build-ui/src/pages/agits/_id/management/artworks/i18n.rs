@@ -1,6 +1,6 @@
 use bdk::prelude::*;
 
-translate!{
+translate! {
     ArtworkTranslate;
     artwork:{
      en:"Artwork",
@@ -57,5 +57,13 @@ translate!{
     status:{
      en:"Status",
      ko:"상태",
+    }
+    save_btn_txt:{
+     en:"Save",
+     ko:"저장",
+    }
+    images_btn:{
+     en:"Images",
+     ko:"이미지",
     }
 }

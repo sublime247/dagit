@@ -1,5 +1,5 @@
+use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
-use crate::routes::Route;
 use bdk::prelude::by_components::icons::arrows;
 use bdk::prelude::{by_components::icons::validations, *};
 use common::tables::artworks::Artwork as ArtworkModel;
@@ -11,7 +11,7 @@ pub fn ArtistTable(
     artist_id: i64,
 ) -> Element {
     let mut active_dropdown = use_signal(|| None::<usize>);
-
+    let ctrl = Controller::new(lang, agit_id)?;
     let tr: ArtistTranslate = translate(&lang);
 
     rsx! {
@@ -130,14 +130,7 @@ pub fn ArtistTable(
                                 tr {
                                     key: "owned-tr-{index}",
                                     class: "border-b border-gray-800 hover:bg-gray-900",
-                                    onclick: move |_| {
-                                        use_navigator()
-                                            .push(Route::EditArtistPage {
-                                                lang: lang,
-                                                agit_id: agit_id(),
-                                                artist_id: artist_id,
-                                            });
-                                    },
+                                    onclick: move |_| ctrl.open_edit_artist_form(index as i64),
                                     td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                                         div { class: "flex items-center",
                                             div { class: "w-8 h-8 bg-white rounded mr-2 flex items-center justify-center",

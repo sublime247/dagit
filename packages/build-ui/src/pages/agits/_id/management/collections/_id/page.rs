@@ -1,6 +1,7 @@
 use bdk::prelude::*;
 
 use crate::components::search_filter_bar::SearchFilterBar;
+use crate::components::tab_button::TabButton;
 use crate::pages::agits::_id::management::collections::controllers::Controller;
 use crate::pages::agits::_id::management::collections::i18n::CollectionTranslate;
 
@@ -70,31 +71,17 @@ pub fn CollectionDetailPage(
 
                 div { class: "mb-10",
                     div { class: "flex space-x-8 text-sm font-medium",
-
-                        button {
-                            class: format!(
-                                "pb-2 px-10 flex items-center space-x-1 {}",
-                                if *active_tab.read() == AssetTab::List {
-                                    "border-b border-white font-semibold text-white"
-                                } else {
-                                    "text-gray-400 hover:text-white"
-                                },
-                            ),
+                        TabButton {
+                            label: tr.list,
+                            is_active: *active_tab.read() == AssetTab::List,
                             onclick: move |_| active_tab.set(AssetTab::List),
-                            span { "List" }
                         }
 
-                        button {
-                            class: format!(
-                                "pb-2 px-10 flex items-center space-x-1 {}",
-                                if *active_tab.read() == AssetTab::Activity {
-                                    "border-b border-white font-semibold text-white"
-                                } else {
-                                    "text-gray-400 hover:text-white"
-                                },
-                            ),
+
+                        TabButton {
+                            label: tr.activity,
+                            is_active: *active_tab.read() == AssetTab::Activity,
                             onclick: move |_| active_tab.set(AssetTab::Activity),
-                            "Activity"
                         }
                     }
                 }

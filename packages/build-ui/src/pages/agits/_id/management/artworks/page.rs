@@ -1,12 +1,11 @@
 #[allow(unused_imports)]
 use crate::{
-    components::{search_filter_bar::SearchFilterBar, filter_sidebar::FilterSidebar},
+    components::{filter_sidebar::FilterSidebar, search_filter_bar::SearchFilterBar},
     routes::Route,
 };
 
-
-use super::i18n::ArtworkTranslate;
 use super::controllers::Controller;
+use super::i18n::ArtworkTranslate;
 use bdk::prelude::*;
 use by_components::icons::{arrows, validations};
 #[allow(unused_variables)]
@@ -34,7 +33,11 @@ pub fn ArtworkPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         show_filters.toggle();
                     },
                     placeholder: tr.search_placeholder,
-                    on_add_click: move |_| {},
+                    on_add_click: move |_| {
+                        tracing::debug!("Add Artwork");
+                        ctrl.open_new_artwork_page();
+                    },
+
                     // Fixme:
                     on_search_change: move |search_text| {},
                     on_search: move |search_text| {},

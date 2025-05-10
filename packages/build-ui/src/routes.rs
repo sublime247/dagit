@@ -25,6 +25,8 @@ pub enum Route {
                 #[nest("/management")]
                     #[route("/artworks")]
                         ArtworkPage { lang: Language, agit_id: i64 },
+                    #[route("/artworks/new")]
+                        NewArtworkPage { lang: Language, agit_id: i64 },
                     #[route("/collections")]
                         CollectionPage { lang: Language, agit_id: i64 },
                     #[route("/collections/:collection_id")]

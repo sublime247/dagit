@@ -51,8 +51,8 @@ pub fn Input2(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
 ) -> Element {
     rsx! {
-        div { class: "flex item-center", ..attributes,
-            label { class: "text-sm/relaxed font-semibold text-white w-50",
+        div { class: "flex items-center", ..attributes,
+            label { class: "text-sm/relaxed font-semibold text-white w-50 flex items-center", // Align label vertically
                 span { class: "text-red-500 mr-1", "*" }
                 {label}
             }
@@ -70,6 +70,7 @@ pub fn Input2(
         }
     }
 }
+
 #[component]
 pub fn TextArea(
     label: String,
@@ -90,6 +91,34 @@ pub fn TextArea(
                 value,
                 disabled,
                 oninput: move |e| on_change(e.value().clone()),
+            }
+        }
+    }
+}
+
+#[component]
+pub fn BottomBorderInput(
+    label: String,
+    #[props(default = "".to_string())] placeholder: String,
+    value: String,
+    on_change: EventHandler<String>,
+    #[props(default = false)] disabled: bool,
+    #[props(default = false)] invalid: bool,
+    #[props(default = "".to_string())] invalid_message: String,
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element {
+    rsx! {
+        div { class: "flex gap-2 w-full items-center", ..attributes,
+            input {
+                "aria-invalid": invalid,
+                class: "text-[17px]/[27px] font-semibold flex-1 border-b border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-80 placeholder-font-xxl disabled:!border-neutral-80",
+                placeholder,
+                value,
+                disabled,
+                oninput: move |e| on_change(e.value().clone()),
+            }
+            if invalid {
+                span { class: "text-[15px]/[23px] text-pink", {invalid_message} }
             }
         }
     }
