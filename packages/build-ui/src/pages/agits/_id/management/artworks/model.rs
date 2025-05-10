@@ -15,6 +15,7 @@ pub struct ArtworkInputField{
       pub color:String,
       pub size:String,
       pub weight:String,
-      pub year:String
+      pub year:String,
+      pub royalty:String
 
 }

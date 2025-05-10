@@ -58,7 +58,7 @@ pub fn Input2(
             }
             input {
                 "aria-invalid": invalid,
-                class: "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 flex-1",
+                class: "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 flex-1 w-64", // Added width class
                 placeholder,
                 value,
                 disabled,
