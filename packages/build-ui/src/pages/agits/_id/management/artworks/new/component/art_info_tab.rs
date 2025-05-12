@@ -15,7 +15,6 @@ pub fn ArtInfoTab(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
             div { class: "flex flex-row items-center pb-5 mb-1",
                 span { class: "text-red-500 mr-1", "*" }
                 label { class: "text-sm ", "Detail Images" }
-            
             }
             FileUpload { onclick: move |_| {}, label: tr.upload_img_label }
             p { class: "text-xs text-gray-500 mt-1", {tr.max_file_size} }

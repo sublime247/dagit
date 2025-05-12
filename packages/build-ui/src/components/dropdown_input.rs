@@ -28,9 +28,11 @@ pub fn DropdownInput(
                     option { value: "{option}", selected: value == *option, "{option}" }
                 }
             }
-           
-                     span { class: "text-[15px]/[23px] text-pink aria-invalid:hidden", "aria-invalid": invalid, {invalid_message} }
-        
+            span {
+                class: "text-[15px]/[23px] text-pink aria-invalid:hidden",
+                "aria-invalid": invalid,
+                {invalid_message}
+            }
         }
     }
 }

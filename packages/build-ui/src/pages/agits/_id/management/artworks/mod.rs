@@ -3,6 +3,8 @@ mod i18n;
 mod new;
 mod page;
 mod model;
+mod components;
 pub use new::NewArtworkPage;
 pub use page::ArtworkPage;
+
 
