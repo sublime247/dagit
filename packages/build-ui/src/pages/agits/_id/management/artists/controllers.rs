@@ -220,7 +220,7 @@ impl Controller {
                 art_style: value,
                 ..self.artist_input_field.with(|field| field.clone())
             }),
-            _ => {}
+             _ => {btracing::error!("{} {}", self.lang, "invalid ...")}
         }
     }
 
@@ -229,6 +229,14 @@ impl Controller {
         navigate.push(Route::NewArtistPage {
             lang: self.lang,
             agit_id: self.agit_id.with(|id| *id),
+        });
+    }
+    pub fn open_edit_artist_form(&self, artist_id: i64) {
+        let navigate = use_navigator();
+        navigate.push(Route::EditArtistPage {
+            lang: self.lang,
+            agit_id: self.agit_id(),
+            artist_id,
         });
     }
 
@@ -288,5 +296,11 @@ impl Controller {
             ))
             .with_id("remove-artist-modal-success")
             .with_title(tr.title);
+    }
+
+
+
+    pub fn go_back(&self) {
+        use_navigator().go_back();
     }
 }

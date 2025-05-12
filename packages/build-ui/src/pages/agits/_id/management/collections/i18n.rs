@@ -133,6 +133,14 @@ translate! {
         en: "Search by title",
         ko: "제목으로 검색",
     }
+      list:{
+        en:"List",
+        ko:"리스트",
+    }
+    activity:{
+        en:"Activity",
+        ko:"활동",
+    }
 
 
 }
@@ -163,6 +171,7 @@ translate! {
         en:"artworks have been selected.",
         ko:"작품이 선택되었습니다.",
     }
+  
 
 }
 

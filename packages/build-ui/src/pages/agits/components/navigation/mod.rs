@@ -19,6 +19,7 @@ enum SelectedItem {
     SalesRequest,
     ShippingLabel,
     Artworks,
+    NewArtworkPage,
     Collections,
     CollectionDetail,
     Artist,
@@ -55,6 +56,11 @@ fn check_route(route: Route) -> (SelectedSection, SelectedItem) {
             lang: _,
             agit_id: _,
         } => (SelectedSection::Management, SelectedItem::Artworks),
+        Route::NewArtworkPage {
+            lang: _,
+            agit_id: _,
+        } => (SelectedSection::Management, SelectedItem::NewArtworkPage),
+
         Route::CollectionPage {
             lang: _,
             agit_id: _,

@@ -24,7 +24,6 @@ use common::tables::{
 };
 use wasm_bindgen_futures::spawn_local;
 
-
 #[derive(Debug, Clone, Copy, DioxusController)]
 pub struct Controller {
     lang: Language,

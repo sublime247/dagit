@@ -30,12 +30,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
             div { class: "flex flex-col w-full h-full  p-6",
                 // Header with title and back button
                 div { class: "flex items-center mb-6",
-                    Link {
-                        to: Route::ArtistPage {
-                            lang,
-                            agit_id: agit_id(),
-                        },
-                        class: "text-gray-400 hover:text-white mr-4",
+                    div { onclick: move |_| ctrl.go_back(),
                         svg {
                             xmlns: "http://www.w3.org/2000/svg",
                             class: "h-6 w-6",
@@ -100,7 +95,7 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                 // Artist Info Section
                 div { class: "mb-8",
                     div { class: "flex items-center mb-4",
-                        h2 { class: "text-xl font-semibold", "Artist Info" }
+                        h2 { class: "text-xl font-semibold", {tr.artist_info} }
                         arrows::ChevronDown {
                             class: "ml-2 [&>path]:stroke-white",
                             height: 20,
