@@ -190,7 +190,7 @@ impl Controller {
                 description: value,
                 ..self.artwork_input_field.with(|field| field.clone())
             }),
-            _ => {}
+                _ => {btracing::error!("{} {}", self.lang, "invalid ...")}
         }
     }
 }

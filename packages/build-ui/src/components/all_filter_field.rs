@@ -15,7 +15,7 @@ pub fn AllFilterField(#[props(default = false)] show: bool) -> Element {
                 arrows::ChevronDown { class: "[&>path]:stroke-white", height: 20, width: 20 }
             }
             input {
-                class: "text-[15px]/23  border border-neutral-80 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pl-3 p-2.5",
+                class: "text-[15px]/[23px] border border-neutral-80 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pl-3 p-2.5",
                 placeholder: "All",
                 r#type: "text",
             }

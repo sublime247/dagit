@@ -220,7 +220,7 @@ impl Controller {
                 art_style: value,
                 ..self.artist_input_field.with(|field| field.clone())
             }),
-            _ => {}
+             _ => {btracing::error!("{} {}", self.lang, "invalid ...")}
         }
     }
 
