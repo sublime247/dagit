@@ -47,7 +47,7 @@ pub fn CollectorsTable(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element 
                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", "Wallet Address" }
                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                         div { class: "flex items-center",
-                            span {{tr.last_activity} }
+                            span { {tr.last_activity} }
                             arrows::UpDown {
                                 class: "[&>path]:stroke-white [&>circle]:stroke-white",
                                 height: 18,
@@ -58,10 +58,7 @@ pub fn CollectorsTable(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element 
                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                         div { class: "flex items-end",
                             span { "" }
-                            validations::Extra {
-                                class: "[&>circle]:stroke-white",
-                                height: 18,
-                            }
+                            validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                         }
                     }
                 }

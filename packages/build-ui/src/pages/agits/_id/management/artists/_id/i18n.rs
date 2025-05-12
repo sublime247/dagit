@@ -10,7 +10,7 @@ translate! {
         ko: "정보",
     }
     remove_artist:{
-        en: "Remove Artist",
+        en: "Delete the artist",
         ko: "작가 제거",
     }
     artist_info:{

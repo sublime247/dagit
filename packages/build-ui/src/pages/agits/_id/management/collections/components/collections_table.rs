@@ -25,7 +25,7 @@ pub fn CollectionTable(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element 
                     }
                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                         div { class: "flex items-center",
-                            span { {tr.collection }}
+                            span { {tr.collection} }
                             arrows::UpDown {
                                 class: "[&>path]:stroke-white [&>circle]:stroke-white",
                                 height: 18,
@@ -65,7 +65,7 @@ pub fn CollectionTable(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element 
                     }
                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                         div { class: "flex items-center",
-                            span {{tr.volume} }
+                            span { {tr.volume} }
                             arrows::UpDown {
                                 class: "[&>path]:stroke-white [&>circle]:stroke-white",
                                 height: 18,
@@ -106,10 +106,7 @@ pub fn CollectionTable(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element 
                     th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
                         div { class: "flex items-center",
                             span { "" }
-                            validations::Extra {
-                                class: "[&>circle]:stroke-white",
-                                height: 18,
-                            }
+                            validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
                         }
                     } // For the actions column
                 }

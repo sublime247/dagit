@@ -59,10 +59,7 @@ pub fn CollectionPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     }
                     // Table body
                     div { class: "flex-1 overflow-auto",
-                        CollectionTable {
-                            lang: lang.clone(),
-                            agit_id: agit_id.clone(),
-                        }
+                        CollectionTable { lang: lang.clone(), agit_id: agit_id.clone() }
                     }
                 }
             }

@@ -37,11 +37,7 @@ pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                 }
 
                 div { class: "flex-1 overflow-x-auto",
-                    CollectorsTable {
-                        lang: lang.clone(),
-                        agit_id: agit_id.clone(),
-                    
-                    }
+                    CollectorsTable { lang: lang.clone(), agit_id: agit_id.clone() }
                 }
             }
         }
