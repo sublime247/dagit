@@ -48,6 +48,8 @@ impl Controller {
             weight: String::new(),
             year: String::new(),
             royalty: String::new(),
+            description: String::new(),
+            img_url: String::new(),
         });
 
         let artworks = use_signal(|| {
@@ -182,6 +184,10 @@ impl Controller {
             }),
             "year" => self.artwork_input_field.set(ArtworkInputField {
                 year: value,
+                ..self.artwork_input_field.with(|field| field.clone())
+            }),
+            "description" => self.artwork_input_field.set(ArtworkInputField {
+                description: value,
                 ..self.artwork_input_field.with(|field| field.clone())
             }),
             _ => {}

@@ -235,7 +235,7 @@ impl Controller {
         let navigate = use_navigator();
         navigate.push(Route::EditArtistPage {
             lang: self.lang,
-            agit_id: self.agit_id.with(|id| *id),
+            agit_id: self.agit_id(),
             artist_id,
         });
     }

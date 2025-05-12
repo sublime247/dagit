@@ -13,7 +13,7 @@ pub fn DropdownInput(
     options: Vec<String>,
 ) -> Element {
     rsx! {
-        div { class: "flex items-center gap-2", ..attributes,
+        div { class: "flex items-center ", ..attributes,
             label { class: "text-sm/relaxed font-semibold text-white w-50 flex items-center", // Align label vertically
                 span { class: "text-red-500 mr-1", "*" }
                 {label}
@@ -28,9 +28,9 @@ pub fn DropdownInput(
                     option { value: "{option}", selected: value == *option, "{option}" }
                 }
             }
-            if invalid {
-                span { class: "text-[15px]/[23px] text-pink", {invalid_message} }
-            }
+           
+                     span { class: "text-[15px]/[23px] text-pink aria-invalid:hidden", "aria-invalid": invalid, {invalid_message} }
+        
         }
     }
 }

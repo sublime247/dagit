@@ -49,6 +49,7 @@ pub fn Input2(
     #[props(default = false)] invalid: bool,
     #[props(default = "".to_string())] invalid_message: String,
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    #[props(default = "flex-1".to_string())] width_class: String,
 ) -> Element {
     rsx! {
         div { class: "flex items-center", ..attributes,
@@ -58,7 +59,10 @@ pub fn Input2(
             }
             input {
                 "aria-invalid": invalid,
-                class: "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 flex-1 w-64", // Added width class
+                class: format!(
+                    "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 {}",
+                    width_class,
+                ),
                 placeholder,
                 value,
                 disabled,

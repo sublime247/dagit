@@ -87,4 +87,40 @@ translate! {
     ko:"년도",
 
  }
+ save:{
+    en:"Save",
+    ko:"저장", 
+ }
+ images:{
+    en:"Images",
+    ko:"이미지",
+ }
+description_label:{
+    en:"Description",
+    ko:"사진",
+}
+description_placeholder:{
+   en:"Please provide a detailed description of your artwork. Feel free to include its meaning, creative process, materials, and techniques used. It would be wonderful if you could share the story behind your piece.",
+   ko:" "
+}
+  upload_img_label:{
+    en: "Please drag and drop your file here.",
+    ko: "여기에 파일을 드래그 앤 드롭하세요.",
+}
+upload_img_label_2:{
+    en: "One or more files (JPG, PNG)",
+    ko: "하나 이상의 파일 (JPG, PNG)",
+}
+max_file_size:{
+    en: "Maximum resolution: 3000px × 3000px (square format)",
+    ko: "최대 해상도: 3000px × 3000px (사각형 형식)",
+}
+max_file_size_2:{
+    en: "Uploads are allowed under 10MB",
+    ko: "업로드는 10MB 미만이어야 합니다.",
+}
+back:{
+    en: "Back",
+    ko: "이전",
+}
 }
