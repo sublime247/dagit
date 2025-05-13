@@ -1,12 +1,15 @@
+use crate::pages::agits::_id::management::artworks::{
+    controllers::Controller, i18n::ArtworkTranslate,
+};
 use bdk::prelude::*;
-use crate:: pages::agits::_id::management::artworks::{controllers::Controller, i18n::ArtworkTranslate};
 use by_components::icons::{arrows, validations};
 
 #[component]
 pub fn ArtworkTable(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let tr: ArtworkTranslate = translate(&lang);
     let ctrl = Controller::new(lang, agit_id)?;
-    let artworks = ctrl.artworks();    rsx! {
+    let artworks = ctrl.artworks();
+    rsx! {
         table { class: "w-full text-sm text-left border-collapse min-w-[800px]",
             // Table header
             thead { class: "text-xs uppercase bg-table-background border-b border-border-primary",
