@@ -4,7 +4,7 @@ use bdk::prelude::by_components::icons::arrows;
 use bdk::prelude::{by_components::icons::validations, *};
 use common::tables::artworks::Artwork as ArtworkModel;
 #[component]
-pub fn ArtistTable(
+pub fn SingleArtistTable(
     assets: Vec<ArtworkModel>,
     lang: Language,
     agit_id: ReadOnlySignal<i64>,

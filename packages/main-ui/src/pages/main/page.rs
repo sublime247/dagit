@@ -35,7 +35,7 @@ pub fn CategorySelector(options: Vec<String>, onchange: EventHandler<usize>) -> 
                     },
                 }
             }
-
+        
         }
     }
 }
@@ -523,7 +523,7 @@ pub fn UpcomingSlide(
                         }
                     }
                 }
-
+            
 
             }
         }

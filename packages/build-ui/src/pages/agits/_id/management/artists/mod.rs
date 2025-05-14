@@ -7,6 +7,5 @@ mod new;
 mod page;
 
 pub use _id::{ArtistDetailPage, EditArtistPage};
-pub use components::ArtistTable;
 pub use new::NewArtistPage;
 pub use page::ArtistPage;

@@ -6,7 +6,7 @@ use crate::components::image_upload::FileUpload;
 use crate::components::input::{Input2, TextArea};
 use crate::components::search_filter_bar::SearchFilterBar;
 use crate::pages::agits::_id::management::artists::_id::i18n::EditArtistPageTranslate;
-use crate::pages::agits::_id::management::artists::ArtistTable;
+use crate::pages::agits::_id::management::artists::components::SingleArtistTable;
 use crate::pages::agits::_id::management::artists::controllers::Controller;
 use crate::pages::agits::_id::management::artists::i18n::ArtistTranslate;
 use crate::pages::agits::_id::management::components::NftTable;
@@ -24,21 +24,20 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
 
                 // Header with back button and collector info
                 div { class: "flex flex-col mb-6",
-                    div {
-                        class: "flex items-center",
-                        onclick: move |_| ctrl.go_back(),
-                        class: "text-gray-400 hover:text-white ",
-                        svg {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            class: "h-6 w-6",
-                            fill: "none",
-                            view_box: "0 0 24 24",
-                            stroke: "currentColor",
-                            path {
-                                stroke_linecap: "round",
-                                stroke_linejoin: "round",
-                                stroke_width: "2",
-                                d: "M15 19l-7-7 7-7",
+                    div { class: "flex items-center",
+                        div { onclick: move |_| ctrl.go_back(),
+                            svg {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                class: "h-6 w-6",
+                                fill: "none",
+                                view_box: "0 0 24 24",
+                                stroke: "currentColor",
+                                path {
+                                    stroke_linecap: "round",
+                                    stroke_linejoin: "round",
+                                    stroke_width: "2",
+                                    d: "M15 19l-7-7 7-7",
+                                }
                             }
                         }
 
@@ -80,7 +79,7 @@ pub fn ArtistDetailPage(lang: Language, agit_id: ReadOnlySignal<i64>, artist_id:
                             }
                         } else {
                             rsx! {
-                                ArtistTable {
+                                SingleArtistTable {
                                     assets: artist_assets.clone(),
                                     lang,
                                     agit_id: agit_id(),
@@ -115,20 +114,20 @@ pub fn EditArtistPage(
         div { class: "w-full min-h-screen bg-background h-full flex text-white items-center",
             div { class: "flex flex-col w-full h-full p-6",
                 // Header with title and back button
-                div {
-                    class: "flex items-center mb-6",
-                    onclick: move |_| ctrl.go_back(),
-                    svg {
-                        xmlns: "http://www.w3.org/2000/svg",
-                        class: "h-6 w-6",
-                        fill: "none",
-                        view_box: "0 0 24 24",
-                        stroke: "currentColor",
-                        path {
-                            stroke_linecap: "round",
-                            stroke_linejoin: "round",
-                            stroke_width: "2",
-                            d: "M15 19l-7-7 7-7",
+                div { class: "flex items-center mb-6",
+                    div { onclick: move |_| ctrl.go_back(),
+                        svg {
+                            xmlns: "http://www.w3.org/2000/svg",
+                            class: "h-6 w-6",
+                            fill: "none",
+                            view_box: "0 0 24 24",
+                            stroke: "currentColor",
+                            path {
+                                stroke_linecap: "round",
+                                stroke_linejoin: "round",
+                                stroke_width: "2",
+                                d: "M15 19l-7-7 7-7",
+                            }
                         }
                     }
                     div { class: "flex justify-between w-full",
@@ -146,7 +145,6 @@ pub fn EditArtistPage(
                                 "aria-dropdown-open": is_dropdown_open,
                                 div { class: "py-1",
                                     a {
-                                        // to:Route::ArtistPage { lang, agit_id: agit_id() },
                                         onclick: move |_| {
                                             ctrl.confirm_removal_modal();
                                         },
