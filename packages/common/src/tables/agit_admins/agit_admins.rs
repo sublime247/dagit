@@ -3,7 +3,7 @@ use validator::Validate;
 
 #[derive(Validate)]
 #[api_model(base = "/", table = agit_admins)]
-pub struct AgitAdmins {
+pub struct AgitAdmin {
     #[api_model(primary_key)]
     pub id: i64,
     #[api_model(summary, auto = [insert])]

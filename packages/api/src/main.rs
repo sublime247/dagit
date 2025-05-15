@@ -10,7 +10,7 @@ use controllers::v1;
 
 use by_types::DatabaseConfig;
 use common::tables::{
-    agit_admins::AgitAdmins,
+    agit_admins::AgitAdmin,
     agits::Agit,
     artists::Artist,
     artworks::Artwork,
@@ -42,7 +42,7 @@ async fn migration(pool: &sqlx::Pool<sqlx::Postgres>) -> Result<()> {
     //TODO: Add Model Migration
     tracing::info!("Running migration");
     migrate!(
-        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmins, UserTerms
+        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmin, UserTerms
     );
     tracing::info!("Migration done");
 
@@ -110,7 +110,7 @@ pub mod dagit_tests {
     pub async fn setup_test_user(id: &str, pool: &sqlx::PgPool) -> Result<User> {
         let user = User::get_repository(pool.clone());
         let agit = Agit::get_repository(pool.clone());
-        let agit_admins = AgitAdmins::get_repository(pool.clone());
+        let agit_admins = AgitAdmin::get_repository(pool.clone());
         let email = format!("user-{id}@test.com");
         let address = format!("test-user-address-{id}");
         let name = format!("test-user-{id}");
