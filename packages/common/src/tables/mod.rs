@@ -5,6 +5,7 @@ pub mod artworks;
 pub mod collections;
 pub mod collectors;
 pub mod users;
+pub mod dao;
 
 pub mod user_terms;
 
@@ -16,4 +17,5 @@ pub mod prelude {
     pub use super::collections::*;
     pub use super::collectors::*;
     pub use super::users::*;
+    pub use super::dao::*;
 }
