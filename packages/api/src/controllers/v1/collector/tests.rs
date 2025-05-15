@@ -24,7 +24,7 @@ async fn create_collector() -> Collector {
             vec!["1234567890".to_string(), "1234567890".to_string()],
             "0x1234567890abcdef".to_string(),
             20.5,
-            "Sent".to_string()
+            "Sent".to_string(),
         )
         .await;
 

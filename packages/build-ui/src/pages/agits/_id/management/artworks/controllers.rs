@@ -15,7 +15,7 @@ pub struct Controller {
     agit_id: ReadOnlySignal<i64>,
     artworks: Signal<Vec<ArtworkModel>>,
     popup: PopupService,
-    artwork_input_field: Signal<ArtworkInputField>
+    artwork_input_field: Signal<ArtworkInputField>,
 }
 
 impl Controller {
@@ -31,7 +31,7 @@ impl Controller {
         })?;
 
         tracing::debug!("res: {:?}", res);
-        let artwork_input_field = use_signal(||ArtworkInputField{
+        let artwork_input_field = use_signal(|| ArtworkInputField {
             display_name: String::new(),
             ways_to_sell: String::new(),
             rarity: String::new(),
@@ -97,26 +97,23 @@ impl Controller {
             agit_id,
             popup,
             artworks,
-            artwork_input_field
+            artwork_input_field,
         };
         use_context_provider(|| ctrl);
         Ok(ctrl)
     }
 
-
-
-
     pub fn open_new_artwork_page(&self) {
         let navigate = use_navigator();
-    
+
         if let Some(err) = navigate.push(Route::NewArtworkPage {
             lang: self.lang,
-            agit_id: self.agit_id.with(|id| *id)}) {
+            agit_id: self.agit_id.with(|id| *id),
+        }) {
             tracing::error!("Navigation failed: {:?}", err);
         }
-        
-}
-    pub fn open_artwork_page(&self){
+    }
+    pub fn open_artwork_page(&self) {
         use_navigator().go_back();
     }
 
@@ -190,7 +187,9 @@ impl Controller {
                 description: value,
                 ..self.artwork_input_field.with(|field| field.clone())
             }),
-                _ => {btracing::error!("{} {}", self.lang, "invalid ...")}
+            _ => {
+                btracing::error!("{} {}", self.lang, "invalid ...")
+            }
         }
     }
 }

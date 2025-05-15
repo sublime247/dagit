@@ -21,7 +21,7 @@ pub fn RemoveArtistModal(
                 // Collection name input
                 div { class: "mb-4",
                     input {
-                        class: "w-full bg-transparent border border-[1px] text-white text-sm rounded-none p-2 focus:outline-none focus:border-primary",
+                        class: "w-full bg-transparent border text-white text-sm rounded-none p-2 focus:outline-none focus:border-primary",
                         placeholder: "Artist name",
                         value: "{collection_name}",
                         oninput: move |evt| collection_name.set(evt.value().clone()),

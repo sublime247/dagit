@@ -21,17 +21,15 @@ pub struct Artist {
     pub intro: String,
     #[api_model(summary, action = create, action_by_id = [update])]
     pub biography: String,
-    
+
     #[api_model(summary, action = create, action_by_id = [update])]
     pub revenue: f64,
     #[api_model(summary, action = create, action_by_id = [update], type=JSONB)]
     pub attributes_type: Vec<String>,
     #[api_model(summary, action = create, action_by_id = [update])]
-    pub featured_work:String,
+    pub featured_work: String,
     #[api_model(summary, action = create, action_by_id = [update])]
-    pub artworks:i64,
+    pub artworks: i64,
     #[api_model(summary, action = create, action_by_id = [update])]
-    pub status:String,
-
-
+    pub status: String,
 }

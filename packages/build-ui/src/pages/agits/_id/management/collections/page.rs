@@ -1,11 +1,11 @@
+use super::controllers::Controller;
+use super::i18n::CollectionTranslate;
 use crate::pages::agits::_id::management::collections::components::CollectionTable;
 #[allow(unused_imports)]
 use crate::{
     components::{filter_sidebar::FilterSidebar, search_filter_bar::SearchFilterBar},
     routes::Route,
 };
-use super::i18n::CollectionTranslate;
-use super::controllers::Controller;
 use bdk::prelude::*;
 
 #[allow(unused_variables)]
