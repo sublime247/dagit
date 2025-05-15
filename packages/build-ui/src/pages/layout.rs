@@ -15,7 +15,7 @@ pub fn SuspenseWrapper(children: Element) -> Element {
             SuspenseBoundary {
                 fallback: |_| {
                     rsx! {
-                        div { class: "absolute w-screen h-screen top-0 left-0 flex items-center justify-center text-white",
+                        div { class: "absolute w-screen h-screen top-0 left-0 flex items-center justify-center text-white bg-black",
                             CubeLoader {}
                         }
                     }
