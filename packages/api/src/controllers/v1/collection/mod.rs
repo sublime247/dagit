@@ -128,7 +128,7 @@ impl CollectionController {
                 volume_change_7d,
                 owners,
                 status,
-                stock
+                stock,
             )
             .await?;
         tracing::debug!("create collection {:?}", collection);

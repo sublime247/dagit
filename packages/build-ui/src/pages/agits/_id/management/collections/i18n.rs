@@ -171,7 +171,7 @@ translate! {
         en:"artworks have been selected.",
         ko:"작품이 선택되었습니다.",
     }
-  
+
 
 }
 

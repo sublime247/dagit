@@ -13,7 +13,7 @@ use by_axum::{
 use by_types::JsonWithHeaders;
 use common::error::ServiceError;
 use common::tables::prelude::*;
-use common::{Result, tables::user_terms::UserTerms};
+use common::{Result, tables::user_terms::UserTerm};
 use sqlx::postgres::PgRow;
 
 use crate::utils::app_claims::AppClaims;
@@ -119,12 +119,14 @@ impl UserController {
             provider,
             terms_agreed_at,
             ads_agreed_at,
+            agit_title,
         }: UserSignupRequest,
     ) -> Result<JsonWithHeaders<User>> {
-        let user_terms_repo = UserTerms::get_repository(self.pool.clone());
+        let user_terms_repo = UserTerm::get_repository(self.pool.clone());
         let mut tx = self.pool.begin().await?;
-
-        let user = self
+        let agit = Agit::get_repository(self.pool.clone());
+        let agit_admin = AgitAdmin::get_repository(self.pool.clone());
+        let mut user = self
             .repo
             .insert_with_tx(&mut *tx, provider, address, email, name, profile_url)
             .await?
@@ -133,8 +135,27 @@ impl UserController {
         user_terms_repo
             .insert_with_tx(&mut *tx, user.id, terms_agreed_at, ads_agreed_at)
             .await?;
-        tx.commit().await?;
+        let agit = agit
+            .insert_with_tx(
+                &mut *tx,
+                agit_title,
+                String::default(),
+                None,
+                String::default(),
+                String::default(),
+                false,
+            )
+            .await?
+            .ok_or(ServiceError::DatabaseError(
+                "Create Agit Failed".to_string(),
+            ))?;
 
+        agit_admin
+            .insert_with_tx(&mut *tx, agit.id, user.id)
+            .await?;
+
+        tx.commit().await?;
+        user.agits = vec![agit];
         let jwt = AppClaims::generate_token(&user)?;
         Ok(JsonWithHeaders::new(user).with_auth_cookie(TokenScheme::Bearer, &jwt))
     }

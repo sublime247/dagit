@@ -89,7 +89,7 @@ translate! {
  }
  save:{
     en:"Save",
-    ko:"저장", 
+    ko:"저장",
  }
  images:{
     en:"Images",

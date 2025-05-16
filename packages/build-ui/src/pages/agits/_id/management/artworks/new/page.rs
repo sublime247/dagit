@@ -1,17 +1,21 @@
-use bdk::prelude::{by_components::icons::security,  *};
-use crate::{components::{ input::BottomBorderInput, tab_button::TabButton}, pages::agits::_id::management::artworks::{controllers::Controller, new::{component::ArtInfoTab, i18n::NewArtworkPageTranslate, ItemDetailsTab}}};
-
-
+use crate::{
+    components::{input::BottomBorderInput, tab_button::TabButton},
+    pages::agits::_id::management::artworks::{
+        controllers::Controller,
+        new::{ItemDetailsTab, component::ArtInfoTab, i18n::NewArtworkPageTranslate},
+    },
+};
+use bdk::prelude::{by_components::icons::security, *};
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum ActiveTab{
+pub enum ActiveTab {
     ItemDetails,
-    ArtInfo
+    ArtInfo,
 }
 #[component]
 pub fn NewArtworkPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
-    let  ctrl = Controller::new(lang, agit_id)?;
-    let mut active_tab = use_signal(||ActiveTab::ItemDetails);
+    let ctrl = Controller::new(lang, agit_id)?;
+    let mut active_tab = use_signal(|| ActiveTab::ItemDetails);
     let _tr: NewArtworkPageTranslate = translate(&lang);
 
     rsx! {

@@ -1,4 +1,6 @@
-use crate::pages::agits::_id::management::{artworks::components::ArtworkTable, components::NftTable};
+use crate::pages::agits::_id::management::{
+    artworks::components::ArtworkTable, components::NftTable,
+};
 #[allow(unused_imports)]
 use crate::{
     components::{filter_sidebar::FilterSidebar, search_filter_bar::SearchFilterBar},

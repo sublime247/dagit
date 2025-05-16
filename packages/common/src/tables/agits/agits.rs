@@ -1,5 +1,5 @@
 #![allow(unused)]
-use crate::tables::{artworks::Artwork, collections::Collection, categories::Category};
+use crate::tables::{artworks::Artwork, categories::Category, collections::Collection};
 
 use bdk::prelude::*;
 use validator::Validate;

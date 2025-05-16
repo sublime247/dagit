@@ -1,6 +1,5 @@
-
 use bdk::prelude::*;
-translate!{
+translate! {
     DaoPageTranslate;
     title:{
         en: "DAO",
@@ -52,7 +51,7 @@ translate!{
     }
 }
 
-translate!{
+translate! {
     ManageCategoryModalTranslate;
     title:{
         en: "Manage Category",

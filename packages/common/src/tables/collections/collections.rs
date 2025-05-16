@@ -49,18 +49,10 @@ pub struct Collection {
     pub status: String,
     #[api_model(summary, action = create,action_by_id = update)]
     pub stock: String,
-    
- 
-
-
-
-
-
 
     #[api_model(summary, one_to_many = artworks, foreign_key = collection_id)]
     #[serde(default)]
     pub artworks: Vec<Artwork>,
-    
 
     #[api_model(summary, one_to_many = collection_user_likes, foreign_key = collection_id, aggregator = count)]
     pub likes: i64,

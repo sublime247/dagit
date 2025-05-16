@@ -8,7 +8,6 @@ pub struct Config {
     pub auth: AuthConfig,
     pub endpoint: &'static str,
     pub port: u16,
-    pub origin: &'static str,
 }
 
 impl Default for Config {
@@ -22,7 +21,6 @@ impl Default for Config {
                 .unwrap_or("3000")
                 .parse()
                 .unwrap_or(3000),
-            origin: option_env!("ORIGIN").unwrap_or("http://localhost:8080"),
         }
     }
 }

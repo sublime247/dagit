@@ -1,9 +1,11 @@
 use bdk::prelude::{dioxus_popup::PopupService, *};
+use common::tables::agits::Agit;
 
 use crate::pages::components::{
     BuildAgitModal, BuildAgitResult, ConnectWalletModal, UserInfoModal, UserInfoResult,
 };
-use crate::services::user_service::{Chain, Status, UserService, Wallet};
+use crate::routes::Route;
+use crate::services::user_service::{Chain, Status, UserInfo, UserService, Wallet};
 
 use super::components::BlockchainSelectionModal;
 use super::i18n::{
@@ -16,13 +18,33 @@ pub struct Controller {
     lang: Language,
     popup: PopupService,
     user: UserService,
+
+    email: Signal<Option<String>>,
+    nickname: Signal<Option<String>>,
+    terms_agreed_at: Signal<Option<i64>>,
+    ads_agreed_at: Signal<Option<i64>>,
 }
 
 impl Controller {
+    pub fn get_user_info(&self) -> Option<(UserInfo, Agit)> {
+        if let Some(agit) = self.user.current_agit() {
+            Some((self.user.user_info().unwrap(), agit))
+        } else {
+            None
+        }
+    }
     pub fn new(lang: Language) -> Result<Self, RenderError> {
         let popup: PopupService = use_context();
         let user: UserService = use_context();
-        let ctrl = Controller { lang, popup, user };
+        let ctrl = Controller {
+            lang,
+            popup,
+            user,
+            email: use_signal(|| None),
+            nickname: use_signal(|| None),
+            terms_agreed_at: use_signal(|| None),
+            ads_agreed_at: use_signal(|| None),
+        };
         Ok(ctrl)
     }
 
@@ -44,10 +66,11 @@ impl Controller {
             .with_title(tr.title);
     }
 
-    pub fn open_connect_wallet_modal(&self, chain: Chain) {
+    fn open_connect_wallet_modal(&self, chain: Chain) {
         let mut popup = self.popup.clone();
         let tr: ConnectWalletModalTranslate = translate(&self.lang);
         let mut ctrl = self.clone();
+        let nav = use_navigator();
 
         popup
             .open(rsx! {
@@ -56,13 +79,21 @@ impl Controller {
                     on_select: move |wallet: Wallet| async move {
                         tracing::debug!("Selected wallet: {:?}", wallet);
                         if let Ok(status) = ctrl.user.login(chain, wallet).await {
-                            tracing::debug!("Login status: {:?}", status);
+                            tracing::debug!("Login status: {:?}", ctrl.user);
                             match status {
                                 Status::Login => {
+                                    if let Some(agit) = ctrl.user.current_agit() {
+                                        nav.push(Route::HomePage {
+                                            lang: ctrl.lang,
+                                            agit_id: agit.id,
+                                        });
+                                    }
                                     popup.close();
                                 }
                                 Status::Signup { principal: _, profile_url: _, nickname, email } => {
-                                    ctrl.open_user_info_modal(nickname, email);
+                                    (ctrl.nickname).set(nickname);
+                                    ctrl.email.set(email);
+                                    ctrl.open_user_info_modal();
                                 }
                                 _ => {
                                     popup.close();
@@ -77,26 +108,51 @@ impl Controller {
     }
 
     // // New method that takes the selected blockchain and wallet
-    pub fn open_user_info_modal(&self, nickname: Option<String>, email: Option<String>) {
+    fn open_user_info_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: UserInfoModalTranslate = translate(&self.lang);
         let mut ctrl = self.clone();
-        let lang = self.lang;
         popup
             .open(rsx! {
                 UserInfoModal {
-                    nickname,
-                    email,
+                    nickname: ctrl.nickname(),
+                    email: ctrl.email(),
                     lang: self.lang,
                     on_button_click: move |result: UserInfoResult| async move {
                         tracing::debug!("Selected wallet: {:?}", result);
+                        ctrl.terms_agreed_at.set(Some(result.terms_agreed_at));
+                        ctrl.ads_agreed_at.set(result.ads_agreed_at);
+                        ctrl.email.set(Some(result.email));
+                        ctrl.nickname.set(Some(result.nickname));
+                        ctrl.open_build_agit_modal();
+                    },
+                }
+            })
+            .with_id("user_info_modal")
+            .with_title(tr.title);
+    }
+
+    #[allow(dead_code)]
+    fn open_build_agit_modal(&self) {
+        let mut popup = self.popup.clone();
+        let tr: BuildAgitModalTranslate = translate(&self.lang);
+        let mut ctrl = self.clone();
+        let lang = self.lang;
+        let nav = use_navigator();
+        popup
+            .open(rsx! {
+                BuildAgitModal {
+                    lang: self.lang,
+                    on_button_click: move |result: BuildAgitResult| async move {
+                        tracing::debug!("Result: {:?}", result);
                         match ctrl
                             .user
                             .signup(
-                                result.email,
-                                result.nickname,
-                                result.terms_agreed_at,
-                                result.ads_agreed_at,
+                                result.name,
+                                ctrl.email().unwrap_or_default(),
+                                ctrl.nickname().unwrap_or_default(),
+                                ctrl.terms_agreed_at().unwrap(),
+                                ctrl.ads_agreed_at(),
                             )
                             .await
                         {
@@ -104,12 +160,16 @@ impl Controller {
                                 tracing::debug!("Signup status: {:?}", status);
                                 match status {
                                     Status::Login => {
+                                        if let Some(agit) = ctrl.user.current_agit() {
+                                            nav.push(Route::HomePage {
+                                                lang: ctrl.lang,
+                                                agit_id: agit.id,
+                                            });
+                                        }
                                         popup.close();
                                     }
-                                    Status::Signup { principal: _, profile_url: _, nickname, email } => {
-                                        ctrl.open_user_info_modal(nickname, email);
-                                    }
-                                    _ => {
+                                    e @ _ => {
+                                        btracing::error!("Error: {e}");
                                         popup.close();
                                     }
                                 }
@@ -119,25 +179,6 @@ impl Controller {
                                 popup.close();
                             }
                         }
-                    },
-                }
-            })
-            .with_id("user_info_modal")
-            .with_title(tr.title);
-    }
-
-    #[allow(dead_code)]
-    pub fn open_build_agit_modal(&self) {
-        let mut popup = self.popup.clone();
-        let tr: BuildAgitModalTranslate = translate(&self.lang);
-
-        popup
-            .open(rsx! {
-                BuildAgitModal {
-                    lang: self.lang,
-                    on_button_click: move |result: BuildAgitResult| {
-                        tracing::debug!("Result: {:?}", result);
-                        popup.close();
                     },
                 }
             })

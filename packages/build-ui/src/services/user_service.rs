@@ -19,6 +19,15 @@ pub enum Status {
     Logout,
 }
 
+impl std::fmt::Display for Status {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Status::Signup { .. } => write!(f, "Signup"),
+            Status::Login => write!(f, "Login"),
+            Status::Logout => write!(f, "Logout"),
+        }
+    }
+}
 #[derive(Debug, Copy, Clone, Translate, Eq, PartialEq)]
 pub enum Chain {
     Bitcoin,
@@ -86,6 +95,7 @@ impl From<User> for UserInfo {
 pub struct UserService {
     pub signer: Signal<Option<WalletSigner>>,
     pub user_info: Signal<Option<UserInfo>>,
+    pub current_agit: Signal<Option<Agit>>,
 }
 
 impl UserService {
@@ -97,10 +107,14 @@ impl UserService {
                 _ => None,
             }
         })?;
-
+        let user_info: Signal<Option<UserInfo>> =
+            use_signal(|| default.value()().unwrap_or_default());
+        let agit =
+            user_info().and_then(|user_info| user_info.agits.get(0).map(|agit| agit.clone()));
         let user = UserService {
             signer: use_signal(|| None),
-            user_info: use_signal(|| default.value()().unwrap_or_default()),
+            user_info,
+            current_agit: use_signal(|| agit),
         };
         use_context_provider(move || user);
         Ok(())
@@ -122,6 +136,7 @@ impl UserService {
 
     pub async fn signup(
         &mut self,
+        agit_title: String,
         email: String,
         nickname: String,
         terms_agreed_at: i64,
@@ -137,12 +152,17 @@ impl UserService {
                     email,
                     nickname,
                     user_info.profile_url,
+                    agit_title,
                     terms_agreed_at,
                     ads_agreed_at,
                 )
                 .await;
             match res {
-                Ok(_) => Ok(Status::Login),
+                Ok(user) => {
+                    self.current_agit
+                        .set(user.agits.get(0).map(|agit| agit.clone()));
+                    Ok(Status::Login)
+                }
                 Err(_) => {
                     self.user_info.set(None);
                     Err(ServiceError::SignupFailed)
@@ -213,6 +233,9 @@ impl UserService {
                     .await;
                 match res {
                     Ok(user) => {
+                        self.current_agit
+                            .set(user.agits.get(0).map(|agit| agit.clone()));
+
                         self.user_info.set(Some(UserInfo {
                             provider: AuthProvider::Google,
                             principal: user.address,
@@ -224,7 +247,7 @@ impl UserService {
                         Status::Login
                     }
                     Err(e) => {
-                        tracing::error!("Error during signup: {:?}", e);
+                        tracing::error!("Error during login: {:?}", e);
                         Status::Signup {
                             principal,
                             email: Some(user_info.0),
