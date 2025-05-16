@@ -1,4 +1,4 @@
-use crate::tables::category::Category;
+use crate::tables::categories::Category;
 use bdk::prelude::*;
 #[api_model(base="/v1/dao", table = dao, action_by_id = [delete])]
 pub struct Dao {

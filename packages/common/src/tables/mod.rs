@@ -6,7 +6,7 @@ pub mod collections;
 pub mod collectors;
 pub mod users;
 pub mod dao;
-pub mod category;
+pub mod categories;
 
 pub mod user_terms;
 
@@ -19,5 +19,5 @@ pub mod prelude {
     pub use super::collectors::*;
     pub use super::users::*;
     pub use super::dao::*;
-    pub use super::category::*;
+    pub use super::categories::*;
 }
