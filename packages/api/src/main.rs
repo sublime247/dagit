@@ -7,6 +7,7 @@ use by_axum::{
     auth::{authorization_middleware, set_auth_config},
     axum::{Router, middleware},
 };
+
 use controllers::v1;
 
 use by_types::DatabaseConfig;
@@ -15,7 +16,10 @@ use common::tables::{
     agits::Agit,
     artists::Artist,
     artworks::Artwork,
+    categories::Category,
     collections::Collection,
+    collectors::Collector,
+    topics::Topic,
     users::{User, UserCredit},
 };
 use common::{Result, tables::user_terms::UserTerms};
@@ -45,7 +49,8 @@ async fn migration(pool: &sqlx::Pool<sqlx::Postgres>) -> Result<()> {
     //TODO: Add Model Migration
     tracing::info!("Running migration");
     migrate!(
-        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmins, UserTerms
+        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmins, UserTerms, Category,
+        Topic, Collector
     );
     tracing::info!("Migration done");
 
@@ -188,7 +193,9 @@ pub mod dagit_tests {
 
     pub async fn setup() -> Result<TestContext> {
         if option_env!("JWT_SECRET_KEY").is_none() {
-            unsafe { std::env::set_var("JWT_SECRET_KEY", "default_test_secret_key"); }
+            unsafe {
+                std::env::set_var("JWT_SECRET_KEY", "default_test_secret_key");
+            }
         }
 
         let conf = config::get();
