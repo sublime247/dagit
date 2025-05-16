@@ -1,5 +1,5 @@
 #![allow(unused)]
-use crate::tables::{artworks::Artwork, collections::Collection};
+use crate::tables::{artworks::Artwork, categories::Category, collections::Collection};
 
 use bdk::prelude::*;
 use validator::Validate;
@@ -43,6 +43,10 @@ pub struct Agit {
     #[api_model(summary, one_to_many = artworks, foreign_key = agit_id)]
     #[serde(default)]
     pub artworks: Vec<Artwork>,
+
+    #[api_model(summary, one_to_many=categories, foreign_key=agit_id)]
+    #[serde(default)]
+    pub categories: Vec<Category>,
 
     #[api_model(summary, one_to_many = agit_user_likes, foreign_key = agit_id, aggregator = count)]
     pub likes: i64,

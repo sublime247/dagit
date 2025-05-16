@@ -62,7 +62,7 @@ pub fn FilterSidebar(
                 div { class: "relative flex",
                     input {
                         "aria-invalid": invalid,
-                        class: "text-[15px]/23 border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pr-10", // Added padding-right to make space for the icon
+                        class: "text-[15px]/[23px] border border-neutral-80 px-4 py-3 outline-none text-white hover:border-primary focus:border-primary aria-invalid:border-pink placeholder-neutral-800 disabled:!border-neutral-80 pr-10", // Added padding-right to make space for the icon
                         placeholder: attribute_input_placeholder,
                         value: attribute_value,
                         disabled,

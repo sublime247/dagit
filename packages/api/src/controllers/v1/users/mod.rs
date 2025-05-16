@@ -13,7 +13,7 @@ use by_axum::{
 use by_types::JsonWithHeaders;
 use common::error::ServiceError;
 use common::tables::prelude::*;
-use common::{Result, tables::user_terms::UserTerms};
+use common::{Result, tables::user_terms::UserTerm};
 use sqlx::postgres::PgRow;
 
 use crate::utils::app_claims::AppClaims;
@@ -122,7 +122,7 @@ impl UserController {
             agit_title,
         }: UserSignupRequest,
     ) -> Result<JsonWithHeaders<User>> {
-        let user_terms_repo = UserTerms::get_repository(self.pool.clone());
+        let user_terms_repo = UserTerm::get_repository(self.pool.clone());
         let mut tx = self.pool.begin().await?;
         let agit = Agit::get_repository(self.pool.clone());
         let agit_admin = AgitAdmin::get_repository(self.pool.clone());
