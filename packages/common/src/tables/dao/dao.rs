@@ -6,6 +6,6 @@ pub struct Dao {
     pub id: i64,
     #[api_model(summary, many_to_one = agits)]
     pub agit_id: i64,
-    #[api_model(summary, action=create one_to_many=catergory, foreign_key = dao_id, type=JSON)]
-    pub catergory: Vec<Category>,
+    #[api_model(summary, action=create one_to_many=catergories, foreign_key = dao_id, type=JSON)]
+    pub catergories: Vec<Category>,
 }
