@@ -47,7 +47,6 @@ impl Controller {
         })?;
         tracing::debug!("Artist resource: {:?}", artist);
         
-      
         let artist_input_field = use_signal(|| ArtistInputField {
             display_name: String::new(),
             social_media: String::new(),
