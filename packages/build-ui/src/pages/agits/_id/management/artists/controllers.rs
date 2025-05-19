@@ -10,7 +10,7 @@ use common::tables::{
     artists::Artist as ArtistModel,
     artworks::Artwork as ArtworkModel,
     prelude::{
-        ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery, ArtistSummary,
+        ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery, ArtistSummary, ArtistAction,
     },
 };
 use wasm_bindgen_futures::spawn_local;
@@ -112,25 +112,24 @@ impl Controller {
 
     pub fn create_artist(&self) {
         let artist_inputs = self.artist_input_field.with(|field| field.clone());
-        // act_by_id is with id, update or delete.
         // act is without id. Create
         spawn_local(async move {
             let endpoint = crate::config::get().api_url;
             let client = ArtistModel::get_client(endpoint);
             let res = client
-                .act(common::tables::prelude::ArtistAction::Create(
+                .act(ArtistAction::Create(
                     ArtistCreateRequest {
-                        title: artist_inputs.display_name,
+                        title: artist_inputs.display_name.clone(),
                         mail: artist_inputs.social_media.clone(),
                         social_media: artist_inputs.medium.clone(),
                         intro: artist_inputs.theme,
                         biography: artist_inputs.art_style,
-                        revenue: todo!(),
-                        attributes_type: todo!(),
-                        featured_work: todo!(),
-                        artworks: todo!(),
-                        name: todo!(),
-                        status: todo!(),
+                        revenue: 6.70,
+                        attributes_type: vec!["Paid".to_string(), "Verified".to_string()],
+                        featured_work: "featured_work".to_string(),
+                        artworks: 100,
+                        name: artist_inputs.display_name.clone(),
+                        status: "Active".to_string(),
                     },
                 ))
                 .await;
