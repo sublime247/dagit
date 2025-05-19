@@ -9,8 +9,8 @@ use by_axum::{
         routing::post,
     },
 };
-use common::Result;
 use common::tables::prelude::*;
+use common::{Result, error::ServiceError};
 
 #[derive(
     Debug, Clone, serde::Deserialize, serde::Serialize, schemars::JsonSchema, aide::OperationIo,
@@ -41,6 +41,70 @@ impl ArtistController {
 }
 
 impl ArtistController {
+    async fn create(
+        &self,
+        auth: Option<Authorization>,
+        ArtistCreateRequest {
+            title,
+            name,
+            mail,
+            social_media,
+            intro,
+            biography,
+            revenue,
+            attributes_type,
+            featured_work,
+            artworks,
+            status,
+        }: ArtistCreateRequest,
+    ) -> Result<Json<Artist>> {
+        if auth.is_none() {
+            return Err(ServiceError::Unauthorized);
+        }
+        let artist = self
+            .repo
+            .insert(
+                title,
+                name,
+                mail,
+                social_media,
+                intro,
+                biography,
+                revenue,
+                attributes_type,
+                featured_work,
+                artworks,
+                status,
+            )
+            .await?;
+        tracing::debug!("create artist {artist:?}");
+        Ok(Json(artist))
+    }
+
+    async fn update(
+        &self,
+        auth: Option<Authorization>,
+        id: i64,
+        param: ArtistUpdateRequest,
+    ) -> Result<Artist> {
+        if auth.is_none() {
+            return Err(ServiceError::Unauthorized);
+        }
+        let artist = self.repo.update(id, param.into()).await?;
+        Ok(artist)
+    }
+    async fn delete(&self, id: i64, auth: Option<Authorization>) -> Result<Artist> {
+        if auth.is_none() {
+            return Err(ServiceError::Unauthorized);
+        }
+        self.repo
+            .delete(id)
+            .await
+            .map_err(|_| ServiceError::NotFound)
+    }
+}
+
+impl ArtistController {
     pub async fn list(
         State(ctrl): State<ArtistController>,
         Extension(claim): Extension<Option<Authorization>>,
@@ -66,8 +130,8 @@ impl ArtistController {
         tracing::debug!("artist act {body:?}");
         match body {
             ArtistAction::Create(req) => {
-                //TODO: Add Create Artist
-                Ok(Json(Artist::default()))
+                let new_artist = ctrl.create(claim, req).await?;
+                Ok(new_artist)
             }
         }
     }
@@ -80,13 +144,13 @@ impl ArtistController {
     ) -> Result<Json<Artist>> {
         tracing::debug!("artist act_by_id {id} {body:?}");
         match body {
-            ArtistByIdAction::Update(_) => {
-                //TODO: Add Update Artist
-                Ok(Json(Artist::default()))
+            ArtistByIdAction::Update(param) => {
+                let artist = ctrl.update(claim, id, param).await?;
+                Ok(Json(artist))
             }
             ArtistByIdAction::Delete(_) => {
-                //TODO: Add Delete Artist
-                Ok(Json(Artist::default()))
+                let artist = ctrl.delete(id, claim).await?;
+                Ok(Json(artist))
             }
         }
     }
