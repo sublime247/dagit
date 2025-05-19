@@ -9,11 +9,13 @@ use super::{
 use common::tables::{
     artists::Artist as ArtistModel,
     artworks::Artwork as ArtworkModel,
-    prelude::{ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery},
+    prelude::{
+        ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery, ArtistSummary,
+    },
 };
 use wasm_bindgen_futures::spawn_local;
 
-use bdk::prelude::{dioxus_popup::PopupService, *};
+use bdk::prelude::{by_types::QueryResponse, dioxus_popup::PopupService, *};
 
 use crate::{
     config::Config,
@@ -27,7 +29,7 @@ use crate::{
 pub struct Controller {
     lang: Language,
     agit_id: ReadOnlySignal<i64>,
-    artist: Signal<Vec<ArtistModel>>,
+    artist: Resource<QueryResponse<ArtistSummary>>,
     artworks: Signal<Vec<ArtworkModel>>,
     artist_input_field: Signal<ArtistInputField>,
     popup: PopupService,
@@ -35,7 +37,7 @@ pub struct Controller {
 impl Controller {
     pub fn new(lang: Language, agit_id: ReadOnlySignal<i64>) -> Result<Self, RenderError> {
         let mut popup: PopupService = use_context();
-        let res = use_server_future(move || async move {
+        let artist = use_server_future(move || async move {
             let endpoint = crate::config::get().api_url;
             let client = ArtistModel::get_client(endpoint);
             client
@@ -43,7 +45,9 @@ impl Controller {
                 .await
                 .unwrap_or_default()
         })?;
-        tracing::debug!("res: {:?}", res);
+        tracing::debug!("Artist resource: {:?}", artist);
+        
+      
         let artist_input_field = use_signal(|| ArtistInputField {
             display_name: String::new(),
             social_media: String::new(),
@@ -52,32 +56,6 @@ impl Controller {
             art_style: String::new(),
             introduction: String::new(),
             biography: String::new(),
-        });
-        let artist = use_signal(|| {
-            (1..10)
-                .map(|id| ArtistModel {
-                    id,
-                    name: "Artist Name".to_string(),
-                    mail: "email@email.com".to_string(),
-                    revenue: 2.370,
-                    attributes_type: vec![
-                        "Pixel".to_string(),
-                        "Animation".to_string(),
-                        "Sci-fi".to_string(),
-                        "3D".to_string(),
-                        "Digital".to_string(),
-                    ],
-                    status: "true".to_string(),
-                    social_media: "@social_media".to_string(),
-                    featured_work: "Artwork_title".to_string(),
-                    created_at: chrono::Utc::now().timestamp(),
-                    updated_at: chrono::Utc::now().timestamp(),
-                    title: "Artist Title".to_string(),
-                    intro: "".to_string(),
-                    biography: "".to_string(),
-                    artworks: 247,
-                })
-                .collect::<Vec<_>>()
         });
         let artworks = use_signal(|| {
             (0..4)
@@ -220,7 +198,9 @@ impl Controller {
                 art_style: value,
                 ..self.artist_input_field.with(|field| field.clone())
             }),
-             _ => {btracing::error!("{} {}", self.lang, "invalid ...")}
+            _ => {
+                btracing::error!("{} {}", self.lang, "invalid ...")
+            }
         }
     }
 
@@ -297,8 +277,6 @@ impl Controller {
             .with_id("remove-artist-modal-success")
             .with_title(tr.title);
     }
-
-
 
     pub fn go_back(&self) {
         use_navigator().go_back();

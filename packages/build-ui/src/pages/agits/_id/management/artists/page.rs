@@ -3,9 +3,9 @@ use crate::routes::Route;
 use bdk::prelude::by_components::icons::{arrows, validations};
 use bdk::prelude::*;
 
+use super::controllers::Controller;
 use super::i18n::ArtistTranslate;
 
-use super::controllers::Controller;
 #[component]
 #[allow(unused_variables)]
 pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
@@ -13,13 +13,21 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let tr: ArtistTranslate = translate(&lang);
     let view_mode = use_signal(|| "table");
     let search_query = use_signal(String::new);
-    let artists = ctrl.artist();
+    let artist_result = ctrl.artist();
+    // Clone artist_result for use in total_count
+    let artist_result_for_count = artist_result.clone();
+    // Create a derived signal for the total count
+    let total_count = use_memo(move || match &artist_result_for_count {
+        Ok(query_response) => query_response.total_count,
+        Err(_) => 0,
+    });
+
     rsx! {
         div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",
-            div { class: "flex flex-col w-full h-full",
-                div { class: "flex flex-col mb-6",
+            div { class: "flex flex-col w-full h-full max-w-[1800px] mx-auto px-6",
+                div { class: "flex flex-col mb-8",
                     h1 { class: "text-2xl font-bold", {tr.artists} }
-                    p { class: "text-sm text-gray-400", "1,201 Total Artists" }
+                    p { class: "text-sm text-gray-400", "{total_count} Total Artists" }
                 }
 
                 SearchFilterBar {
@@ -37,13 +45,11 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                     remove_btn_text: tr.remove_artist,
                 }
 
-
-                div { class: " flex-1 overflow-x-auto",
-                    table { class: "w-full text-sm text-left border-collapse min-w-[800px]",
+                div { class: "flex-1 overflow-x-auto",
+                    table { class: "w-full text-sm text-left border-collapse",
                         thead { class: "text-xs text-white capitalize bg-table-background border-b border-border-primary",
                             tr {
-
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[20%]",
                                     div { class: "flex items-center",
                                         span { {tr.artist} }
                                         arrows::UpDown {
@@ -53,7 +59,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[10%]",
                                     div { class: "flex items-center",
                                         span { {tr.revenue} }
                                         arrows::UpDown {
@@ -63,7 +69,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[10%]",
                                     div { class: "flex items-center",
                                         span { {tr.artworks} }
                                         arrows::UpDown {
@@ -73,7 +79,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[15%]",
                                     div { class: "flex items-center",
                                         span { {tr.featured_work} }
                                         arrows::UpDown {
@@ -83,10 +89,10 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[15%]",
                                     "Attributes"
                                 }
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[10%]",
                                     div { class: "flex items-center",
                                         span { {tr.status} }
                                         arrows::UpDown {
@@ -96,7 +102,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[15%]",
                                     div { class: "flex items-center",
                                         span { {tr.social_media} }
                                         arrows::UpDown {
@@ -106,8 +112,7 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                                         }
                                     }
                                 }
-
-                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                th { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap w-[5%]",
                                     div { class: "flex items-end",
                                         span { "" }
                                         validations::Extra {
@@ -119,68 +124,93 @@ pub fn ArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                             }
                         }
                         tbody {
-                            {
-                                artists
-                                    .into_iter()
-                                    .enumerate()
-                                    .map(|(_index, artist)| {
-                                        let artist_id = artist.id.clone();
-                                        rsx! {
-                                            tr {
-                                                key: "owned-tr-{artist_id}",
-                                                class: "hover:bg-gray-900 cursor-pointer",
-                                                onclick: move |_| {
+                            match artist_result.clone() {
+                                Ok(query_response) if query_response.items.is_empty() => {
+                                    rsx! {
+                                        tr {
+                                            td { colspan: 8, class: "px-4 py-8 text-center text-gray-400",
+                                                "No artists found. Add a new artist to get started."
+                                            }
+                                        }
+                                    }
+                                }
+                                Ok(query_response) => {
+                                    let query_response = query_response.clone();
+                                    let items = query_response.items.clone();
+                                    rsx! {
+                                        {
+                                            items
+                                                .clone()
+                                                .into_iter()
+                                                .enumerate()
+                                                .map(|(index, artist)| {
                                                     let artist_id = artist.id.clone();
-                                                    use_navigator()
-                                                        .push(Route::ArtistDetailPage {
-                                                            lang: lang,
-                                                            agit_id: agit_id(),
-                                                            artist_id,
-                                                        });
-                                                },
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                    div { class: "flex items-center",
-                                                        div { class: "w-8 h-8 bg-white rounded-full mr-2 flex items-center justify-center" }
-                                                        div { class: "flex items-center",
-                                                            div { class: "flex flex-col",
-                                                                span { {artist.name.clone()} }
-                                                                span { {artist.mail.clone()} }
+                                                    rsx! {
+                                                        tr {
+                                                            key: "artist-tr-{artist_id}",
+                                                            class: "hover:bg-gray-900 cursor-pointer",
+                                                            onclick: move |_| {
+                                                                let artist_id = artist.id.clone();
+                                                                use_navigator()
+                                                                    .push(Route::ArtistDetailPage {
+                                                                        lang: lang,
+                                                                        agit_id: agit_id(),
+                                                                        artist_id,
+                                                                    });
+                                                            },
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                                div { class: "flex items-center",
+                                                                    div { class: "w-8 h-8 bg-white rounded-full mr-2 flex items-center justify-center" }
+                                                                    div { class: "flex items-center",
+                                                                        div { class: "flex flex-col",
+                                                                            span { {artist.name.clone()} }
+                                                                            span { {artist.mail.clone()} }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                                div { class: "flex flex-col",
+                                                                    span { "{artist.revenue} ETH" }
+                                                                    span { class: "text-xs text-gray-500", "${artist.revenue}" }
+                                                                }
+                                                            }
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.artworks.to_string()} }
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.featured_work.to_string()} }
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                                div { class: "flex space-x-1",
+                                                                    {
+                                                                        artist
+                                                                            .attributes_type
+                                                                            .iter()
+                                                                            .map(|attribute| {
+                                                                                rsx! {
+                                                                                    span { class: "text-xs px-2 py-1 rounded border border-white", "{attribute}" }
+                                                                                }
+                                                                            })
+                                                                    }
+                                                                }
+                                                            }
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.status.clone()} }
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.social_media.clone()} }
+                                                            td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
+                                                                button { class: "text-gray-400 hover:text-white",
+                                                                    validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
+                                                                }
                                                             }
                                                         }
                                                     }
-                                                }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                    div { class: "flex flex-col",
-                                                        span { "{artist.revenue} ETH" }
-                                                        span { class: "text-xs text-gray-500", "${artist.revenue}" }
-                                                    }
-                                                }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.artworks.to_string()} }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.featured_work.to_string()} }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                    div { class: "flex space-x-1",
-                                                        {
-                                                            artist
-                                                                .attributes_type
-                                                                .iter()
-                                                                .map(|attribute| {
-                                                                    rsx! {
-                                                                        span { class: "text-xs px-2 py-1 rounded border border-white", "{attribute}" }
-                                                                    }
-                                                                })
-                                                        }
-                                                    }
-                                                }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.status.clone()} }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap", {artist.social_media.clone()} }
-                                                td { class: "px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap",
-                                                    button { class: "text-gray-400 hover:text-white",
-                                                        validations::Extra { class: "[&>circle]:stroke-white", height: 18 }
-                                                    }
-                                                }
-                                            }
+                                                })
                                         }
-                                    })
+                                    }
+                                }
+                                Err(_) => rsx! {
+                                    tr {
+                                        td { colspan: 8, class: "px-4 py-8 text-center text-gray-400",
+                                            "Failed to load artists. Please try again."
+                                        }
+                                    }
+                                },
                             }
                         }
                     }
