@@ -1,4 +1,3 @@
-#![allow(unused)]
 use super::{
     i18n::{
         ConfirmRemoveArtistModalTranslate, RemovalSuccessModalTranslate,
@@ -9,16 +8,13 @@ use super::{
 use common::tables::{
     artists::Artist as ArtistModel,
     artworks::Artwork as ArtworkModel,
-    prelude::{
-        ArtistByIdAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery, ArtistSummary, ArtistAction,
-    },
+    prelude::{ArtistAction, ArtistCreateRequest, ArtistDeleteRequest, ArtistQuery, ArtistSummary},
 };
 use wasm_bindgen_futures::spawn_local;
 
 use bdk::prelude::{by_types::QueryResponse, dioxus_popup::PopupService, *};
 
 use crate::{
-    config::Config,
     pages::agits::_id::management::artists::components::{
         ConfirmRemoveArtistModal, RemovalSuccessModal, RemoveArtistModal,
     },
@@ -36,17 +32,17 @@ pub struct Controller {
 }
 impl Controller {
     pub fn new(lang: Language, agit_id: ReadOnlySignal<i64>) -> Result<Self, RenderError> {
-        let mut popup: PopupService = use_context();
+        let popup: PopupService = use_context();
         let artist = use_server_future(move || async move {
             let endpoint = crate::config::get().api_url;
             let client = ArtistModel::get_client(endpoint);
             client
-                .query(ArtistQuery::new(100).with_page(0))
+                .query(ArtistQuery::new(100).with_page(1))
                 .await
                 .unwrap_or_default()
         })?;
         tracing::debug!("Artist resource: {:?}", artist);
-        
+
         let artist_input_field = use_signal(|| ArtistInputField {
             display_name: String::new(),
             social_media: String::new(),
@@ -79,7 +75,7 @@ impl Controller {
                     external_link: None,
                     description: "Description".to_string(),
                     agit_id: 1,
-                    collection_id: Some((1)),
+                    collection_id: Some(1),
                     artist_id:1,
                     owner_id:1,
                     likes: 0,
@@ -109,41 +105,39 @@ impl Controller {
         Ok(ctrl)
     }
 
-    pub fn create_artist(&self) {
-        let artist_inputs = self.artist_input_field.with(|field| field.clone());
+    pub async fn create_artist(&self) {
+        let artist_inputs = self.artist_input_field();
         // act is without id. Create
-        spawn_local(async move {
-            let endpoint = crate::config::get().api_url;
-            let client = ArtistModel::get_client(endpoint);
-            let res = client
-                .act(ArtistAction::Create(
-                    ArtistCreateRequest {
-                        title: artist_inputs.display_name.clone(),
-                        mail: artist_inputs.social_media.clone(),
-                        social_media: artist_inputs.medium.clone(),
-                        intro: artist_inputs.theme,
-                        biography: artist_inputs.art_style,
-                        revenue: 6.70,
-                        attributes_type: vec!["Paid".to_string(), "Verified".to_string()],
-                        featured_work: "featured_work".to_string(),
-                        artworks: 100,
-                        name: artist_inputs.display_name.clone(),
-                        status: "Active".to_string(),
-                    },
-                ))
-                .await;
-            tracing::debug!("mail: {:?}", artist_inputs.social_media);
-            tracing::debug!("social_media: {:?}", artist_inputs.medium);
-            match res {
-                Ok(_) => {
-                    btracing::info!("Artist created successfully");
-                }
-                Err(e) => {
-                    btracing::error!("Error creating artist: {:?}", e);
-                }
-            };
-        });
+
+        let endpoint = crate::config::get().api_url;
+        let client = ArtistModel::get_client(endpoint);
+        let res = client
+            .act(ArtistAction::Create(ArtistCreateRequest {
+                title: artist_inputs.display_name.clone(),
+                mail: artist_inputs.social_media.clone(),
+                social_media: artist_inputs.medium.clone(),
+                intro: artist_inputs.theme,
+                biography: artist_inputs.art_style,
+                revenue: 6.70,
+                attributes_type: vec!["Paid".to_string(), "Verified".to_string()],
+                featured_work: "featured_work".to_string(),
+                artworks: 100,
+                name: artist_inputs.display_name.clone(),
+                status: "Active".to_string(),
+            }))
+            .await;
+        tracing::debug!("mail: {:?}", artist_inputs.social_media);
+        tracing::debug!("social_media: {:?}", artist_inputs.medium);
+        match res {
+            Ok(_) => {
+                btracing::info!("Artist created successfully");
+            }
+            Err(e) => {
+                btracing::error!("Error creating artist: {:?}", e);
+            }
+        };
     }
+    #[allow(dead_code)]
     pub fn remove_artist(&self, artist_id: i64) {
         spawn_local(async move {
             let endpoint = crate::config::get().api_url;
@@ -241,7 +235,7 @@ impl Controller {
     pub fn confirm_name_removal_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: RemoveArtistNameModalTranslate = translate(&self.lang);
-        let mut ctrl = self.clone();
+        let ctrl = self.clone();
         popup
             .open(rsx!(RemoveArtistModal {
                 on_back: move |_| {
@@ -259,7 +253,6 @@ impl Controller {
     pub fn success_modal(&self) {
         let mut popup = self.popup.clone();
         let tr: RemovalSuccessModalTranslate = translate(&self.lang);
-        let mut ctrl = self.clone();
         popup
             .open(rsx!(RemovalSuccessModal {
                 on_back: move |_| {},

@@ -191,7 +191,9 @@ pub fn NewArtistPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
                         disabled: ctrl.artist_input_field().display_name.is_empty(),
                     }
                     ButtonWithIcon {
-                        onclick: move |_| ctrl.create_artist(),
+                        onclick: move |_| async move {
+                            ctrl.create_artist().await;
+                        },
                         icon: rsx! {
                             validations::Add { class: "mr-2 [&>path]:stroke-white [&>circle]:stroke-white" }
                         },

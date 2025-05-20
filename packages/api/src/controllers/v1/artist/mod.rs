@@ -1,5 +1,5 @@
 #![allow(unused)]
-use bdk::prelude::*;
+use bdk::prelude::{by_types::QueryResponse, *};
 use by_axum::{
     aide,
     auth::Authorization,
@@ -11,6 +11,7 @@ use by_axum::{
 };
 use common::tables::prelude::*;
 use common::{Result, error::ServiceError};
+use sqlx::postgres::PgRow;
 
 #[derive(
     Debug, Clone, serde::Deserialize, serde::Serialize, schemars::JsonSchema, aide::OperationIo,
@@ -102,6 +103,23 @@ impl ArtistController {
             .await
             .map_err(|_| ServiceError::NotFound)
     }
+
+    async fn query(&self, param: ArtistQuery) -> Result<QueryResponse<ArtistSummary>> {
+        let mut total_count = 0;
+        let items: Vec<ArtistSummary> = Artist::query_builder()
+            .limit(param.size())
+            .page(param.page())
+            .query()
+            .map(|row: PgRow| {
+                use sqlx::Row;
+                total_count = row.try_get::<i64, _>("total_count").unwrap_or(0);
+                row.into()
+            })
+            .fetch_all(&self.pool)
+            .await?;
+
+        Ok(QueryResponse { total_count, items })
+    }
 }
 
 impl ArtistController {
@@ -109,10 +127,12 @@ impl ArtistController {
         State(ctrl): State<ArtistController>,
         Extension(claim): Extension<Option<Authorization>>,
         Query(q): Query<ArtistParam>,
-    ) -> Result<Json<Vec<ArtistSummary>>> {
-        //TODO: Add Listing Artists
-        tracing::debug!("list artists");
-        Ok(Json(vec![]))
+    ) -> Result<Json<ArtistGetResponse>> {
+        match q {
+            ArtistParam::Query(param) => {
+                Ok(Json(ArtistGetResponse::Query(ctrl.query(param).await?)))
+            }
+        }
     }
     pub async fn get(
         State(ctrl): State<ArtistController>,
