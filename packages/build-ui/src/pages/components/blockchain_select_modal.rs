@@ -6,7 +6,7 @@ use crate::services::user_service::Chain;
 #[component]
 pub fn BlockchainSelectionModal(on_select: EventHandler<Chain>, lang: Language) -> Element {
     rsx! {
-        div { class: "flex flex-col gap-2.5",
+        div { class: "flex flex-col gap-2.5 mt-8",
             ModalOption {
                 label: Chain::InternetComputer.translate(&lang),
                 disabled: false,

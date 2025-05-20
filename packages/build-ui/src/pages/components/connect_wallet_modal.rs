@@ -6,7 +6,7 @@ use crate::services::user_service::Wallet;
 #[component]
 pub fn ConnectWalletModal(on_select: EventHandler<Wallet>, lang: Language) -> Element {
     rsx! {
-        div { class: "flex flex-col gap-2.5",
+        div { class: "flex flex-col gap-2.5 mt-8",
             ModalOption {
                 label: Wallet::Google.translate(&lang),
                 icon: rsx! {

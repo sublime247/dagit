@@ -6,7 +6,7 @@ use by_components::icons::{arrows, validations};
 #[component]
 pub fn CollectionTable(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let ctrl = Controller::new(lang, agit_id)?;
-    let tr: CollectionTranslate =translate(&lang);
+    let tr: CollectionTranslate = translate(&lang);
     let collections = ctrl.collections();
     rsx! {
         table { class: "w-full text-sm text-left border-collapse min-w-[800px]",

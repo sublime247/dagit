@@ -1,9 +1,9 @@
+use crate::components::button::ButtonWithIcon;
+use crate::components::{dropdown_input::DropdownInput, input::Input2};
+use crate::pages::agits::_id::management::artworks::controllers::Controller;
+use crate::pages::agits::_id::management::artworks::new::i18n::NewArtworkPageTranslate;
 use bdk::prelude::by_components::icons::other_devices;
 use bdk::prelude::*;
-use crate::components::button::ButtonWithIcon;
-use crate::components::{input::Input2, dropdown_input::DropdownInput};
-use crate::pages::agits::_id::management::artworks::new::i18n::NewArtworkPageTranslate;
-use crate::pages::agits::_id::management::artworks::controllers::Controller;
 use by_components::icons::arrows;
 
 #[component]

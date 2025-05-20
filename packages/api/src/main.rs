@@ -2,25 +2,26 @@ pub mod config;
 pub mod controllers;
 
 use bdk::prelude::*;
-use by_axum::cors::{AllowOrigin, CorsLayer};
 use by_axum::{
     auth::{authorization_middleware, set_auth_config},
     axum::{Router, middleware},
 };
+
 use controllers::v1;
 
 use by_types::DatabaseConfig;
 use common::tables::{
-    agit_admins::AgitAdmins,
+    agit_admins::AgitAdmin,
     agits::Agit,
     artists::Artist,
     artworks::Artwork,
+    categories::Category,
     collections::Collection,
+    collectors::Collector,
+    topics::Topic,
     users::{User, UserCredit},
 };
-use common::{Result, tables::user_terms::UserTerms};
-use reqwest::Method;
-use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, COOKIE};
+use common::{Result, tables::user_terms::UserTerm};
 use sqlx::{migrate, postgres::PgPoolOptions};
 use tokio::net::TcpListener;
 mod utils;
@@ -45,7 +46,8 @@ async fn migration(pool: &sqlx::Pool<sqlx::Postgres>) -> Result<()> {
     //TODO: Add Model Migration
     tracing::info!("Running migration");
     migrate!(
-        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmins, UserTerms
+        pool, User, UserCredit, Artist, Agit, Collection, Artwork, AgitAdmin, UserTerm, Category,
+        Topic, Collector
     );
     tracing::info!("Migration done");
 
@@ -82,13 +84,7 @@ async fn main() -> Result<()> {
         .await
         .unwrap();
     tracing::info!("listening on {}", listener.local_addr().unwrap());
-    let cors_layer = CorsLayer::new()
-        .allow_origin(AllowOrigin::exact(config::get().origin.parse().unwrap()))
-        .allow_credentials(true)
-        .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
-        .allow_headers(vec![CONTENT_TYPE, AUTHORIZATION, COOKIE]);
-    let app = app.layer(cors_layer);
-    by_axum::serve_wo_cors_layer(listener, app).await.unwrap();
+    by_axum::serve(listener, app).await.unwrap();
 
     Ok(())
 }
@@ -119,7 +115,7 @@ pub mod dagit_tests {
     pub async fn setup_test_user(id: &str, pool: &sqlx::PgPool) -> Result<User> {
         let user = User::get_repository(pool.clone());
         let agit = Agit::get_repository(pool.clone());
-        let agit_admins = AgitAdmins::get_repository(pool.clone());
+        let agit_admins = AgitAdmin::get_repository(pool.clone());
         let email = format!("user-{id}@test.com");
         let address = format!("test-user-address-{id}");
         let name = format!("test-user-{id}");
@@ -188,7 +184,9 @@ pub mod dagit_tests {
 
     pub async fn setup() -> Result<TestContext> {
         if option_env!("JWT_SECRET_KEY").is_none() {
-            unsafe { std::env::set_var("JWT_SECRET_KEY", "default_test_secret_key"); }
+            unsafe {
+                std::env::set_var("JWT_SECRET_KEY", "default_test_secret_key");
+            }
         }
 
         let conf = config::get();

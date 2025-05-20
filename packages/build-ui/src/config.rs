@@ -6,6 +6,7 @@ pub struct Config {
     pub commit: &'static str,
     pub log_level: Level,
     pub api_url: &'static str,
+    pub api_endpoint: &'static str,
     pub base_url: &'static str,
     pub firebase: FirebaseConfig,
 }
@@ -24,7 +25,8 @@ impl Default for Config {
                 _ => Level::INFO,
             },
             base_url: option_env!("BASE_URL").unwrap_or("https://dev.dagit.club"),
-            api_url: option_env!("API_URL").unwrap_or("https://dagit-api.dev.biyard.co"),
+            api_url: option_env!("API_ENDPOINT").unwrap_or("https://api.dev.dagit.club"),
+            api_endpoint: option_env!("API_ENDPOINT").unwrap_or("https://api.dev.biyard.co"),
             firebase: FirebaseConfig {
                 api_key: option_env!("FIREBASE_API_KEY")
                     .expect("You must set FIREBASE_API_KEY")

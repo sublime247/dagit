@@ -1,4 +1,6 @@
-use crate::pages::agits::_id::management::{artworks::components::ArtworkTable, components::NftTable};
+use crate::pages::agits::_id::management::{
+    artworks::components::ArtworkTable, components::NftTable,
+};
 #[allow(unused_imports)]
 use crate::{
     components::{filter_sidebar::FilterSidebar, search_filter_bar::SearchFilterBar},
@@ -14,7 +16,7 @@ pub fn ArtworkPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let tr: ArtworkTranslate = translate(&lang);
     let ctrl = Controller::new(lang, agit_id)?;
     let mut show_filters = use_signal(|| false);
-    let mut view_mode = use_signal(|| false);
+    let mut view_mode = use_signal(|| true);
 
     rsx! {
         div { class: "w-full min-h-screen bg-background h-full flex text-white justify-center items-center",

@@ -5,9 +5,11 @@ use bdk::prelude::{
     *,
 };
 
-use crate::{pages::agits::_id::management::collectors::components::CollectorsTable, routes::Route};
 use super::controllers::Controller;
 use super::i18n::CollectorsTranslate;
+use crate::{
+    pages::agits::_id::management::collectors::components::CollectorsTable, routes::Route,
+};
 #[component]
 pub fn CollectorsPage(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
     let ctrl = Controller::new(lang, agit_id)?;

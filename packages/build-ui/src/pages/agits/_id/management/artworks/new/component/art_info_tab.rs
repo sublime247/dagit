@@ -1,14 +1,14 @@
-use bdk::prelude::by_components::icons::{arrows, other_devices};
-use bdk::prelude::*;
 use crate::components::button::ButtonWithIcon;
 use crate::components::image_upload::FileUpload;
 use crate::components::input::TextArea;
-use crate::pages::agits::_id::management::artworks::new::i18n::NewArtworkPageTranslate;
 use crate::pages::agits::_id::management::artworks::controllers::Controller;
+use crate::pages::agits::_id::management::artworks::new::i18n::NewArtworkPageTranslate;
+use bdk::prelude::by_components::icons::{arrows, other_devices};
+use bdk::prelude::*;
 
 #[component]
 pub fn ArtInfoTab(lang: Language, agit_id: ReadOnlySignal<i64>) -> Element {
-        let mut ctrl = Controller::new(lang, agit_id)?;
+    let mut ctrl = Controller::new(lang, agit_id)?;
     let tr: NewArtworkPageTranslate = translate(&lang);
     rsx! {
         div { class: "flex flex-col mt-8",
